@@ -1,2 +1,5 @@
-# progetto_PA
-Progetto di Programmazione avanzata, UNIVPM A.A. 2021/2022
+# Dataset Manager
+
+# Team Work
+- Mele Alessandro
+- Traini Davide
