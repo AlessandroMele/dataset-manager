@@ -1,0 +1,27 @@
+version: '3.7'
+networks:
+    app-tier:
+        driver: bridge
+services:
+    db:
+      image: mysql
+      restart: always
+      env_file:
+      - ./env/db.env
+      ports:
+      - '3306:3306'
+      networks:
+      - app-tier
+      volumes: 
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    web-node:
+      restart: always
+      build: .
+      networks:
+      - app-tier
+      ports:
+      - 8080:8080
+      env_file:
+      - ./env/app.env
+      depends_on:
+      - db
