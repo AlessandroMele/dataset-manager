@@ -1,35 +1,21 @@
-const express = require('express');
-const jwt = require("../middleware/jwt");
-const router = express.Router();
+var express = require('express');
+var router = express.Router();
+import { checkAutorization } from '../middleware/auth';
+import { login, residualToken, updateToken } from "../controller/userController";
 
-
-/**
- * generate and return the token with informations give in the body
- */
+//generate and return the token with informations given in the body
 router.post('/login', function (req: any, res: any) {
-  try {
-
-    console.log(req.body.username, req.body.role)
-    if (req.body.username && req.body.role) {
-      var username: string = req.body.username;
-      var role: string = req.body.role;
-      let token: string = jwt.setToken(username, role)
-      let decoded: string = jwt.getPayload(token)
-      res.json(
-        {
-          token: token,
-          payload: decoded
-        });
-    }
-    else {
-      throw new Error("Need to specify username and role in the body")
-    }
-  } catch (error:any) {
-    res.status(500)
-    res.send(error.message)
-  }
+  login(req, res);
 });
 
+//return user's residual tokens
+router.get('/:id/residualToken',[checkAutorization], function (req:any, res:any){
+  residualToken(req, res);
+});
 
+//update user's token
+router.post('/:id/updateToken',[checkAutorization/**, checkAdmin*/], function (req:any, res:any){
+  updateToken(req, res);
+});
 
 module.exports = router;

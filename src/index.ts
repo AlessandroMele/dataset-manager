@@ -1,46 +1,25 @@
-import { Identifier } from 'sequelize/types';
-import { UserTable, ModelTable, DatasetTable, ImageTable } from './model/Tables';
 import { checkAutorization } from './middleware/auth';
+
 const userRouter = require('./routes/user');
+const modelRouter = require('./routes/model');
+const datasetRouter = require('./routes/dataset');
+
 const express = require('express');
-
-
 const app = express();
+
+//Body request parsed in JSON
 app.use(express.json());
 
+//All routes that start with '/user' are managed by userRouter router
 app.use('/user', userRouter);
+app.use('/model', [checkAutorization],  modelRouter);
+app.use('/dataset',[checkAutorization], datasetRouter);
 
-
-
-app.get('/',[checkAutorization], function(req:any, res:any) {
-  res.send('Ciao ciao homepage');
-});
-
-
-
-app.get('/utente/:id',[checkAutorization], async function(req:any, res:any, next:any) {
-  let result: any;
-  let id:Identifier = req.params.id;
-    try{
-        result = await UserTable.findByPk(id, {raw: true});
-    }catch(error){
-      res.send(error);
-    }
-    res.send(result);
-});
-
-
-
-
-
-/** 
- * check if the env variable APP_PORT is set and activate the application 
- */
-
- if(process.env.APP_PORT) {
+//check if the env variable APP_PORT is set and activate the application 
+if(process.env.APP_PORT) {
   var port:string = process.env.APP_PORT;
   } else {
-  throw new Error("APP_PORT environment variable is not set")
+  throw new Error("APP_PORT environment variable is not set");
 }
 
 app.listen(Number(port), () => {

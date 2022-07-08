@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { SingletonConnection } from "./SingletonConnection";
-const connection: Sequelize = SingletonConnection.getConnection();
+import { Singleton } from "./Singleton";
+const connection: Sequelize = Singleton.getConnection();
 
 
 export class DatasetTable extends Model {}

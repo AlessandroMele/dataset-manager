@@ -1,10 +1,10 @@
-const jsonwebtoken = require("jsonwebtoken")
+const jsonwebtoken = require("jsonwebtoken");
 
 // options about the token
 const options = {
     algorithm: "HS256",
-    expiresIn: "2m"
-}
+    expiresIn: "1h"
+};
 
 // check if the env variable is set
 if(process.env.SECRET_KEY) {
@@ -12,7 +12,6 @@ if(process.env.SECRET_KEY) {
     } else {
     throw new Error("SECRET_KEY environment variable is not set")
 }
-
 
 /**
  * Decode the token in input and extract the payload
@@ -37,9 +36,8 @@ const setToken = (username:string, role:string): string => {
         var token = jsonwebtoken.sign(payload, secretKey, options);
         return token;
     }
-    catch (errore:any) {
-        console.log(errore.message)
-        return errore
+    catch (error:any) {
+        return error;
     }
 }
 
@@ -49,15 +47,14 @@ const setToken = (username:string, role:string): string => {
  */
 const verifyToken = (token:string):boolean => {
     try {
-        jsonwebtoken.verify(token, secretKey, options)
-        return true
+        //verifyng token
+        jsonwebtoken.verify(token, secretKey, options);
+        return true;
     }
     catch(error:any) {
         return error.message;
     }
-}
-
-
+};
 
 
 
@@ -65,4 +62,4 @@ module.exports = {
     setToken,
     getPayload,
     verifyToken
-}
+};
