@@ -1,5 +1,16 @@
-FROM node:lts-stretch-slim
-WORKDIR /usr/src/app
+FROM node:lts-stretch-slim as base
+
+WORKDIR /home/node/app
+
+COPY package.json ./
+
+RUN npm i
+RUN npm i ts-node@latest
+
 COPY . .
-RUN npm install
-CMD ["node", "app.js"]
+
+FROM base as production
+
+ENV NODE_PATH=./build
+
+RUN npm run build

@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+    db:
+      image: mysql
+      restart: always
+      env_file:
+      - ./env/db.env
+      ports:
+      - '3306:3306'
+      volumes: 
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+      container_name: db-mysql
+
+    app:
+      restart: always
+      build:
+        context: .
+        dockerfile: Dockerfile
+        target: base
+      ports:
+      - 8080:8080
+      env_file:
+      - ./env/app.env
+      volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+      command: npm run dev
+      container_name: app-web
+      depends_on:
+      - db

@@ -7,7 +7,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   `token` float NOT NULL,
-  `role` enum('users','admin') NOT NULL
+  `role` enum('user','admin') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `datasets` (
@@ -62,7 +62,7 @@ ALTER TABLE `models`
 
 INSERT INTO `users` (`id`, `email`, `token`, `role`) VALUES
 (3, 'admin@admin.it', 100, 'admin'),
-(4, 'users1@users1.it', 100000, 'users');
+(4, 'users1@users1.it', 100000, 'user');
 
 INSERT INTO `datasets` (`id`, `name`, `classes`, `userId`) VALUES
 (1, 'occhi_ritagliati', 9, 4),
