@@ -19,7 +19,7 @@ if(process.env.SECRET_KEY) {
  * @param token string hashed with the secret key
  * @returns informations in the token 
  */
-const getPayload = (token:string) => {
+export const getPayload = function(token:string) {
     let decoded_token = jsonwebtoken.decode(token, { complete: true });
     return decoded_token
 }
@@ -30,7 +30,7 @@ const getPayload = (token:string) => {
  * @param role role of the user
  * @returns token 
  */
-const setToken = (username:string, role:string): string => {
+export const setToken = function(username:string, role:string): string {
     try {
         var payload:Object = {username: username, role: role};
         var token = jsonwebtoken.sign(payload, secretKey, options);
@@ -45,7 +45,7 @@ const setToken = (username:string, role:string): string => {
  * throws an exception if the token is invalid
  * @param token token to verify
  */
-const verifyToken = (token:string):boolean => {
+export const verifyToken = function(token:string):boolean {
     try {
         //verifyng token
         jsonwebtoken.verify(token, secretKey, options);
@@ -54,12 +54,4 @@ const verifyToken = (token:string):boolean => {
     catch(error:any) {
         return error.message;
     }
-};
-
-
-
-module.exports = {
-    setToken,
-    getPayload,
-    verifyToken
 };

@@ -1,6 +1,7 @@
+import { create, update, remove, list, load, inference } from "../controller/modelController";
+
 var express = require('express');
 var router = express.Router();
-import { create, update, remove, list, load, inference } from "../controller/modelController";
 
 //create model
 router.put('/create', function(req:any, res:any) {

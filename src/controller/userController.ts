@@ -1,36 +1,82 @@
-var jwt = require("../middleware/jwt");
+var jwt = require("../middleware/jwtUtil");
+import {SuccessEnum, ErrEnum, Response} from "../responseFactory/util"
+import {ErrorFactory} from "../responseFactory/Error"
+import {SuccessFactory} from "../responseFactory/Success"
+import {UserTable} from "../model/Tables"
 
-//generate and return the token with informations given in the body
-export const login = function(req: any,res: any){
-    try {
-        //checking if body contains fields
-        if (req.body.username && req.body.role) {
-          var username: string = req.body.username;
-          var role: string = req.body.role;
-          
+
+const errorFactory:ErrorFactory  = new ErrorFactory();
+const successFactory:SuccessFactory  = new SuccessFactory();
+
+/**
+ * Generate and return the token with informations given in the body
+ * @param username username of the user
+ * @param role role of the user
+ * @param res response
+ */
+export const login = function(username: string, role: string, res:any){
+    try {          
           //generating token
           let token: string = jwt.setToken(username, role)
           
           let decoded: string = jwt.getPayload(token)
-          res.json(
-            {
-              token: token,
-              info: decoded
-            });
-        }
-        else {
-          throw new Error("Need to specify username and role in the body");
-        }
+
+            res.status(successFactory.getSuccess(SuccessEnum.JWTSuccess).getMsg().status);
+            res.json(
+              {
+                token: token,
+                info: decoded
+              });
       } catch (error:any) {
-        res.status(500);
-        res.send(error.message);
+        res.status()
+        res.json(errorFactory.getError(ErrEnum.InternalError).getMsg());
       }
 };
 
-//return user's residual tokens
-export const residualToken = function(req: any, res: any){
+/**
+ * Return user's residual tokens
+ * @param email of the user
+ * @param res response
+ */
+export const residualToken = async function(email: string, res: any){
+  try {
+  const user:any = await UserTable.findOne({ where: { email: email } });
+  res.status(200);
+  res.json(user.token);
+  } catch(err:any) {
+    var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+    res.status(error.status)
+    res.json(error)
+  }
 };
 
-//update user's token
-export const updateToken = function(req: any, res: any){
+/**
+ * Update user token
+ * @param email email of the user
+ * @param token number of token to update
+ * @param res response
+ */
+export const updateToken = async function(email: string, token: number, res: any){
+  try {
+    const result = await UserTable.update(
+      { token: token },
+      { where: { email: email }}
+    )
+    if(result[0] === 1) {
+      console.log(result)
+    var success: Response = successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMsg();
+    res.status(success.status);
+    res.json(success);
+    }
+    else {
+      var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+      res.status(error.status)
+      res.json(error)
+    }
+    } catch(err:any) {
+      var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+      res.status(error.status)
+      res.json(error)
+    }
 };
+
