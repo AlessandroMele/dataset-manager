@@ -1,5 +1,5 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
-import { Singleton } from "./Singleton";
+import {DataTypes, Model, Sequelize} from 'sequelize';
+import {Singleton} from "./Singleton";
 const connection: Sequelize = Singleton.getConnection();
 
 
@@ -28,15 +28,15 @@ DatasetTable.init({
   },
 
 }, {
-  sequelize: connection, 
+  sequelize: connection,
   timestamps: false,
-  modelName: 'datasets' 
+  modelName: 'datasets'
 });
 
 export class ImageTable extends Model {}
 
 ImageTable.init({
-  
+
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -50,7 +50,8 @@ ImageTable.init({
 
   path: {
     type: DataTypes.STRING(30),
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
 
   boundingBoxes: {
@@ -58,15 +59,15 @@ ImageTable.init({
     allowNull: true
   },
 }, {
-  sequelize: connection, 
+  sequelize: connection,
   timestamps: false,
-  modelName: 'images' 
+  modelName: 'images'
 });
 
 export class ModelTable extends Model {}
 
 ModelTable.init({
-  
+
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -94,15 +95,15 @@ ModelTable.init({
   },
 
 }, {
-  sequelize: connection, 
+  sequelize: connection,
   timestamps: false,
-  modelName: 'models' 
+  modelName: 'models'
 });
 
 export class UserTable extends Model {}
 
 UserTable.init({
-  
+
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -111,6 +112,12 @@ UserTable.init({
 
   email: {
     type: DataTypes.STRING(50),
+    allowNull: false,
+    unique: true
+  },
+
+  username: {
+    type: DataTypes.STRING(30),
     allowNull: false
   },
 
@@ -128,11 +135,11 @@ UserTable.init({
   role: {
     type: DataTypes.ENUM('user', 'admin'),
     defaultValue: 'user'
-},
+  },
 }, {
-  sequelize: connection, 
+  sequelize: connection,
   timestamps: false,
-  modelName: 'users' 
+  modelName: 'users'
 });
 
 DatasetTable.hasMany(ImageTable, {

@@ -1,6 +1,6 @@
-import { checkAutorization,checkInputPassword, checkAdmin, checkInputUser, checkInputRole, checkInputToken, checkInputEmail } from '../middleware/user';
-import { renderErrors } from '../middleware/util';
-import { login, signUp, residualToken, updateToken } from "../controller/userController";
+import {checkAutorization, checkInputPassword, checkEmailMatches, checkAdmin, checkInputUser, checkInputRole, checkInputToken, checkInputEmail} from '../middleware/user';
+import {renderErrors} from '../middleware/util';
+import {login, signUp, residualToken, updateToken} from "../controller/userController";
 
 var express = require('express');
 var router = express.Router();
@@ -17,12 +17,12 @@ router.post('/signup', [checkInputUser, checkInputEmail, checkInputPassword, ren
 });
 
 //return user's residual tokens
-router.get('/residualToken', [checkAutorization, checkInputEmail, renderErrors], function (req:any, res:any){
+router.get('/residualToken', [checkAutorization, checkInputEmail, checkEmailMatches, renderErrors], function (req: any, res: any) {
   residualToken(req.body.email, res);
 });
 
 //update user's token
-router.post('/updateToken', [checkAutorization, checkAdmin, checkInputToken, checkInputEmail, renderErrors], function (req:any, res:any){
+router.post('/updateToken', [checkAutorization, checkAdmin, checkInputToken, checkInputEmail, renderErrors], function (req: any, res: any) {
   updateToken(req.body.email, req.body.token, res);
 });
 

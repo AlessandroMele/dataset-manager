@@ -1,43 +1,27 @@
-import { ErrEnum, Response } from "../responseFactory/util";
-import { ErrorFactory } from "../responseFactory/Error";
+import {ErrEnum, Response, formatResponse} from "../responseFactory/util";
+import {ErrorFactory} from "../responseFactory/Error";
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 
-export const renderErrors = (err: any, req: any, res: any, next: any): void => {
+export const renderErrors = (err: Response, req: any, res: any, next: any): void => {
   try {
     if (err !== null) {
-      res.status(err.status);
-      res.json(err);
+      formatResponse(res, err);
     } else next();
   } catch (err: any) {
-    var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
-    res.json(error);
+    formatResponse(res, errorFactory.getError(ErrEnum.InternalError).getMessage())
   }
 };
 
-export const renderJsonError = (
-  err: any,
-  req: any,
-  res: any,
-  next: any
-): void => {
+export const renderJsonError = (err: Response, req: any, res: any, next: any): void => {
   try {
     if (err instanceof SyntaxError) {
-      var error: Response = errorFactory
-        .getError(ErrEnum.RequestErrorJSON)
-        .getMessage();
-      res.status(error.status);
-      res.json(error);
+      formatResponse(res, errorFactory.getError(ErrEnum.RequestErrorJSON).getMessage())
     } else {
-      var error: Response = errorFactory
-        .getError(ErrEnum.NoJSONRequest)
-        .getMessage();
-      res.status(error.status);
-      res.json(error);
+      formatResponse(res, errorFactory.getError(ErrEnum.NoJSONRequest).getMessage())
     }
   } catch (err: any) {
-    var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
-    res.json(error);
+    formatResponse(res, errorFactory.getError(ErrEnum.InternalError).getMessage())
   }
 };
 

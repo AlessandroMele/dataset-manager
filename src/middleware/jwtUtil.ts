@@ -7,9 +7,9 @@ const options = {
 };
 
 // check if the env variable is set
-if(process.env.SECRET_KEY) {
-    var secretKey:string = process.env.SECRET_KEY;
-    } else {
+if (process.env.SECRET_KEY) {
+    var secretKey: string = process.env.SECRET_KEY;
+} else {
     throw new Error("SECRET_KEY environment variable is not set")
 }
 
@@ -19,8 +19,8 @@ if(process.env.SECRET_KEY) {
  * @param token string hashed with the secret key
  * @returns informations in the token 
  */
-export const getPayload = function(token:string) {
-    let decoded_token = jsonwebtoken.decode(token, { complete: true });
+export const getPayload = function (token: string) {
+    let decoded_token = jsonwebtoken.decode(token, {complete: true});
     return decoded_token
 }
 
@@ -30,13 +30,13 @@ export const getPayload = function(token:string) {
  * @param role role of the user
  * @returns token 
  */
-export const setToken = function(username:string, role:string): string {
+export const setToken = function (username: string, role: string, password: string, email: string): string {
     try {
-        var payload:Object = {username: username, role: role};
+        var payload: Object = {username: username, role: role, password: password, email: email};
         var token = jsonwebtoken.sign(payload, secretKey, options);
         return token;
     }
-    catch (error:any) {
+    catch (error: any) {
         return error;
     }
 }
@@ -45,13 +45,13 @@ export const setToken = function(username:string, role:string): string {
  * throws an exception if the token is invalid
  * @param token token to verify
  */
-export const verifyToken = function(token:string):boolean {
+export const verifyToken = function (token: string): boolean {
     try {
         //verifyng token
         jsonwebtoken.verify(token, secretKey, options);
         return true;
     }
-    catch(error:any) {
+    catch (error: any) {
         return error.message;
     }
 };

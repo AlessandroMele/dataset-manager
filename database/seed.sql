@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS `models`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL UNIQUE,
+  `username` varchar(30) NOT NULL,
   `password` varchar(256) NOT NULL,
   `token` float NOT NULL DEFAULT 100,
   `role` enum('user','admin') NOT NULL,
@@ -59,9 +60,9 @@ ALTER TABLE `models`
   ADD CONSTRAINT `datasetId` FOREIGN KEY (`datasetId`) REFERENCES `datasets` (`id`),
   ADD CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
-INSERT INTO `users` (`id`, `email`, `token`,`password`, `role`) VALUES
-(1, 'admin@admin.it', 100, 'password1', 'admin'),
-(2, 'users1@users1.it', 100000, 'password2', 'user');
+INSERT INTO `users` (`id`, `email`, `username`, `token`,`password`, `role`) VALUES
+(1, 'admin@admin.it','admin', 100, 'password1', 'admin'),
+(2, 'users1@users1.it', 'user', 100000, 'password2', 'user');
 
 INSERT INTO `datasets` (`id`, `name`, `classes`, `userId`) VALUES
 (1, 'occhi_ritagliati', 9, 2),

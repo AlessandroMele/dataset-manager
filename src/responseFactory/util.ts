@@ -10,17 +10,31 @@ export enum ErrEnum {
     NoJSONRequest,
     InputPasswordNotValid,
     InputCredentialsNotValid,
-    UserAlreadyExists
+    UserAlreadyExists,
+    EmailNotMatchError,
+    NoUserFoundError
 }
 
 export enum SuccessEnum {
     JWTSuccess,
     DefaultSuccess,
     UpdateSuccess,
-    UserCreateSuccess
+    UserCreateSuccess,
+    GetSuccess
 }
 
 export interface Response {
-    message: string, 
+    message: string,
     status: number
+}
+
+
+export const formatResponse = (res: any, response: Response) => {
+    res.status(response.status);
+    res.json(response);
+}
+
+export const formatResponseWithData = (res: any, response: Response, data: Object) => {
+    res.status(response.status);
+    res.json(data);
 }

@@ -1,5 +1,5 @@
-import { checkAutorization } from "./middleware/user";
-import { renderJsonError, checkRequestContent } from "./middleware/util";
+import {checkAutorization} from "./middleware/user";
+import {renderJsonError, checkRequestContent} from "./middleware/util";
 
 const userRouter = require("./routes/user");
 const modelRouter = require("./routes/model");
@@ -27,5 +27,5 @@ if (process.env.APP_PORT) {
 }
 
 app.listen(Number(port), () => {
-  console.log(`Ready for accepting requests on port ${port}`);
+  console.log(`Ready for accepting requests on port ${ port }`);
 });
