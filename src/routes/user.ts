@@ -1,14 +1,19 @@
-import { checkAutorization, checkAdmin, checkInputUser, checkInputRole, checkInputToken, checkInputEmail } from '../middleware/user';
+import { checkAutorization,checkInputPassword, checkAdmin, checkInputUser, checkInputRole, checkInputToken, checkInputEmail } from '../middleware/user';
 import { renderErrors } from '../middleware/util';
-import { login, residualToken, updateToken } from "../controller/userController";
+import { login, signUp, residualToken, updateToken } from "../controller/userController";
 
 var express = require('express');
 var router = express.Router();
 
 
 //generate and return the token with informations given in the body
-router.post('/login', [checkInputUser, checkInputRole, renderErrors], function (req: any, res: any) {
-  login(req.body.username, req.body.role, res);
+router.post('/login', [checkInputUser, checkInputRole, checkInputEmail, checkInputPassword, renderErrors], function (req: any, res: any) {
+  login(req.body.username, req.body.role, req.body.password, req.body.email, res);
+});
+
+//register an user in the database
+router.post('/signup', [checkInputUser, checkInputEmail, checkInputPassword, renderErrors], function (req: any, res: any) {
+  signUp(req.body.username, req.body.password, req.body.email, res);
 });
 
 //return user's residual tokens

@@ -7,13 +7,17 @@ export enum ErrEnum {
     NumberTokenNotValid,
     InputEmailNotValid,
     RequestErrorJSON,
-    NoJSONRequest
+    NoJSONRequest,
+    InputPasswordNotValid,
+    InputCredentialsNotValid,
+    UserAlreadyExists
 }
 
 export enum SuccessEnum {
     JWTSuccess,
     DefaultSuccess,
-    UpdateSuccess
+    UpdateSuccess,
+    UserCreateSuccess
 }
 
 export interface Response {

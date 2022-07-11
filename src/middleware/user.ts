@@ -17,7 +17,7 @@ export const checkAutorization = function(req: any, res: any, next: any) {
         //check if authorization field is empty
         if (req.headers["authorization"] == null) {
             //unauthorized
-            var error: Response = errorFactory.getError(ErrEnum.AuthError).getMsg();
+            var error: Response = errorFactory.getError(ErrEnum.AuthError).getMessage();
             next(error)
         }
         else {
@@ -31,13 +31,13 @@ export const checkAutorization = function(req: any, res: any, next: any) {
                 next();
             }
             else {
-                var error: Response = errorFactory.getError(ErrEnum.AuthError).getMsg();
+                var error: Response = errorFactory.getError(ErrEnum.AuthError).getMessage();
                 next(error)
             }
         }
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.AuthError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.AuthError).getMessage();
         next(error)
     };
 }
@@ -58,13 +58,13 @@ export const checkAdmin = function(req: any, res: any, next: any) {
         var role: string = payload.payload.role;
         //if role is not set to admin, call the error middleware
         if (role !== "admin") {
-            var error: Response = errorFactory.getError(ErrEnum.AdminAuthError).getMsg();
+            var error: Response = errorFactory.getError(ErrEnum.AdminAuthError).getMessage();
             next(error)
         }
         else next();
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
         next(error)
     };
 }
@@ -80,13 +80,34 @@ export const checkInputUser = function(req: any, res: any, next: any) {
     try {
         //checking if username is valid
         if (typeof req.body.username !== 'string') {
-            var error = errorFactory.getError(ErrEnum.CreateTokenErrorUsername).getMsg();
+            var error = errorFactory.getError(ErrEnum.CreateTokenErrorUsername).getMessage();
             next(error)
         }
         else next()
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
+        next(error)
+    };
+}
+
+/**
+ * Check if the input body contains valid password
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkInputPassword = function(req: any, res: any, next: any) {  
+    try {
+        //checking if password is valid
+        if (typeof req.body.password !== 'string') {
+            var error = errorFactory.getError(ErrEnum.InputPasswordNotValid).getMessage();
+            next(error)
+        }
+        else next()
+    }
+    catch (error: any) {
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
         next(error)
     };
 }
@@ -102,13 +123,13 @@ export const checkInputUser = function(req: any, res: any, next: any) {
     try {
         //checking if role is valid
         if (req.body.role !== 'admin' && req.body.role !== 'user') {
-            var error = errorFactory.getError(ErrEnum.CreateTokenErrorRole).getMsg();
+            var error = errorFactory.getError(ErrEnum.CreateTokenErrorRole).getMessage();
             next(error)
         }
         else next()
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
         next(error)
     };
 }
@@ -126,13 +147,13 @@ export const checkInputToken = function(req: any, res: any, next: any) {
     try {
         //checking if token number is valid
         if (typeof req.body.token !== 'number') {
-            var error = errorFactory.getError(ErrEnum.NumberTokenNotValid).getMsg();
+            var error = errorFactory.getError(ErrEnum.NumberTokenNotValid).getMessage();
             next(error)
         }
         else next()
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
         next(error)
     };
 }
@@ -147,13 +168,13 @@ export const checkInputToken = function(req: any, res: any, next: any) {
     try {
         //checking if email is valid
         if (typeof req.body.email !== 'string') {
-            var error = errorFactory.getError(ErrEnum.InputEmailNotValid).getMsg();
+            var error = errorFactory.getError(ErrEnum.InputEmailNotValid).getMessage();
             next(error)
         }
         else next()
     }
     catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMsg();
+        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
         next(error)
     };
 }

@@ -114,9 +114,15 @@ UserTable.init({
     allowNull: false
   },
 
+  password: {
+    type: DataTypes.STRING(256),
+    allowNull: false
+  },
+
   token: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 100
   },
 
   role: {
