@@ -6,31 +6,46 @@ interface SuccessMessage {
 
 class UserCreateSuccess implements SuccessMessage {
     getMessage (): Response {
-        return {message: "User created with success", status: 201};
+        return {
+            message: "User created with success",
+            status: 201
+        };
     }
 }
 
 class JWTSuccess implements SuccessMessage {
     getMessage (): Response {
-        return {message: "JWT Token created with success", status: 201};
+        return {
+            message: "JWT Token created with success",
+            status: 201
+        };
     }
 }
 
 class UpdateSuccess implements SuccessMessage {
     getMessage (): Response {
-        return {message: "Value correctly modified", status: 200};
+        return {
+            message: "Value correctly modified",
+            status: 200
+        };
     }
 }
 
 class GetSuccess implements SuccessMessage {
     getMessage (): Response {
-        return {message: "Ok get", status: 200};
+        return {
+            message: "Ok get",
+            status: 200
+        };
     }
 }
 
 class DefaultSuccess implements SuccessMessage {
     getMessage (): Response {
-        return {message: "Good results", status: 200};
+        return {
+            message: "Good results",
+            status: 200
+        };
     }
 }
 

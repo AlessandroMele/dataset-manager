@@ -37,7 +37,7 @@ export const login = async function (username: string, role: string, password: s
 };
 
 /**
- * Generate and return the token with informations given in the body
+ * Insert user in the database
  * @param username username of the user
  * @param password password of the user
  * @param email email of the user

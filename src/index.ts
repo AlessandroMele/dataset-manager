@@ -1,5 +1,5 @@
 import {checkAutorization} from "./middleware/user";
-import {renderJsonError, checkRequestContent} from "./middleware/util";
+import {checkRequestContent} from "./middleware/util";
 
 const userRouter = require("./routes/user");
 const modelRouter = require("./routes/model");
@@ -8,12 +8,10 @@ const datasetRouter = require("./routes/dataset");
 const express = require("express");
 const app = express();
 
-//Error if the request body is not a json
+//Error if the request body is not a JSON
 app.use(checkRequestContent);
 //Body request parsed in JSON
 app.use(express.json());
-//Render error if the request json has syntax errors
-app.use(renderJsonError);
 
 app.use("/user", userRouter);
 app.use("/model", [checkAutorization], modelRouter);

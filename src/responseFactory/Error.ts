@@ -6,43 +6,64 @@ interface ErrorMessage {
 
 class UserAlreadyExists implements ErrorMessage {
   getMessage (): Response {
-    return {message: "User already exists", status: 409};//conflict 
+    return {
+      message: "User already exists",
+      status: 409 //conflict 
+    };
   }
 }
 
 class AuthError implements ErrorMessage {
   getMessage (): Response {
-    return {message: "Unauthorized", status: 401};
+    return {
+      message: "Unauthorized",
+      status: 401
+    };
   }
 }
 
 class EmailNotMatchError implements ErrorMessage {
   getMessage (): Response {
-    return {message: "Users can only get their residual token", status: 401};
+    return {
+      message: "Users can only get their residual token",
+      status: 401
+    };
   }
 }
 
 class AdminAuthError implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Sorry, you are not the admin", status: 401};
+    return {
+      message: "Sorry, you are not the admin",
+      status: 401
+    };
   }
 }
 
 class CreateTokenErrorUsername implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Need to specify string 'username' ", status: 400};
+    return {
+      message: "Need to specify string 'username' ",
+      status: 400
+    };
   }
 }
 
 class InputEmailNotValid implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Need to specify string 'email'", status: 400};
+    return {
+      message: "Need to specify string 'email'",
+      status: 400
+    };
   }
 }
 
 class NumberTokenNotValid implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Need to specify number of 'token'", status: 400};
+    return {
+      message: "Need to specify number of 'token'",
+      status: 400
+    };
   }
 }
 
@@ -57,7 +78,10 @@ class CreateTokenErrorRole implements ErrorMessage {
 
 class InternalError implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Ops, something went wrong", status: 500};
+    return {
+      message: "Ops, something went wrong",
+      status: 500
+    };
   }
 }
 
@@ -73,26 +97,36 @@ class RequestErrorJSON implements ErrorMessage {
 class NoJSONRequest implements ErrorMessage {
   public getMessage (): Response {
     return {
-      message: "Your request body need to be a json object", status: 400
+      message: "Your request body need to be a json object",
+      status: 400
     };
   }
 }
 
 class InputPasswordNotValid implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Need to specify string 'password'", status: 400};
+    return {
+      message: "Need to specify string 'password'",
+      status: 400
+    };
   }
 }
 
 class InputCredentialsNotValid implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "Email or password not valid", status: 400};
+    return {
+      message: "Email or password not valid",
+      status: 400
+    };
   }
 }
 
 class NoUserFoundError implements ErrorMessage {
   public getMessage (): Response {
-    return {message: "No user found with this email", status: 404};
+    return {
+      message: "No user found with this email",
+      status: 404
+    };
   }
 }
 
