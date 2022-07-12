@@ -2,7 +2,7 @@ var jwt = require("../middleware/jwtUtil");
 import {SuccessEnum, ErrEnum, Response, formatResponse, formatResponseWithData} from '../responseFactory/util';
 import {ErrorFactory} from "../responseFactory/Error";
 import {SuccessFactory} from "../responseFactory/Success";
-import {UserTable} from "../model/Tables";
+import {UserTable} from "../model/tables/Users";
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 const successFactory: SuccessFactory = new SuccessFactory();

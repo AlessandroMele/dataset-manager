@@ -6,11 +6,8 @@
 
 # Requisiti
 - Docker;
+- Node.JS
 - Postman;
-- Node.JS;
-- Express;
-- Sequelize;
-- MySQL.
 
 # Descrizione ed obiettivi di progetto
 Si realizzi un sistema che consenta di gestire dati circa attività di annotazione di data-set ed inferenza a partire da modelli pre-addestrati. Devono essere predisposte le seguenti rotte:<br />
@@ -53,11 +50,35 @@ Si chiede di commentare opportunamente il codice.<br />
 # Progettazione
 
 ## Diagrammi UML
+### Diagramma dei casi d'uso
+<img src = "UML/use_case_diagram.png">
+
+### Diagramma strutturale
+
+<img src = "UML/DiagrammaProgetto.png">
 
 ## Pattern utilizzati
+
+## Factory
+
+## Singleton
+
+## Middleware
 
 # Configurazione
 
 ## Avvio del progetto
 
+Per avviare il progetto è necessario eseguire, posizionandosi nella directory di progetto:
+
+```
+cd dataset-manager
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up 
+```
+
 ## Testing 
+
+Esempi di chiamate:
+
+
+

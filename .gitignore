@@ -2,11 +2,13 @@ Specifiche progetto.pdf
 dataset-manager.pptx
 
 node_modules
-UML
+UML/*.mdj
 env
 
 database/database.drawio
 
+comandi.txt
+
 .DS_Store
 
-README.md
+build

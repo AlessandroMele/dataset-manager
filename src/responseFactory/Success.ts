@@ -49,8 +49,6 @@ class DefaultSuccess implements SuccessMessage {
     }
 }
 
-
-
 export class SuccessFactory {
     constructor () {}
     getSuccess (type: SuccessEnum): SuccessMessage {
