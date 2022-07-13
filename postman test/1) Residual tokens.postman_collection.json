@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "c12946b9-a7bb-4514-9289-f6788c002129",
-		"name": "Residual tokens",
+		"_postman_id": "80f1c847-b756-455e-b25c-a032ebb9a8da",
+		"name": "1) Residual tokens",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -50,7 +50,7 @@
 			"response": []
 		},
 		{
-			"name": "No email",
+			"name": "No username",
 			"event": [
 				{
 					"listen": "test",
@@ -158,7 +158,7 @@
 			"response": []
 		},
 		{
-			"name": "Emails doesn't match",
+			"name": "username doesn't match",
 			"event": [
 				{
 					"listen": "test",

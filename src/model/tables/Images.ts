@@ -1,34 +1,36 @@
-import {DataTypes, Model, Sequelize} from 'sequelize';
-import {Singleton} from "../Singleton";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { Singleton } from "../Singleton";
 const connection: Sequelize = Singleton.getConnection();
 
 export class ImageTable extends Model {}
 
-ImageTable.init({
+ImageTable.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
 
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
+    label: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+    },
 
-  label: {
-    type: DataTypes.STRING(30),
-    allowNull: false
-  },
+    path: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      unique: true,
+    },
 
-  path: {
-    type: DataTypes.STRING(30),
-    allowNull: false,
-    unique: true
+    boundingBoxes: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
   },
-
-  boundingBoxes: {
-    type: DataTypes.STRING(100),
-    allowNull: true
-  },
-}, {
-  sequelize: connection,
-  timestamps: false,
-  modelName: 'images'
-});
+  {
+    sequelize: connection,
+    timestamps: false,
+    modelName: "images",
+  }
+);

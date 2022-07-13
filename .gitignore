@@ -3,12 +3,12 @@ dataset-manager.pptx
 
 node_modules
 UML/*.mdj
+UML/*.drawio
+
 env
 
-database/database.drawio
+database/*.drawio
 
 comandi.txt
 
 .DS_Store
-
-build

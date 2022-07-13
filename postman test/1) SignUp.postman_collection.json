@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "a6ebaf16-a304-47ea-9881-6dc8a9f6682f",
-		"name": "signUp",
+		"_postman_id": "f21ac79c-d74d-43ff-ac3c-87eb83e3856a",
+		"name": "1) SignUp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

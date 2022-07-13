@@ -1,52 +1,48 @@
-import {DataTypes, Model, Sequelize} from 'sequelize';
-import {Singleton} from "../Singleton";
-import {DatasetTable} from './Datasets';
-import {ModelTable} from './Models';
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { Singleton } from "../Singleton";
+import { DatasetTable } from "./Datasets";
+import { ModelTable } from "./Models";
 const connection: Sequelize = Singleton.getConnection();
 
 export class UserTable extends Model {}
 
-UserTable.init({
+UserTable.init(
+  {
+    username: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      primaryKey: true,
+    },
 
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+    email: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
+
+    password: {
+      type: DataTypes.STRING(256),
+      allowNull: false,
+    },
+
+    token: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 100,
+    },
+
+    role: {
+      type: DataTypes.ENUM("user", "admin"),
+      defaultValue: "user",
+    },
   },
+  {
+    sequelize: connection,
+    timestamps: false,
+    modelName: "users",
+  }
+);
 
-  email: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    unique: true
-  },
+UserTable.hasMany(DatasetTable, { foreignKey: "user" });
 
-  username: {
-    type: DataTypes.STRING(30),
-    allowNull: false
-  },
-
-  password: {
-    type: DataTypes.STRING(256),
-    allowNull: false
-  },
-
-  token: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-    defaultValue: 100
-  },
-
-  role: {
-    type: DataTypes.ENUM('user', 'admin'),
-    defaultValue: 'user'
-  },
-}, {
-  sequelize: connection,
-  timestamps: false,
-  modelName: 'users'
-});
-
-
-UserTable.hasMany(DatasetTable);
-
-UserTable.hasMany(ModelTable);
+UserTable.hasMany(ModelTable, { foreignKey: "user" });

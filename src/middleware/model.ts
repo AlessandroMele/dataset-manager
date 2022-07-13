@@ -24,25 +24,3 @@ export const checkModelName = function (req: any, res: any, next: any) {
         next(error)
     };
 }
-
-
-/**
- * Check if the input body contains valid dataset
- * @param req user request
- * @param res response
- * @param next next middleware
- */
-export const checkDatasetName = function (req: any, res: any, next: any) {
-    try {
-        //checking if dataset is valid
-        if (typeof req.body.dataset !== 'string') {
-            var error = errorFactory.getError(ErrEnum.NoInputDatasetError).getMessage();
-            next(error)
-        }
-        else next()
-    }
-    catch (error: any) {
-        var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
-        next(error)
-    };
-}

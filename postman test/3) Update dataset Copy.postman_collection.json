@@ -1,51 +1,10 @@
 {
 	"info": {
-		"_postman_id": "8a3dc32e-4cc3-42fd-b765-e1f45b2c1b41",
-		"name": "refill tokens",
+		"_postman_id": "aae71af8-4d71-41b6-9dfb-8e33650a4cc1",
+		"name": "3) Update dataset Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "No tokenJWT",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"No tokenJWT\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "[]",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "Malformed tokenJWT",
 			"event": [
@@ -84,27 +43,68 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/update",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"update"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No tokens specified",
+			"name": "No tokenJWT",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No token specified\", function () {\r",
+							"pm.test(\"No tokenJWT\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No dataset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model_name\", function () {\r",
 							"  pm.response.to.have.status(400);\r",
 							"});"
 						],
@@ -118,16 +118,16 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU3NTc4NzMxLCJleHAiOjE2NTc1ODIzMzF9.Jpac-56hPI8I-ZG6IKv5XQVd6MuhzzYsaFld8CvbeD0",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NjYyMDE3LCJleHAiOjE2NTc2NjU2MTd9.ZvSaViWLpBjkuQbFcv3d7k6VTisuJ3xhCq8Z5BLGxkg",
 							"type": "string"
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"users1@users1.it\"\r\n}",
+					"raw": "{\r\n    \"model_name\": \"modello numero 1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -135,27 +135,27 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/create",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"create"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Negative tokens",
+			"name": "No model_name",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Number of token can't be negative\", function () {\r",
+							"pm.test(\"No model_name\", function () {\r",
 							"  pm.response.to.have.status(400);\r",
 							"});"
 						],
@@ -169,16 +169,16 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU3NTc4NzMxLCJleHAiOjE2NTc1ODIzMzF9.Jpac-56hPI8I-ZG6IKv5XQVd6MuhzzYsaFld8CvbeD0",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NjYyMDE3LCJleHAiOjE2NTc2NjU2MTd9.ZvSaViWLpBjkuQbFcv3d7k6VTisuJ3xhCq8Z5BLGxkg",
 							"type": "string"
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"users1@users1.it\",\r\n    \"token\": -10\r\n}",
+					"raw": "{\r\n    \"dataset\": \"modello numero 1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -186,78 +186,27 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/create",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"create"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No email",
+			"name": "No dataset with this name",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No email\", function () {\r",
-							"  pm.response.to.have.status(400);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU3NTc4NzMxLCJleHAiOjE2NTc1ODIzMzF9.Jpac-56hPI8I-ZG6IKv5XQVd6MuhzzYsaFld8CvbeD0",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"token\":300\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "User not found",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"User not found\", function () {\r",
+							"pm.test(\"No dataset found with this name\", function () {\r",
 							"  pm.response.to.have.status(404);\r",
 							"});"
 						],
@@ -271,16 +220,16 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU3NTc4NzMxLCJleHAiOjE2NTc1ODIzMzF9.Jpac-56hPI8I-ZG6IKv5XQVd6MuhzzYsaFld8CvbeD0",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NjYyMDE3LCJleHAiOjE2NTc2NjU2MTd9.ZvSaViWLpBjkuQbFcv3d7k6VTisuJ3xhCq8Z5BLGxkg",
 							"type": "string"
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\": 3333,\r\n    \"email\": \"email.sbagliata@aa.it\"\r\n}",
+					"raw": "{\r\n    \"dataset\": \"dataset sbagliato\",\r\n    \"model_name\": \"modello numero 1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -288,28 +237,28 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/create",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"create"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "User is not uthorized (use an user token)",
+			"name": "One model with this name already exists Copy",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"User is not uthorized (use an user token)\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
+							"pm.test(\"No email\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -322,16 +271,16 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsImlhdCI6MTY1NzU3NDQ2OSwiZXhwIjoxNjU3NTc4MDY5fQ.W93xyTYI1PoWrODeVn0zN4HuIDiGeDRzcTtjxIClmE4",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NjYyMDE3LCJleHAiOjE2NTc2NjU2MTd9.ZvSaViWLpBjkuQbFcv3d7k6VTisuJ3xhCq8Z5BLGxkg",
 							"type": "string"
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"users1@users1.it\",\r\n    \"token\": 333\r\n}",
+					"raw": "{\r\n    \"dataset\": \"occhi_ritagliati\",\r\n    \"model_name\": \"my_eye_models_0\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -339,28 +288,28 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/create",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"create"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Update success",
+			"name": "Create model success",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Update success\", function () {\r",
-							"  pm.response.to.have.status(200);\r",
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -373,16 +322,16 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwicGFzc3dvcmQiOiJwYXNzd29yZDEiLCJlbWFpbCI6ImFkbWluQGFkbWluLml0IiwiaWF0IjoxNjU3NjM2MTU0LCJleHAiOjE2NTc2Mzk3NTR9.rBqbS_AsS6qopSNtPm0xcmyecXpP7YNnzbXpUVeYT24",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NjYyMDE3LCJleHAiOjE2NTc2NjU2MTd9.ZvSaViWLpBjkuQbFcv3d7k6VTisuJ3xhCq8Z5BLGxkg",
 							"type": "string"
 						}
 					]
 				},
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"users1@users1.it\",\r\n    \"token\": 80\r\n}",
+					"raw": "{\r\n    \"dataset\": \"occhi_ritagliati\",\r\n    \"model_name\": \"modello nuovo giusto\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -390,14 +339,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/model/create",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"updateToken"
+						"model",
+						"create"
 					]
 				}
 			},

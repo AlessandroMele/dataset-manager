@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e3e13791-fa3c-4abd-90c6-1c6300706077",
-		"name": "login",
+		"_postman_id": "7c36495a-0083-4967-ae1a-811df563b74f",
+		"name": "1) Login",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
