@@ -1,4 +1,4 @@
-var jwt = require("../middleware/jwtUtil");
+var jwt = require("../middleware/util/jwtUtil");
 import {SuccessEnum, ErrEnum, Response, formatResponse, formatResponseWithData} from '../responseFactory/util';
 import {ErrorFactory} from "../responseFactory/Error";
 import {SuccessFactory} from "../responseFactory/Success";
@@ -18,13 +18,12 @@ const successFactory: SuccessFactory = new SuccessFactory();
 export const login = async function (username: string, role: string, password: string, email: string, res: any) {
   try {
     //trying to search existing user
-    let results: UserTable | null = await UserTable.findOne({
+    let user: UserTable | null = await UserTable.findOne({
       where: {email: email, password: password, role: role},
     });
-    if (results != null) {
+    if (user != null) {
       //generate token
-      let token: string = jwt.setToken(username, role, password, email);
-      let decoded: string = jwt.getPayload(token);
+      let [token, decoded]: [string, string] = jwt.setToken(username, role, password, email);;
       formatResponseWithData(res, successFactory.getSuccess(SuccessEnum.JWTSuccess).getMessage(), {token: token, info: decoded})
     }
     //wrong password or email

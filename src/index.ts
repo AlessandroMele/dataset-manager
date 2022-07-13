@@ -1,9 +1,10 @@
 import {checkAutorization} from "./middleware/user";
-import {checkRequestContent} from "./middleware/util";
-
+import {checkRequestContent} from "./middleware/util/util";
+import {renderErrors} from './middleware/util/util';
 const userRouter = require("./routes/user");
 const modelRouter = require("./routes/model");
 const datasetRouter = require("./routes/dataset");
+
 
 const express = require("express");
 const app = express();
@@ -13,9 +14,12 @@ app.use(checkRequestContent);
 //Body request parsed in JSON
 app.use(express.json());
 
+
 app.use("/user", userRouter);
 app.use("/model", [checkAutorization], modelRouter);
 app.use("/dataset", [checkAutorization], datasetRouter);
+//Render errors 
+app.use(renderErrors);
 
 //check if the env variable APP_PORT is set and activate the application
 if (process.env.APP_PORT) {

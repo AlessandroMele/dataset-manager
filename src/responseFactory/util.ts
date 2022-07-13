@@ -1,26 +1,33 @@
 export enum ErrEnum {
-    AuthError,
-    CreateTokenErrorUsername,
-    CreateTokenErrorRole,
+    NoUserFoundError,
+    NoInputTokenNumberError,
+    NoInputRoleError,
+    NoInputPasswordError,
+    NoInputUsernameError,
+    NoInputEmailError,
+    NoInputModelError,
+    NoInputDatasetError,
+    UserAlreadyExists,
+    InputCredentialsNotValid,
+    EmailNotMatchError,
+    NoJSONRequest,
     InternalError,
     AdminAuthError,
-    NumberTokenNotValid,
-    InputEmailNotValid,
+    AuthError,
     RequestErrorJSON,
-    NoJSONRequest,
-    InputPasswordNotValid,
-    InputCredentialsNotValid,
-    UserAlreadyExists,
-    EmailNotMatchError,
-    NoUserFoundError
+    ModelAlreadyExists,
+    NoDatasetFoundError,
+    NoModelFoundError
 }
+
 
 export enum SuccessEnum {
     JWTSuccess,
     DefaultSuccess,
     UpdateSuccess,
     UserCreateSuccess,
-    GetSuccess
+    GetSuccess,
+    ModelCreateSuccess
 }
 
 export interface Response {

@@ -2,7 +2,7 @@ import {ImageTable} from "./tables/Images";
 import {ModelTable} from "./tables/Models";
 import {UserTable} from "./tables/Users";
 import {DatasetTable} from "./tables/Datasets";
-
+/**
 DatasetTable.hasMany(ImageTable, {
     foreignKey: 'id'
 });
@@ -26,3 +26,4 @@ UserTable.hasMany(DatasetTable, {
 UserTable.hasMany(ModelTable, {
     foreignKey: 'id'
 });
+*/

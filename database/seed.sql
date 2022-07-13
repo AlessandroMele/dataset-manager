@@ -33,7 +33,7 @@ CREATE TABLE `images` (
 CREATE TABLE `models` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
-  `path` varchar(100) NOT NULL UNIQUE,
+  `path` varchar(100) DEFAULT NULL UNIQUE,
   `datasetId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`id`)

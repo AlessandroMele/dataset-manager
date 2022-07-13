@@ -20,6 +20,8 @@ if (process.env.SECRET_KEY) {
  * @returns informations in the token 
  */
 export const getPayload = function (token: string) {
+    //token variable starts with "Bearer ", so now we cut that word
+    token = token.slice(7, token.length);
     let decoded_token = jsonwebtoken.decode(token, {complete: true});
     return decoded_token
 }
@@ -28,13 +30,14 @@ export const getPayload = function (token: string) {
  * Generate the token from information about the user
  * @param username name of the user
  * @param role role of the user
- * @returns token 
+ * @returns token and payload informations
  */
-export const setToken = function (username: string, role: string, password: string, email: string): string {
+export const setToken = function (username: string, role: string, password: string, email: string): [string, string] {
     try {
-        var payload: Object = {username: username, role: role, password: password, email: email};
-        var token = jsonwebtoken.sign(payload, secretKey, options);
-        return token;
+        let informations: Object = {username: username, role: role, password: password, email: email};
+        let token = jsonwebtoken.sign(informations, secretKey, options);
+        let payload: string = jsonwebtoken.decode(token, {complete: true});
+        return [token, payload];
     }
     catch (error: any) {
         return error;

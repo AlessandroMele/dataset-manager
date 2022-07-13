@@ -1,5 +1,5 @@
-import {ErrEnum, Response, formatResponse} from "../responseFactory/util";
-import {ErrorFactory} from "../responseFactory/Error";
+import {ErrEnum, Response, formatResponse} from "../../responseFactory/util";
+import {ErrorFactory} from "../../responseFactory/Error";
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 

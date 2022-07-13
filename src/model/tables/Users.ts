@@ -1,5 +1,7 @@
 import {DataTypes, Model, Sequelize} from 'sequelize';
 import {Singleton} from "../Singleton";
+import {DatasetTable} from './Datasets';
+import {ModelTable} from './Models';
 const connection: Sequelize = Singleton.getConnection();
 
 export class UserTable extends Model {}
@@ -43,3 +45,8 @@ UserTable.init({
   timestamps: false,
   modelName: 'users'
 });
+
+
+UserTable.hasMany(DatasetTable);
+
+UserTable.hasMany(ModelTable);

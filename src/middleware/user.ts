@@ -1,4 +1,4 @@
-const jwt = require("./jwtUtil");
+const jwt = require("./util/jwtUtil");
 import {ErrEnum, Response} from "../responseFactory/util"
 import {ErrorFactory} from "../responseFactory/Error"
 
@@ -52,8 +52,6 @@ export const checkAdmin = function (req: any, res: any, next: any) {
     try {
         //extracting token
         let token = req.headers["authorization"];
-        //token variable starts with "Bearer ", so now we cut that word
-        token = token.slice(7, token.length);
         var payload = jwt.getPayload(token)
         var role: string = payload.payload.role;
         //if role is not set to admin, call the error middleware
@@ -80,7 +78,7 @@ export const checkInputUser = function (req: any, res: any, next: any) {
     try {
         //checking if username is valid
         if (typeof req.body.username !== 'string') {
-            var error = errorFactory.getError(ErrEnum.CreateTokenErrorUsername).getMessage();
+            var error = errorFactory.getError(ErrEnum.NoInputUsernameError).getMessage();
             next(error)
         }
         else next()
@@ -101,7 +99,7 @@ export const checkInputPassword = function (req: any, res: any, next: any) {
     try {
         //checking if password is valid
         if (typeof req.body.password !== 'string') {
-            var error = errorFactory.getError(ErrEnum.InputPasswordNotValid).getMessage();
+            var error = errorFactory.getError(ErrEnum.NoInputPasswordError).getMessage();
             next(error)
         }
         else next()
@@ -123,7 +121,7 @@ export const checkInputRole = function (req: any, res: any, next: any) {
     try {
         //checking if role is valid
         if (req.body.role !== 'admin' && req.body.role !== 'user') {
-            var error = errorFactory.getError(ErrEnum.CreateTokenErrorRole).getMessage();
+            var error = errorFactory.getError(ErrEnum.NoInputRoleError).getMessage();
             next(error)
         }
         else next()
@@ -147,7 +145,7 @@ export const checkInputToken = function (req: any, res: any, next: any) {
     try {
         //checking if token number is valid
         if (typeof req.body.token !== 'number' && req.body.token <= 0) {
-            var error = errorFactory.getError(ErrEnum.NumberTokenNotValid).getMessage();
+            var error = errorFactory.getError(ErrEnum.NoInputTokenNumberError).getMessage();
             next(error)
         }
         else next()
@@ -168,7 +166,7 @@ export const checkInputEmail = function (req: any, res: any, next: any) {
     try {
         //checking if email is valid
         if (typeof req.body.email !== 'string') {
-            var error = errorFactory.getError(ErrEnum.InputEmailNotValid).getMessage();
+            var error = errorFactory.getError(ErrEnum.NoInputEmailError).getMessage();
             next(error)
         }
         else next()
@@ -191,9 +189,7 @@ export const checkEmailMatches = function (req: any, res: any, next: any) {
     try {
         //extracting token
         let token = req.headers["authorization"];
-        //token variable starts with "Bearer ", so now we cut that word
-        token = token.slice(7, token.length);
-        var payload = jwt.getPayload(token)
+        var payload = jwt.getPayload(token);
         var email: string = payload.payload.email;
         var role: string = payload.payload.role;
         //if email doesn't matches the email in the token and the role is not admin, call the error middleware

@@ -13,6 +13,15 @@ class UserAlreadyExists implements ErrorMessage {
   }
 }
 
+class ModelAlreadyExists implements ErrorMessage {
+  getMessage (): Response {
+    return {
+      message: "You can't have two models with the same name",
+      status: 409 //conflict 
+    };
+  }
+}
+
 class AuthError implements ErrorMessage {
   getMessage (): Response {
     return {
@@ -40,7 +49,7 @@ class AdminAuthError implements ErrorMessage {
   }
 }
 
-class CreateTokenErrorUsername implements ErrorMessage {
+class NoInputUsernameError implements ErrorMessage {
   public getMessage (): Response {
     return {
       message: "Need to specify string 'username' ",
@@ -49,25 +58,43 @@ class CreateTokenErrorUsername implements ErrorMessage {
   }
 }
 
-class InputEmailNotValid implements ErrorMessage {
+class NoInputModelError implements ErrorMessage {
   public getMessage (): Response {
     return {
-      message: "Need to specify string 'email'",
+      message: "Need to specify string 'model_name' ",
       status: 400
     };
   }
 }
 
-class NumberTokenNotValid implements ErrorMessage {
+class NoInputDatasetError implements ErrorMessage {
   public getMessage (): Response {
     return {
-      message: "Need to specify number of 'token'",
+      message: "Need to specify string 'dataset'",
       status: 400
     };
   }
 }
 
-class CreateTokenErrorRole implements ErrorMessage {
+class NoInputEmailError implements ErrorMessage {
+  public getMessage (): Response {
+    return {
+      message: "Need to specify a valid string 'email'",
+      status: 400
+    };
+  }
+}
+
+class NoInputTokenNumberError implements ErrorMessage {
+  public getMessage (): Response {
+    return {
+      message: "Need to specify number of 'token' to recharge",
+      status: 400
+    };
+  }
+}
+
+class NoInputRoleError implements ErrorMessage {
   public getMessage (): Response {
     return {
       message: "Need to specify string 'role', you can pick 'admin' or 'user'",
@@ -103,7 +130,7 @@ class NoJSONRequest implements ErrorMessage {
   }
 }
 
-class InputPasswordNotValid implements ErrorMessage {
+class NoInputPasswordError implements ErrorMessage {
   public getMessage (): Response {
     return {
       message: "Need to specify string 'password'",
@@ -130,6 +157,27 @@ class NoUserFoundError implements ErrorMessage {
   }
 }
 
+
+class NoDatasetFoundError implements ErrorMessage {
+  public getMessage (): Response {
+    return {
+      message: "No dataset found with this name",
+      status: 404
+    };
+  }
+}
+
+class NoModelFoundError implements ErrorMessage {
+  public getMessage (): Response {
+    return {
+      message: "You have no model",
+      status: 404
+    };
+  }
+}
+
+
+
 export class ErrorFactory {
   constructor () {}
   getError (type: ErrEnum): ErrorMessage {
@@ -137,33 +185,40 @@ export class ErrorFactory {
     switch (type) {
       case ErrEnum.AuthError:
         error = new AuthError();
+        NoInputPasswordError
         break;
       case ErrEnum.AdminAuthError:
         error = new AdminAuthError();
         break;
+      case ErrEnum.NoInputPasswordError:
+        error = new NoInputPasswordError();
+        break;
       case ErrEnum.RequestErrorJSON:
         error = new RequestErrorJSON();
         break;
-      case ErrEnum.CreateTokenErrorUsername:
-        error = new CreateTokenErrorUsername();
+      case ErrEnum.NoInputModelError:
+        error = new NoInputModelError();
         break;
-      case ErrEnum.InputEmailNotValid:
-        error = new InputEmailNotValid();
+      case ErrEnum.NoInputRoleError:
+        error = new NoInputRoleError();
+        break;
+      case ErrEnum.NoInputEmailError:
+        error = new NoInputEmailError();
         break;
       case ErrEnum.NoJSONRequest:
         error = new NoJSONRequest();
         break;
-      case ErrEnum.NumberTokenNotValid:
-        error = new NumberTokenNotValid();
+      case ErrEnum.NoInputTokenNumberError:
+        error = new NoInputTokenNumberError();
         break;
       case ErrEnum.EmailNotMatchError:
         error = new EmailNotMatchError();
         break;
-      case ErrEnum.CreateTokenErrorRole:
-        error = new CreateTokenErrorRole();
+      case ErrEnum.NoInputDatasetError:
+        error = new NoInputDatasetError();
         break;
-      case ErrEnum.InputPasswordNotValid:
-        error = new InputPasswordNotValid();
+      case ErrEnum.NoInputUsernameError:
+        error = new NoInputUsernameError();
         break;
       case ErrEnum.InputCredentialsNotValid:
         error = new InputCredentialsNotValid();
@@ -171,14 +226,21 @@ export class ErrorFactory {
       case ErrEnum.UserAlreadyExists:
         error = new UserAlreadyExists();
         break;
+      case ErrEnum.ModelAlreadyExists:
+        error = new ModelAlreadyExists();
+        break;
       case ErrEnum.NoUserFoundError:
         error = new NoUserFoundError();
         break;
-
+      case ErrEnum.NoDatasetFoundError:
+        error = new NoDatasetFoundError();
+        break;
+      case ErrEnum.NoModelFoundError:
+        error = new NoModelFoundError();
+        break;
       default:
         error = new InternalError();
     }
-
     return error;
   }
 }

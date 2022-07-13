@@ -13,6 +13,15 @@ class UserCreateSuccess implements SuccessMessage {
     }
 }
 
+class ModelCreateSuccess implements SuccessMessage {
+    getMessage (): Response {
+        return {
+            message: "Model created with success",
+            status: 201
+        };
+    }
+}
+
 class JWTSuccess implements SuccessMessage {
     getMessage (): Response {
         return {
@@ -65,6 +74,9 @@ export class SuccessFactory {
                 break;
             case SuccessEnum.UserCreateSuccess:
                 success = new UserCreateSuccess();
+                break;
+            case SuccessEnum.ModelCreateSuccess:
+                success = new ModelCreateSuccess();
                 break;
             default:
                 success = new DefaultSuccess();
