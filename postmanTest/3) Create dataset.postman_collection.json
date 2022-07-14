@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0f29b6f4-5509-4ff1-bb51-b0f3cd83486a",
+		"_postman_id": "56cb135a-ed9f-4b9a-bc9f-2abe69f247e9",
 		"name": "3) Create dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -120,7 +120,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'dataset'\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'datasetName'\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -176,7 +176,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'dataset'\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify 'numClasses'\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -198,7 +198,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"]\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -257,7 +257,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -313,7 +313,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

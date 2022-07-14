@@ -12,10 +12,21 @@ class UserAlreadyExists implements ErrorMessage {
     };
   }
 }
+
+class NoInputFileModelError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Input model file not found",
+      status: 400,
+    };
+  }
+}
+
+
 class NoInputKeywordsError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify keywords",
+      message: "You have to specify 'keywords'",
       status: 400,
     };
   }
@@ -23,8 +34,8 @@ class NoInputKeywordsError implements ErrorMessage {
 class NoInputNumClassesError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify number of classes",
-      status: 409, //conflict
+      message: "You have to specify 'numClasses'",
+      status: 400,
     };
   }
 }
@@ -50,7 +61,7 @@ class AuthError implements ErrorMessage {
 class UserNotMatchError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "Users can only get their residual token",
+      message: "Users can only get their own residual token",
       status: 401,
     };
   }
@@ -77,7 +88,7 @@ class NoInputUsernameError implements ErrorMessage {
 class NoInputModelError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'model_name' ",
+      message: "Need to specify string 'modelName' ",
       status: 400,
     };
   }
@@ -86,7 +97,7 @@ class NoInputModelError implements ErrorMessage {
 class NoInputDatasetError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'name'",
+      message: "Need to specify string 'datasetName'",
       status: 400,
     };
   }
@@ -104,7 +115,7 @@ class NoInputEmailError implements ErrorMessage {
 class NoInputTokenNumberError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Invalid 'tokens' to recharge",
+      message: "Number 'token' is invalid ",
       status: 400,
     };
   }
@@ -140,7 +151,7 @@ class RequestErrorJSON implements ErrorMessage {
 class NoJSONRequest implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Your request body need to be a json object",
+      message: "Your request body need to be a JSON object",
       status: 400,
     };
   }
@@ -181,16 +192,24 @@ class NoDatasetFoundError implements ErrorMessage {
     };
   }
 }
+class NoInputMetadataError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "No input metadata",
+      status: 400,
+    };
+  }
+}
+
 
 class DatasetAlreadyExists implements ErrorMessage {
   public getMessage(): Response {
     return {
       message: "Dataset already exists",
-      status: 404,
+      status: 409,
     };
   }
 }
-
 
 
 class NoModelFoundError implements ErrorMessage {
@@ -241,6 +260,12 @@ export class ErrorFactory {
         break;
       case ErrEnum.NoInputEmailError:
         error = new NoInputEmailError();
+        break;
+        case ErrEnum.NoInputFileModelError:
+        error = new NoInputFileModelError();
+        break;
+        case ErrEnum.NoInputMetadataError:
+        error = new NoInputMetadataError();
         break;
       case ErrEnum.NoJSONRequest:
         error = new NoJSONRequest();

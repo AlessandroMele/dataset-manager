@@ -1,3 +1,4 @@
+import { checkRequestContent } from "../middleware/util/util";
 import {
   create,
   update,
@@ -9,14 +10,13 @@ import {
 } from "../controller/datasetController";
 
 import {checkDatasetName, checKeywords, checkNumClasses} from "../middleware/dataset"
-import { checkAutorization } from "../middleware/user";
 
 var express = require("express");
 var router = express.Router();
 
 //creating dataset
-router.put("/create", [checkDatasetName, checKeywords, checkNumClasses], function (req: any, res: any) {
-  create(req.body.name,req.body.numClasses, req.body.keywords, req.headers["authorization"], res);
+router.put("/create", [checkRequestContent, express.json(), checkDatasetName, checKeywords, checkNumClasses], function (req: any, res: any) {
+  create(req.body.datasetName,req.body.numClasses, req.body.keywords, req.headers["authorization"], res);
 });
 
 //updating dataset
@@ -25,12 +25,12 @@ router.put("/:id/update", function (req: any, res: any) {
 });
 
 //deleting dataset
-router.delete("/:id/delete", function (req: any, res: any) {
-  remove(req.headers.dataset, req.headers["authorization"], res);
+router.delete("/:id/delete",[checkRequestContent, express.json()], function (req: any, res: any) {
+  remove(req.headers.datasetName, req.headers["authorization"], res);
 });
 
 //dataset's list
-router.get("/list",[checkAutorization], function (req: any, res: any) {
+router.get("/list", function (req: any, res: any) {
   list(req.headers["authorization"], res);
 });
 
@@ -45,7 +45,7 @@ router.put("/:id/zip/insert", function (req: any, res: any) {
 });
 
 //insert a label on a specific image on the specified dataset
-router.put("/:id/image/:id/label/insert", function (req: any, res: any) {
+router.put("/:id/image/:id/label/insert",[checkRequestContent, express.json()], function (req: any, res: any) {
   labelInsert(req, res);
 });
 

@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e1fafe5f-c51b-4485-a64b-8ca0ba8f1dc6",
-		"name": "2) Create model",
+		"_postman_id": "61200e84-6f60-4150-adec-8a385e048193",
+		"name": "2) Update model metadata",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -12,13 +12,13 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Malformed tokenJWT\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -31,7 +31,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "ciaociao",
+							"value": "cccc",
 							"type": "string"
 						}
 					]
@@ -40,7 +40,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[]",
+					"raw": "{\n    \"modelName\": \"star wars\",\n    \"newModelName\": \"star wars nuovo\",\n    \"datasetName\": \"occhi_ritagliati\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,14 +48,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model/updateMetadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"create"
+						"updateMetadata"
 					]
 				}
 			},
@@ -68,59 +68,13 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No tokenJWT\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "[]",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/model/create",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"model",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "No dataset",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"No model_name\", function () {\r",
-							"  pm.response.to.have.status(400);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'dataset'\");\r",
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -133,7 +87,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-user}}",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -142,7 +96,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"model_name\": \"modello numero 1\"\r\n}",
+					"raw": "{\n    \"modelName\": \"star wars\",\n    \"newModelName\": \"star wars nuovo\",\n    \"datasetName\": \"occhi_ritagliati\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -150,89 +104,35 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model/updateMetadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"create"
+						"updateMetadata"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No model_name",
+			"name": "Model not found",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model_name\", function () {\r",
-							"  pm.response.to.have.status(400);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'model_name' \");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-user}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"modello numero 1\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/model/create",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"model",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "No dataset with this name",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"No dataset found with this name\", function () {\r",
+							"pm.test(\"Success\", function () {\r",
 							"  pm.response.to.have.status(404);\r",
 							"});\r",
 							"\r",
+							"\r",
+							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Model not found\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -254,7 +154,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"dataset sbagliato\",\r\n    \"model_name\": \"modello numero 1\"\r\n}",
+					"raw": "{\r\n    \"modelName\": \"modello non esistente\",\r\n    \"newModelName\": \"star wars nuovo3\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -262,33 +162,35 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model/updateMetadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"create"
+						"updateMetadata"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "One model with this name already exists",
+			"name": "Dataset not found",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No email\", function () {\r",
-							"  pm.response.to.have.status(409);\r",
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
 							"});\r",
+							"\r",
+							"\r",
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"You can't have two models with the same name\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Model not found\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -310,7 +212,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"occhi_ritagliati\",\r\n    \"model_name\": \"my_eye_models_0\"\r\n}",
+					"raw": "{\r\n    \"modelName\": \"star wars nuovo3\",\r\n    \"datasetName\": \"dataset non esistente\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -318,21 +220,190 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model/updateMetadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"create"
+						"updateMetadata"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Create model success",
+			"name": "No model input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'modelName' \");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/updateMetadata",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"updateMetadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No input metadata",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No input metadata\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"No input metadata\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"modelName\": \"star wars_27\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/updateMetadata",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"updateMetadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update datasetName success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Value correctly modified\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"modelName\": \"star wars nuovo3\",\r\n    \"datasetName\": \"occhio_dx\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/updateMetadata",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"updateMetadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update modelName success",
 			"event": [
 				{
 					"listen": "test",
@@ -344,10 +415,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.model.id).to.eql(3);\r",
-							"  pm.expect(jsonData.model.name).to.eql(\"star wars\");\r",
-							"  pm.expect(jsonData.model.datasetId).to.eql(1);\r",
-							"  pm.expect(jsonData.model.user).to.eql(\"user\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Value correctly modified\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -369,7 +437,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"dataset\": \"occhi_ritagliati\",\r\n    \"model_name\": \"star wars\"\r\n}",
+					"raw": "{\r\n    \"modelName\": \"star wars nuovo3\",\r\n    \"newModelName\": \"modello nuovo\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -377,14 +445,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model/updateMetadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"create"
+						"updateMetadata"
 					]
 				}
 			},

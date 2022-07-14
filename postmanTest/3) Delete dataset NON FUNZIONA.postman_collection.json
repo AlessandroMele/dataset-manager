@@ -1,66 +1,10 @@
 {
 	"info": {
-		"_postman_id": "5d5b991c-fe9e-400b-9bb7-c5fa693ca8b3",
-		"name": "2) Delete model",
+		"_postman_id": "be03b294-6424-4a88-add9-d1d3918ab6aa",
+		"name": "3) Delete dataset NON FUNZIONA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "Malformed tokenJWT",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
-							"  pm.response.to.have.status(401);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "cccc",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"model_name\": \"new_model\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/dataset/delete",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"dataset",
-						"delete"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "No tokenJWT",
 			"event": [
@@ -118,19 +62,19 @@
 			"response": []
 		},
 		{
-			"name": "No model found",
+			"name": "Malformed tokenJWT",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(401);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -143,7 +87,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-admin}}",
+							"value": "cccc",
 							"type": "string"
 						}
 					]
@@ -152,7 +96,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"model_name\": \"ciccioPanzo\"\n}",
+					"raw": "{\n    \"model_name\": \"new_model\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -160,13 +104,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/delete",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
+						"dataset",
 						"delete"
 					]
 				}
@@ -174,7 +118,63 @@
 			"response": []
 		},
 		{
-			"name": "Delete model success",
+			"name": "No dataset found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dataset\": \"dataset sbagliato\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/delete",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete dataset success",
 			"event": [
 				{
 					"listen": "test",
@@ -199,7 +199,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoicGFzc3dvcmQyIiwiZW1haWwiOiJ1c2VyczFAdXNlcnMxLml0IiwiaWF0IjoxNjU3NzQwODAwLCJleHAiOjE2NTg2MDQ4MDB9.reRh_RlCFB_0n5N6ieZ76IG6Eo8txIWg4W1RhU1azw4",
+							"value": "{{token-user}}",
 							"type": "string"
 						}
 					]
@@ -208,7 +208,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"model_name\": \"my_eye_models_0\"\n}",
+					"raw": "{\n    \"dataset\": \"occhi_ritagliati\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,13 +216,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/delete",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
+						"dataset",
 						"delete"
 					]
 				}

@@ -1,235 +1,67 @@
 {
 	"info": {
-		"_postman_id": "cb3b9f44-23aa-4508-bdee-13a9aecafefa",
-		"name": "1) Refill tokens",
+		"_postman_id": "d9a9487b-0393-4d90-a933-5d42226aba46",
+		"name": "1) Login",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "No tokenJWT",
+			"name": "Error in json body",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No tokenJWT\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "[]",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Malformed tokenJWT",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Malformed tokenJWT\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "ciaociao",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "[]",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "No tokens specified",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"No token specified\", function () {\r",
+							"pm.test(\"Error in json body\", function () {\r",
 							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Invalid 'tokens' to recharge\");\r",
-							"});"
+							"  pm.expect(jsonData.message).to.eql(\"Your request body need to be a json object\");\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript"
 					}
 				}
 			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"user\"\r\n}",
+					"raw": "{   eeeeeeeeeeeeeee\r\n    \"username\": \"1000,\r\n    \"role\":\"admi\r\n}",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/user/login",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"updateToken"
+						"login"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Negative tokens",
+			"name": "Username is not set",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Number of token can't be negative\", function () {\r",
+							"pm.test(\"Username is not set\", function () {\r",
 							"  pm.response.to.have.status(400);\r",
 							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Invalid 'tokens' to recharge\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"user\",\r\n    \"token\": -10\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "No username",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"No email\", function () {\r",
-							"  pm.response.to.have.status(400);\r",
-							"});\r",
-							"\r",
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
@@ -241,21 +73,11 @@
 				}
 			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\":300\r\n}",
+					"raw": "{\r\n    \r\n    \"role\":\"admin\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -263,33 +85,317 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/user/login",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"updateToken"
+						"login"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "User not found",
+			"name": "Email is not set",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"User not found\", function () {\r",
-							"  pm.response.to.have.status(404);\r",
+							"pm.test(\"Email is not set\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"No user found with this username\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid string 'email'\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"user\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Password is not set",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Password is not set\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'password'\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email\",\r\n    \"username\": \"user\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Role is not set Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Role is not set\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'role', you can pick 'admin' or 'user'\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email\",\r\n    \"username\": \"user\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Email not in database",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Email not in database\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Email or password not valid\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"pippo.pippo\",\r\n    \"username\": \"user\",\r\n    \"role\":\"user\",\r\n    \"password\": \"password1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Email in database, but wrong password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Email in database, but wrong password\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Email or password not valid\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@admin.it\",\r\n    \"username\": \"user\",\r\n    \"role\":\"user\",\r\n    \"password\": \"password_errata\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create success (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create success\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.info.payload.username).to.eql(\"admin\");\r",
+							"  pm.expect(jsonData.info.payload.role).to.eql(\"admin\");\r",
+							"  pm.expect(jsonData.info.payload.password).to.eql(\"password1\");\r",
+							"  pm.expect(jsonData.info.payload.email).to.eql(\"admin@admin.it\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@admin.it\",\r\n    \"username\": \"admin\",\r\n    \"role\":\"admin\",\r\n    \"password\": \"password1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create success (user)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create success\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.info.payload.username).to.eql(\"user\");\r",
+							"  pm.expect(jsonData.info.payload.role).to.eql(\"user\");\r",
+							"  pm.expect(jsonData.info.payload.password).to.eql(\"password2\");\r",
+							"  pm.expect(jsonData.info.payload.email).to.eql(\"users1@users1.it\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -302,7 +408,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-admin}}",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -311,7 +417,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\": 3333,\r\n    \"username\": \"user sbagliato\"\r\n}",
+					"raw": "{\r\n    \"email\": \"users1@users1.it\",\r\n    \"username\": \"user\",\r\n    \"role\":\"user\",\r\n    \"password\": \"password2\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -319,134 +425,41 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/updateToken",
+					"raw": "localhost:8080/user/login",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"updateToken"
+						"login"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "User is not uthorized (use an user token)",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"User is not uthorized (use an user token)\", function () {\r",
-							"  pm.response.to.have.status(401);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Sorry, you are not the admin\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-user}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"users1@users1.it\",\r\n    \"token\": 333\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update success",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Update success\", function () {\r",
-							"  pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Confirm response message\", function () {\r",
-							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.username).to.eql(\"user\");\r",
-							"  pm.expect(jsonData.role).to.eql(\"user\");\r",
-							"  pm.expect(jsonData.password).to.eql(\"password2\");\r",
-							"  pm.expect(jsonData.email).to.eql(\"users1@users1.it\");\r",
-							"  pm.expect(jsonData.token).to.eql(80);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"user\",\r\n    \"token\": 80\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/updateToken",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"updateToken"
-					]
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

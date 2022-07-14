@@ -20,7 +20,9 @@ export enum ErrEnum {
   NoModelFoundError,
   DatasetAlreadyExists,
   NoInputNumClassesError,
-  NoInputKeywordsError
+  NoInputKeywordsError,
+  NoInputMetadataError,
+  NoInputFileModelError
 }
 
 export enum SuccessEnum {

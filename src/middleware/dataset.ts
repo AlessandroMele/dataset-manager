@@ -13,7 +13,7 @@ const errorFactory: ErrorFactory = new ErrorFactory();
  export const checkDatasetName = function (req: any, res: any, next: any) {
   try {
       //checking if dataset is valid
-      if (typeof req.body.name !== 'string') {
+      if (typeof req.body.datasetName !== 'string') {
           var error = errorFactory.getError(ErrEnum.NoInputDatasetError).getMessage();
           next(error)
       }

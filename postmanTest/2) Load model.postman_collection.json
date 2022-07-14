@@ -1,66 +1,10 @@
 {
 	"info": {
-		"_postman_id": "55f6542b-b248-4aa8-a476-b2aeb1baebe1",
-		"name": "3) Delete dataset NON FUNZIONA",
+		"_postman_id": "939abfdc-06a5-4e85-9f2d-8647204312fd",
+		"name": "2) Load model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "No tokenJWT",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
-							"  pm.response.to.have.status(401);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"model_name\": \"new_model\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/dataset/delete",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"dataset",
-						"delete"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "Malformed tokenJWT",
 			"event": [
@@ -92,11 +36,11 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"model_name\": \"new_model\"\n}",
+					"raw": "{\n    \"modelName\": \"new_model\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -104,21 +48,77 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/model/loadFile",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"model",
+						"loadFile"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No dataset found",
+			"name": "No tokenJWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/loadFile",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"loadFile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No model found",
 			"event": [
 				{
 					"listen": "test",
@@ -130,7 +130,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");",
+							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -148,11 +148,22 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"dataset\": \"dataset sbagliato\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
+						},
+						{
+							"key": "modelName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -160,33 +171,33 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/model/loadFile",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"model",
+						"loadFile"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete dataset success",
+			"name": "Load model success",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Success\", function () {",
-							"  pm.response.to.have.status(200);",
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(404);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Item has been removed successfully\");",
+							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -204,11 +215,22 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"dataset\": \"occhi_ritagliati\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "543.carousel2-potassium-1024w-1366h@2xipad.jpg"
+						},
+						{
+							"key": "modelName",
+							"value": "my_eye_models_0",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,14 +238,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/model/loadFile",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"model",
+						"loadFile"
 					]
 				}
 			},

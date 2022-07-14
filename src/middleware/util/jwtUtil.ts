@@ -3,7 +3,7 @@ const jsonwebtoken = require("jsonwebtoken");
 // options about the token
 const options = {
   algorithm: "HS256",
-  expiresIn: "1h",
+  expiresIn: "20d",
 };
 
 // check if the env variable is set

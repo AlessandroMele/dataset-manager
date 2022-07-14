@@ -1,14 +1,15 @@
-import { checkAutorization } from "../middleware/user";
-import { checkModelName } from "../middleware/model";
+import { checkMetadata, checkModelName, checkInputFile } from "../middleware/model";
 import {checkDatasetName} from "../middleware/dataset";
 import {
   create,
-  update,
+  updateMetadata,
+  updateFile,
   remove,
   list,
-  load,
+  loadFile,
   inference,
 } from "../controller/modelController";
+import { checkRequestContent } from "../middleware/util/util";
 
 var express = require("express");
 var router = express.Router();
@@ -16,35 +17,40 @@ var router = express.Router();
 //create model
 router.put(
   "/create",
-  [checkAutorization, checkModelName, checkDatasetName],
+  [checkRequestContent, express.json(), checkModelName, checkDatasetName],
   function (req: any, res: any) {
     create(
-      req.body.model_name,
-      req.body.dataset,
+      req.body.modelName,
+      req.body.datasetName,
       req.headers["authorization"],
       res
     );
   }
 );
 
-//update model
-router.put("/update", function (req: any, res: any) {
-  update(req, res);
+//update model metadata
+router.put("/updateMetadata", [checkRequestContent, express.json(), checkModelName, checkMetadata], function (req: any, res: any) {
+  updateMetadata(req.body.modelName, req.body.newModelName, req.body.datasetName, req.headers["authorization"], res);
+});
+
+//update model file
+router.put("/updateFile", [], function (req: any, res: any) {
+  updateFile(req, res);
 });
 
 //delete model
-router.delete("/delete", function (req: any, res: any) {
-  remove(req.body.model_name, req.headers["authorization"], res);
+router.delete("/delete", [checkRequestContent, express.json(), checkModelName], function (req: any, res: any) {
+  remove(req.body.modelName, req.headers["authorization"], res);
 });
 
 //list of models
-router.get("/list", [checkAutorization], function (req: any, res: any) {
+router.get("/list", [], function (req: any, res: any) {
   list(req.headers["authorization"], res);
 });
 
-//load model's file
-router.post("/load", function (req: any, res: any) {
-  load(req, res);
+//load model file
+router.post("/loadFile", [checkInputFile], function (req: any, res: any) {
+  loadFile(req.files, req.body.modelName, req.headers["authorization"], res);
 });
 
 //calculating inference of a specific image on a specific model

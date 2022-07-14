@@ -17,7 +17,7 @@ class RemovedSuccess implements SuccessMessage {
   getMessage(): Response {
     return {
       message: "Item has been removed successfully",
-      status: 201,
+      status: 200,
     };
   }
 }

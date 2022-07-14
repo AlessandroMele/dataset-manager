@@ -14,9 +14,14 @@ import {
   residualToken,
   updateToken,
 } from "../controller/userController";
+import { checkRequestContent } from "../middleware/util/util";
 
 var express = require("express");
 var router = express.Router();
+//Error if the request body is not a JSON
+router.use(checkRequestContent);
+//Body request parsed in JSON
+router.use(express.json());
 
 //generate and return the token with informations given in the body (user)
 router.post(

@@ -9,10 +9,8 @@ const fileUpload = require("express-fileupload");
 const express = require("express");
 const app = express();
 
-//Error if the request body is not a JSON
-app.use(checkRequestContent);
-//Body request parsed in JSON
-app.use(express.json());
+
+app.use(fileUpload());
 
 app.use("/user", userRouter);
 app.use("/model", [checkAutorization], modelRouter);
