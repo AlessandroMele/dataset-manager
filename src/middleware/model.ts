@@ -55,8 +55,8 @@ export const checkModelName = function (req: any, res: any, next: any) {
  */
  export const checkInputFile = function (req: any, res: any, next: any) {
     try {
-        //checking if metadata are valid
-        if (!req.files) {
+        //checking if exists fileName
+        if (!req.files.fileName) {
             var error = errorFactory.getError(ErrEnum.NoInputFileModelError).getMessage();
             next(error);
         }

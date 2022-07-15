@@ -22,6 +22,16 @@ class RemovedSuccess implements SuccessMessage {
   }
 }
 
+class DatasetCreateSuccess implements SuccessMessage {
+  getMessage(): Response {
+    return {
+      message: "Dataset has been created with success",
+      status: 200,
+    };
+  }
+}
+
+
 class ModelCreateSuccess implements SuccessMessage {
   getMessage(): Response {
     return {
@@ -77,6 +87,9 @@ export class SuccessFactory {
         break;
       case SuccessEnum.GetSuccess:
         success = new GetSuccess();
+        break;
+        case SuccessEnum.DatasetCreateSuccess:
+        success = new DatasetCreateSuccess();
         break;
       case SuccessEnum.UpdateSuccess:
         success = new UpdateSuccess();

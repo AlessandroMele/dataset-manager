@@ -3,6 +3,8 @@ import {checkDatasetName} from "../middleware/dataset";
 import {
   create,
   updateMetadata,
+  updateModelName,
+  updateDatasetName,
   updateFile,
   remove,
   list,
@@ -30,12 +32,17 @@ router.put(
 
 //update model metadata
 router.put("/updateMetadata", [checkRequestContent, express.json(), checkModelName, checkMetadata], function (req: any, res: any) {
-  updateMetadata(req.body.modelName, req.body.newModelName, req.body.datasetName, req.headers["authorization"], res);
+  if(req.body.newModelName && req.body.datasetName)
+    updateMetadata(req.body.modelName, req.body.newModelName, req.body.datasetName, req.headers["authorization"], res);
+  else if (req.body.newModelName)
+    updateModelName(req.body.modelName, req.body.newModelName,req.headers["authorization"], res);
+  else
+    updateDatasetName(req.body.modelName, req.body.datasetName,req.headers["authorization"], res);
 });
 
 //update model file
 router.put("/updateFile", [], function (req: any, res: any) {
-  updateFile(req, res);
+  updateFile(req.files, req.body.modelName, req.headers["authorization"], res);
 });
 
 //delete model

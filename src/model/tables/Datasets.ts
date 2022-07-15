@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import { Singleton } from "../Singleton";
 import { ImageTable } from "./Images";
 import { ModelTable } from "./Models";
+import { KeywordTable } from "./Keywords";
 const connection: Sequelize = Singleton.getConnection();
 
 export class DatasetTable extends Model {}
@@ -23,6 +24,10 @@ DatasetTable.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+     defaultValue: 0
+    },
   },
   {
     sequelize: connection,
@@ -32,6 +37,8 @@ DatasetTable.init(
   }
 );
 
-DatasetTable.hasMany(ImageTable, { foreignKey: "id" });
+DatasetTable.hasMany(ImageTable, { foreignKey: "image" });
 
-DatasetTable.hasMany(ModelTable, { foreignKey: "id" });
+DatasetTable.hasMany(ModelTable, { foreignKey: "dataset" });
+
+DatasetTable.belongsToMany(KeywordTable, { through: "dataset-keyword", sourceKey:"keyword" });

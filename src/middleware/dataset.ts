@@ -31,11 +31,11 @@ const errorFactory: ErrorFactory = new ErrorFactory();
  * @param res response
  * @param next next middleware
  */
- export const checkNumClasses = function (req: any, res: any, next: any) {
+ export const checkClasses = function (req: any, res: any, next: any) {
   try {
     //checking if model_name is valid
-    if (typeof req.body.numClasses !== 'number') {
-      var error = errorFactory.getError(ErrEnum.NoInputNumClassesError).getMessage();
+    if (typeof req.body.classes !== 'number') {
+      var error = errorFactory.getError(ErrEnum.NoInputClassesError).getMessage();
       next(error);
     } else next();
   } catch (error: any) {
@@ -67,3 +67,46 @@ const errorFactory: ErrorFactory = new ErrorFactory();
   }
 };
 
+/**
+ * Check if the input body contains valid number classes of dataset
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkImage = function (req: any, res: any, next: any) {
+  try {
+    const array: string[] = req.files.fileName.mimetype.split('/');
+    const type: string  = array[0];
+    //checking if model_name is valid
+    if (type !== 'image') {
+      var error = errorFactory.getError(ErrEnum.NoInputImageError).getMessage();
+      next(error);
+    } else next();
+  } catch (error: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};
+/**
+ * Check if the input body contains valid number classes of dataset
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkZip = function (req: any, res: any, next: any) {
+  try {
+    const array: string[] = req.files.fileName.mimetype.split('/');
+    const hopeIsZip: string  = array[1];
+    if (hopeIsZip !== 'zip') {
+      var error = errorFactory.getError(ErrEnum.NoInputZipError).getMessage();
+      next(error);
+    } else next();
+  } catch (error: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};

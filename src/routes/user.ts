@@ -50,9 +50,9 @@ router.post(
 //return user's residual tokens (user)
 router.get(
   "/residualToken",
-  [checkAutorization, checkInputUser, checkUserMatches],
+  [checkAutorization],
   function (req: any, res: any) {
-    residualToken(req.body.username, res);
+    residualToken(req.headers["authorization"], res);
   }
 );
 

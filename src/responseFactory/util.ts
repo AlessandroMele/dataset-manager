@@ -19,10 +19,14 @@ export enum ErrEnum {
   NoDatasetFoundError,
   NoModelFoundError,
   DatasetAlreadyExists,
-  NoInputNumClassesError,
+  NoInputClassesError,
   NoInputKeywordsError,
   NoInputMetadataError,
-  NoInputFileModelError
+  NoInputFileModelError,
+  NoInputImageError,
+  NoInputZipError,
+  ModelFileExistsError,
+  NoModelFileFoundError
 }
 
 export enum SuccessEnum {
@@ -33,6 +37,7 @@ export enum SuccessEnum {
   GetSuccess,
   ModelCreateSuccess,
   RemovedSuccess,
+  DatasetCreateSuccess
 }
 
 export interface Response {

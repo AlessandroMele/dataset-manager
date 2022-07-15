@@ -2,9 +2,9 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import { Singleton } from "../Singleton";
 const connection: Sequelize = Singleton.getConnection();
 
-export class ModelTable extends Model {}
+export class LabelTable extends Model {}
 
-ModelTable.init(
+LabelTable.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,23 +12,31 @@ ModelTable.init(
       primaryKey: true,
     },
 
-    name: {
-      type: DataTypes.STRING(30),
+    label: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
 
-    path: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+    width: {
+      type: DataTypes.FLOAT,
+      defaultValue: null,
+    },
+    center: {
+      type: DataTypes.FLOAT,
+      defaultValue: null,
+    },
+    height: {
+      type: DataTypes.FLOAT,
+      defaultValue: null,
     },
     deleted: {
       type: DataTypes.BOOLEAN,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   },
   {
     sequelize: connection,
     timestamps: false,
-    modelName: "models",
+    modelName: "labels",
   }
 );

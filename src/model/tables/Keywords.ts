@@ -1,26 +1,18 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Singleton } from "../Singleton";
+import { DatasetTable } from "./Datasets";
 const connection: Sequelize = Singleton.getConnection();
 
-export class ModelTable extends Model {}
+export class KeywordTable extends Model {}
 
-ModelTable.init(
+KeywordTable.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
+    keyword: {
+      type: DataTypes.STRING(30),
       autoIncrement: true,
       primaryKey: true,
     },
 
-    name: {
-      type: DataTypes.STRING(30),
-      allowNull: false,
-    },
-
-    path: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
-    },
     deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: 0
@@ -29,6 +21,8 @@ ModelTable.init(
   {
     sequelize: connection,
     timestamps: false,
-    modelName: "models",
+    modelName: "keywords",
   }
 );
+
+KeywordTable.belongsToMany(DatasetTable, { through: "dataset-keyword", sourceKey:"dataset" });

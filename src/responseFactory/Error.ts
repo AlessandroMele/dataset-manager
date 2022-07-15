@@ -16,12 +16,36 @@ class UserAlreadyExists implements ErrorMessage {
 class NoInputFileModelError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "Input model file not found",
+      message: "'fileName' not specified ",
       status: 400,
     };
   }
 }
+class ModelFileExistsError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Model file already exists ",
+      status: 409,
+    };
+  }
+}
 
+class NoInputImageError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Input fileName is not an image ",
+      status: 400,
+    };
+  }
+}
+class NoInputZipError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Input fileName is not zip ",
+      status: 400,
+    };
+  }
+}
 
 class NoInputKeywordsError implements ErrorMessage {
   getMessage(): Response {
@@ -31,10 +55,10 @@ class NoInputKeywordsError implements ErrorMessage {
     };
   }
 }
-class NoInputNumClassesError implements ErrorMessage {
+class NoInputClassesError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify 'numClasses'",
+      message: "You have to specify 'classes'",
       status: 400,
     };
   }
@@ -108,6 +132,15 @@ class NoInputEmailError implements ErrorMessage {
     return {
       message: "Need to specify a valid string 'email'",
       status: 400,
+    };
+  }
+}
+
+class NoModelFileFoundError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "No file found for this model ",
+      status: 404,
     };
   }
 }
@@ -201,7 +234,6 @@ class NoInputMetadataError implements ErrorMessage {
   }
 }
 
-
 class DatasetAlreadyExists implements ErrorMessage {
   public getMessage(): Response {
     return {
@@ -210,7 +242,6 @@ class DatasetAlreadyExists implements ErrorMessage {
     };
   }
 }
-
 
 class NoModelFoundError implements ErrorMessage {
   public getMessage(): Response {
@@ -233,10 +264,10 @@ export class ErrorFactory {
       case ErrEnum.AdminAuthError:
         error = new AdminAuthError();
         break;
-        case ErrEnum.DatasetAlreadyExists:
+      case ErrEnum.DatasetAlreadyExists:
         error = new DatasetAlreadyExists();
         break;
-        case ErrEnum.UserAlreadyExists:
+      case ErrEnum.UserAlreadyExists:
         error = new UserAlreadyExists();
         break;
       case ErrEnum.NoInputPasswordError:
@@ -251,20 +282,25 @@ export class ErrorFactory {
       case ErrEnum.NoInputRoleError:
         error = new NoInputRoleError();
         break;
-      
-        case ErrEnum.NoInputKeywordsError:
+      case ErrEnum.NoInputImageError:
+        error = new NoInputImageError();
+        break;
+      case ErrEnum.NoInputZipError:
+        error = new NoInputImageError();
+        break;
+      case ErrEnum.NoInputKeywordsError:
         error = new NoInputKeywordsError();
         break;
-        case ErrEnum.NoInputNumClassesError:
-        error = new NoInputNumClassesError();
+      case ErrEnum.NoInputClassesError:
+        error = new NoInputClassesError();
         break;
       case ErrEnum.NoInputEmailError:
         error = new NoInputEmailError();
         break;
-        case ErrEnum.NoInputFileModelError:
+      case ErrEnum.NoInputFileModelError:
         error = new NoInputFileModelError();
         break;
-        case ErrEnum.NoInputMetadataError:
+      case ErrEnum.NoInputMetadataError:
         error = new NoInputMetadataError();
         break;
       case ErrEnum.NoJSONRequest:
@@ -300,6 +336,14 @@ export class ErrorFactory {
       case ErrEnum.NoModelFoundError:
         error = new NoModelFoundError();
         break;
+        case ErrEnum.ModelFileExistsError:
+          error = new ModelFileExistsError();
+          break;
+          case ErrEnum.NoModelFileFoundError:
+            error = new NoModelFileFoundError();
+            break;
+
+          
       default:
         error = new InternalError();
     }

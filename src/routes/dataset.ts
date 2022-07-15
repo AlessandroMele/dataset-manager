@@ -9,14 +9,14 @@ import {
   labelInsert,
 } from "../controller/datasetController";
 
-import {checkDatasetName, checKeywords, checkNumClasses} from "../middleware/dataset"
+import {checkDatasetName, checKeywords, checkClasses, checkImage, checkZip} from "../middleware/dataset"
 
 var express = require("express");
 var router = express.Router();
 
 //creating dataset
-router.put("/create", [checkRequestContent, express.json(), checkDatasetName, checKeywords, checkNumClasses], function (req: any, res: any) {
-  create(req.body.datasetName,req.body.numClasses, req.body.keywords, req.headers["authorization"], res);
+router.put("/create", [checkRequestContent, express.json(), checkDatasetName, checKeywords, checkClasses], function (req: any, res: any) {
+  create(req.body.datasetName,req.body.classes, req.body.keywords, req.headers["authorization"], res);
 });
 
 //updating dataset
@@ -35,18 +35,18 @@ router.get("/list", function (req: any, res: any) {
 });
 
 //insert a single image on the specified dataset
-router.put("/:id/image/insert", function (req: any, res: any) {
-  imageInsert(req, res);
+router.put("/image", [checkImage],function (req: any, res: any) {
+  imageInsert(req, req.headers["authorization"], res);
 });
 
 //insert a zip images on the specified dataset
-router.put("/:id/zip/insert", function (req: any, res: any) {
-  zipInsert(req, res);
+router.put("/zip", [checkZip],function (req: any, res: any) {
+  zipInsert(req, req.headers["authorization"], res);
 });
 
 //insert a label on a specific image on the specified dataset
-router.put("/:id/image/:id/label/insert",[checkRequestContent, express.json()], function (req: any, res: any) {
-  labelInsert(req, res);
+router.put("/label",[checkRequestContent, express.json()], function (req: any, res: any) {
+  labelInsert(req, req.headers["authorization"], res);
 });
 
 module.exports = router;

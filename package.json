@@ -24,6 +24,7 @@
     "express-fileupload": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.21.2"
+    "sequelize": "^6.21.2",
+    "unzipper": "^0.10.11"
   }
 }

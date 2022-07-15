@@ -112,22 +112,17 @@ export const signUp = async function (
  * @param username of the user
  * @param res response
  */
-export const residualToken = async function (username: string, res: any) {
+export const residualToken = async function (token: string, res: any) {
   try {
+    var payload = jwt.getPayload(token);
+    var username: string = payload.payload.username;
     const user: UserTable | null = await UserTable.findByPk(username);
-    if (user != null) {
-      let token: number = user.getDataValue("token");
+    let tokenValue: number = user?.getDataValue("token");
       formatResponseWithData(
         res,
         successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-        { token: token }
+        { token: tokenValue }
       );
-    } else {
-      formatResponse(
-        res,
-        errorFactory.getError(ErrEnum.NoUserFoundError).getMessage()
-      );
-    }
   } catch (err: any) {
     formatResponse(
       res,

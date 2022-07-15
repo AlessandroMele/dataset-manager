@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Singleton } from "../Singleton";
+import { LabelTable } from "./Labels";
 const connection: Sequelize = Singleton.getConnection();
 
 export class ImageTable extends Model {}
@@ -13,7 +14,7 @@ ImageTable.init(
     },
 
     label: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
 
@@ -23,9 +24,9 @@ ImageTable.init(
       unique: true,
     },
 
-    boundingBoxes: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0,
     },
   },
   {
@@ -34,3 +35,5 @@ ImageTable.init(
     modelName: "images",
   }
 );
+
+ImageTable.hasMany(LabelTable, { foreignKey: "id" });
