@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `models`;
-DROP TABLE IF EXISTS `labels`;
 DROP TABLE IF EXISTS `images`;
+DROP TABLE IF EXISTS `labels`;
 DROP TABLE IF EXISTS `keywords`;
 DROP TABLE IF EXISTS `datasets`;
 DROP TABLE IF EXISTS `users`;
@@ -9,7 +9,7 @@ CREATE TABLE `users` (
   `username` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL UNIQUE,
   `password` varchar(256) NOT NULL,
-  `token` float NOT NULL DEFAULT 100,
+  `token` DECIMAL(8,3) NOT NULL DEFAULT 100,
   `role` enum('user', 'admin') NOT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
@@ -37,9 +37,9 @@ CREATE TABLE `labels` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `image` int(11) DEFAULT NULL,
   `label` varchar(30) DEFAULT NULL,
-  `center` float(2),
-  `width` float(2),
-  `height` float(2),
+  `center` DECIMAL(7,6),
+  `width` DECIMAL(7,6),
+  `height` DECIMAL(7,6),
   `deleted` BIT DEFAULT 0,
   FOREIGN KEY (`image`) REFERENCES `images` (`id`),
   PRIMARY KEY (`id`)

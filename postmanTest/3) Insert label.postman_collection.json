@@ -1,0 +1,671 @@
+{
+	"info": {
+		"_postman_id": "9e43d1b8-65b1-499a-9e31-a7ff91412c2b",
+		"name": "3) Insert label",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "No tokenJWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No tokenJWT\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Malformed tokenJWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Malformed tokenJWT\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "ciaociao",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No className",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify string 'className'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"width\": 12,\r\n    \"imagePath\": \"ciaociao\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No malformed BoundingBoxes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"If you want to insert BoundingBoxes you need to specify normalized height, width and center\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"imagePath\": \"ciaociao\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Not normalized BoundingBoxes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"If you want to insert BoundingBoxes you need to specify normalized height, width and center\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"width\": 12,\r\n    \"imagePath\": \"ciaociao\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No imagePath",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'imagePath'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"width\": 0.3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Label insert from another account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).equals(\"No image find with this 'imagePath'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"porco caneeeee\",\r\n    \"imagePath\":\"datasets/user/dogs&/4/Grafico_volumi.PNG\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No image found (label)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"No image find with this 'imagePath'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"classe 1\",\r\n    \"imagePath\":\"immagine inesistente\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Label insert success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).equals(\"Label created with success\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"classe 5\",\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Label insert from another account (Bounding Boxes)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).equals(\"No image find with this 'imagePath'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"width\": 0.3,\r\n    \"imagePath\": \"/datasets/1/user/img_1.png\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No image found (Bounding Boxes)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"No image find with this 'imagePath'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.1,\r\n    \"center\": 0.1,\r\n    \"width\": 0.3,\r\n    \"imagePath\": \"immagine inesistente\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Label Bounding Boxes insert success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).equals(\"Label created with success\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.3,\r\n    \"center\": 0.3,\r\n    \"width\": 0.4,\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/label",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"label"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

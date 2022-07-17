@@ -302,7 +302,34 @@ class LabelAlreadyExists implements ErrorMessage {
 class NoInputLabelListError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify array 'labelList'",
+      message: "Need to specify an array ",
+      status: 400,
+    };
+  }
+}
+
+class NoArrayKeywordsError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "'Keywords' need to be an array",
+      status: 400,
+    };
+  }
+}
+
+class NotClassesNumberError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "'classes' need to be a number",
+      status: 400,
+    };
+  }
+}
+
+class NewModelNameFormatError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "'modelName' need to be a string",
       status: 400,
     };
   }
@@ -311,7 +338,7 @@ class NoInputLabelListError implements ErrorMessage {
 class ImageDoesNotExists implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "No image find with this 'imagePath'",
+      message: "No image found with this 'imagePath'",
       status: 404,
     };
   }
@@ -325,6 +352,24 @@ class ImageAlreadyExists implements ErrorMessage {
     };
   }
 }
+class NewDatasetNameError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "'newDatasetName' name must be a string",
+      status: 400,
+    };
+  }
+}
+
+class ArrayKeywordsError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "'keywords' must be an array and contains no duplicates",
+      status: 400,
+    };
+  }
+}
+
 
 export class ErrorFactory {
   constructor() {}
@@ -334,6 +379,21 @@ export class ErrorFactory {
       case ErrEnum.AuthError:
         error = new AuthError();
         break;
+        case ErrEnum.NewDatasetNameError:
+          error = new NewDatasetNameError();
+          break;
+        case ErrEnum.NoInputZipError:
+        error = new NoInputZipError();
+        break;
+        case ErrEnum.NewModelNameFormatError:
+          error = new NewModelNameFormatError();
+          break;
+        case ErrEnum.NoArrayKeywordsError:
+          error = new NoArrayKeywordsError();
+          break;
+          case ErrEnum.NotClassesNumberError:
+          error = new NotClassesNumberError();
+          break;
       case ErrEnum.LabelAlreadyExists:
         error = new LabelAlreadyExists();
         break;
@@ -358,6 +418,9 @@ export class ErrorFactory {
       case ErrEnum.NoInputImageIdentifierError:
         error = new NoInputImageIdentifierError();
         break;
+        case ErrEnum.ArrayKeywordsError:
+          error = new ArrayKeywordsError();
+          break;
       case ErrEnum.NoInputPasswordError:
         error = new NoInputPasswordError();
         break;

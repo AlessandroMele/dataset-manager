@@ -1,10 +1,77 @@
 {
 	"info": {
-		"_postman_id": "f10a5436-b2d0-4183-a02d-1658653223bf",
-		"name": "2) Delete model",
+		"_postman_id": "66630948-7f6e-43d0-a6d7-e31e3ef2feb1",
+		"name": "4)Inference NON FUNZIONA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "No dataset found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
+						},
+						{
+							"key": "modelName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/zip",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"zip"
+					]
+				}
+			},
+			"response": []
+		},
 		{
 			"name": "Malformed tokenJWT",
 			"event": [
@@ -36,7 +103,7 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -48,14 +115,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/zip",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"zip"
 					]
 				}
 			},
@@ -92,7 +159,7 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -104,21 +171,21 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/zip",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"zip"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No model found",
+			"name": "Insert zip success",
 			"event": [
 				{
 					"listen": "test",
@@ -143,72 +210,27 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"ciccioPanzo\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/model/delete",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"model",
-						"delete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete model success",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Success\", function () {",
-							"  pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Item has been removed successfully\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
 							"value": "{{token-user}}",
 							"type": "string"
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"starwars8\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "Archivio.zip"
+						},
+						{
+							"key": "datasetName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,14 +238,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/zip",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"zip"
 					]
 				}
 			},

@@ -478,17 +478,17 @@ export const labelInsertList = async function (
   });
   let userTokens: number = user?.getDataValue("token");
   // error if token are not sufficients
-  if (userTokens < 0.05 * (labelList.length - 1)) {
+  if (userTokens < 0.05 * (labelList.length)) {
     formatResponse(res, errorFactory.getError(ErrEnum.AuthError).getMessage());
   } else {
     await UserTable.update(
       {
-        token: userTokens - 0.05 * (labelList.length - 1),
+        token: userTokens - 0.05 * (labelList.length),
       },
       { where: { username: username } }
     );
     // iterate over the list of labels
-    for (let index: number = 0; index < labelList.length - 1; index++) {
+    for (let index: number = 0; index < labelList.length; index++) {
       try {
         let element: any = labelList[index];
         let imagePath: string = element.imagePath;
@@ -498,7 +498,7 @@ export const labelInsertList = async function (
         let center: number = element.center;
 
         // create the new element in json
-        finalJSON.response.push({ info: [{ path: imagePath }] });
+        finalJSON.response.push({ info: [] });
         // check if the user has an image with this path
         let image: DatasetTable | null = await DatasetTable.findOne({
           where: {
@@ -519,16 +519,21 @@ export const labelInsertList = async function (
         // if images does not exists
         if (!image) {
           finalJSON.response[index].info.push({
+            path: imagePath,
             message: errorFactory
               .getError(ErrEnum.ImageDoesNotExists)
-              .getMessage().message,
+              .getMessage().message
           });
         } else {
           // if values are undefined, they are set to true
-          let widthReal = width ? width : null;
-          let heightReal = height ? height : null;
-          let centerReal = center ? center : null;
+          let widthReal: number | null = width ? width : null;
+          let heightReal: number | null = height ? height : null;
+          let centerReal: number | null = center ? center : null;
+          console.log(widthReal,heightReal, centerReal)
+          console.log(image)
           let imageId = image.getDataValue("images")[0].id;
+        console.log(imageId)
+          
           // check if already exists this label for this same image
           let label: LabelTable | null = await LabelTable.findOne({
             where: {
@@ -543,6 +548,7 @@ export const labelInsertList = async function (
           // if a label already exists return error
           if (label) {
             finalJSON.response[index].info.push({
+              path: imagePath,
               message: errorFactory
                 .getError(ErrEnum.LabelAlreadyExists)
                 .getMessage().message,
@@ -557,6 +563,7 @@ export const labelInsertList = async function (
               center: centerReal,
             });
             finalJSON.response[index].info.push({
+              path: imagePath,
               message: successFactory
                 .getSuccess(SuccessEnum.LabelCreateSuccess)
                 .getMessage().message,
@@ -578,5 +585,77 @@ export const labelInsertList = async function (
   );
 };
 
-//update dataset
-export const update = function (req: any, res: any) {};
+//update dataset's metadata
+export const update = async function (
+  datasetName: string,
+  newDatasetName: string,
+  keywords: string[],
+  classes: number,
+  token: string,
+  res: any
+) {
+  try {
+    // get username from token
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+    let flag = 1;
+    let dataset: DatasetTable | null = await DatasetTable.findOne({
+      where: { user: username, name: datasetName },
+    });
+
+    if (!dataset) {
+      formatResponse(
+        res,
+        errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
+      );
+    } else {
+      let datasetId = dataset.getDataValue("id");
+
+      if (keywords) {
+        await KeywordTable.destroy({ where: { dataset: datasetId } });
+        keywords.forEach(async (keyword) => {
+          await KeywordTable.create({
+            keyword: keyword,
+            dataset: datasetId,
+          });
+        });
+      }
+
+      if (classes) {
+        await DatasetTable.update(
+          { classes: classes },
+          { where: { id: datasetId, user: username, deleted: false } }
+        );
+      }
+      if (newDatasetName) {
+        let newNameAlreadyExists: DatasetTable | null =
+          await DatasetTable.findOne({
+            where: { name: newDatasetName },
+          });
+        if (newNameAlreadyExists) {
+          flag = 0;
+          formatResponse(
+            res,
+            errorFactory.getError(ErrEnum.DatasetAlreadyExists).getMessage()
+          );
+        } else {
+          await DatasetTable.update(
+            { name: newDatasetName },
+            { where: { name: datasetName, user: username, deleted: false } }
+          );
+        }
+      }
+      if (flag)
+        formatResponse(
+          res,
+          successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage()
+        );
+    }
+  } catch (err) {
+    console.log(err);
+    formatResponse(
+      res,
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
+    );
+  }
+};

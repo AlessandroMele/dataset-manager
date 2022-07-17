@@ -12,20 +12,22 @@ import {
   labelInsert,
   labelInsertList,
 } from "../controller/datasetController";
-
 import {
   checkDatasetName,
   checKeywords,
   checkClasses,
   checkImageFile,
   checkZip,
-  checkClassName,
-  checkBoundingBoxesName,
+  checkClass,
+  checkBoundingBoxes,
   checkImageIdentifier,
-  checkClassNameList,
-  checkBoundingBoxesNameList,
+  checkClassList,
+  checkBoundingBoxesList,
   checkImageIdentifierList,
   checkLabelList,
+  checKeywordsUpdate,
+  checkClassesUpdate,
+  checkDatasetNameUpdate
 } from "../middleware/dataset";
 import { checkInputFile } from "../middleware/model";
 
@@ -53,12 +55,12 @@ router.put(
   }
 );
 
-//updating dataset
-router.put("/update", function (req: any, res: any) {
-  update(req, res);
+//updating dataset's metadata
+router.put("/update", [checkRequestContent, express.json(), checkDatasetName, checKeywordsUpdate, checkClassesUpdate, checkDatasetNameUpdate],function (req: any, res: any) {
+  update(req.body.datasetName, req.body.newDatasetName, req.body.keywords, req.body.classes, req.headers["authorization"], res);
 });
 
-//deleting dataset
+//deleting (logically) dataset
 router.delete(
   "/delete",
   [checkRequestContent, express.json(), checkDatasetName],
@@ -96,8 +98,8 @@ router.post(
   [
     checkRequestContent,
     express.json(),
-    checkClassName,
-    checkBoundingBoxesName,
+    checkClass,
+    checkBoundingBoxes,
     checkImageIdentifier,
   ],
   function (req: any, res: any) {
@@ -116,18 +118,19 @@ router.post(
 
 //insert list of label
 router.post(
-  "/insertList",
+  "/labelList",
   [
     checkRequestContent,
     express.json(),
     checkLabelList,
-    checkClassNameList,
-    checkBoundingBoxesNameList,
+    checkClassList,
+    checkBoundingBoxesList,
     checkImageIdentifierList,
   ],
   function (req: any, res: any) {
+    console.log(req.body)
     // if bounding boxes parameters are set, then call the apposite function
-    labelInsertList(req.body.labelList, req.headers["authorization"], res);
+    labelInsertList(req.body, req.headers["authorization"], res);
   }
 );
 

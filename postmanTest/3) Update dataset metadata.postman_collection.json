@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f10a5436-b2d0-4183-a02d-1658653223bf",
-		"name": "2) Delete model",
+		"_postman_id": "aee3387e-34f4-441f-983c-a679a38eafe4",
+		"name": "3) Update dataset metadata",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -36,11 +36,11 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"raw": "{\n    \"datasetName\": \"star wars\",\n    \"newDatasetName\": \"star wars nuovo\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,14 +48,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/update",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"update"
 					]
 				}
 			},
@@ -92,11 +92,11 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"raw": "{\n    \"datasetName\": \"star wars\",\n    \"newDatasetName\": \"star wars nuovo\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -104,89 +104,35 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/update",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"update"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "No model found",
+			"name": "Dataset not found",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token-admin}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"ciccioPanzo\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/model/delete",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"model",
-						"delete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete model success",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Success\", function () {",
-							"  pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Item has been removed successfully\");",
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -204,11 +150,11 @@
 						}
 					]
 				},
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"starwars8\"\n}",
+					"raw": "{\r\n    \"datasetName\": \"star wars\",\r\n    \"newDatasetName\": \"star wars nuovo\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,14 +162,126 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/dataset/update",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"dataset",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No datasetName input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No input metadata\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'datasetName'\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newDatasetName\": \"star wars nuovo\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update dataset success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"Value correctly modified\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"datasetName\": \"peppino la salsa\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"update"
 					]
 				}
 			},

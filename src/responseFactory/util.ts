@@ -34,7 +34,12 @@ export enum ErrEnum {
   NoInputLabelListError,
   ImageDoesNotExists,
   LabelAlreadyExists,
-  ImageAlreadyExists
+  ImageAlreadyExists,
+  NoArrayKeywordsError,
+  NotClassesNumberError,
+  NewModelNameFormatError,
+  NewDatasetNameError,
+  ArrayKeywordsError
 }
 
 

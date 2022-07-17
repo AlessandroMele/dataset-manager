@@ -32,7 +32,7 @@ export const checkDatasetName = function (req: any, res: any, next: any) {
  * @param res response
  * @param next next middleware
  */
-export const checkClassName = function (req: any, res: any, next: any) {
+export const checkClass = function (req: any, res: any, next: any) {
   try {
     //checking if className is valid
     if (typeof req.body.className !== 'string') {
@@ -54,21 +54,23 @@ export const checkClassName = function (req: any, res: any, next: any) {
  * @param res response
  * @param next next middleware
  */
-export const checkClassNameList = function (req: any, res: any, next: any) {
+export const checkClassList = function (req: any, res: any, next: any) {
   try {
-    if (req.body.labelList.length !== 0) {
-      req.body.labelList.forEach((element: any) => {
-        //checking if className is valid
-        if (typeof element.className !== 'string') {
-          var error = errorFactory.getError(ErrEnum.NoInputClassNameError).getMessage();
-          next(error)
-        }
-        else next()
-      });
-    } else {
-      var error = errorFactory.getError(ErrEnum.NoInputClassNameError).getMessage();
-      next(error)
-    }
+    let flag = 0;
+    if (req.body.length !== 0) {
+      for(let index = 0; index < req.body.length; index++){
+        let element = req.body[index];
+        if (typeof element.className !== 'string')
+          flag = 1;
+      }
+    } else
+        flag = 1;
+      if(!flag)
+        next();
+      else {
+        var error = errorFactory.getError(ErrEnum.NoInputClassNameError).getMessage();
+        next(error)
+      }
   }
   catch (err: any) {
     var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
@@ -109,7 +111,7 @@ export const checkImageIdentifier = function (req: any, res: any, next: any) {
 export const checkLabelList = function (req: any, res: any, next: any) {
   try {
     //checking if className is valid
-    if (!util.isArray(req.body.labelList)) {
+    if (!util.isArray(req.body)) {
       var error = errorFactory.getError(ErrEnum.NoInputLabelListError).getMessage();
       next(error)
     }
@@ -130,19 +132,23 @@ export const checkLabelList = function (req: any, res: any, next: any) {
  */
 export const checkImageIdentifierList = function (req: any, res: any, next: any) {
   try {
-    if (req.body.labelList.length !== 0) {
-      req.body.labelList.forEach((element: any) => {
+    let flag = 0;
+    if (req.body.length !== 0) {
+      for(let index = 0; index< req.body.length; index ++){
+        let element = req.body[index];
         if (typeof element.imagePath !== 'string') {
-          var error = errorFactory.getError(ErrEnum.NoInputImageIdentifierError).getMessage();
-          next(error)
+          flag = 1;
         }
-        else next()
-      })
+      }
     }
-    else {
-      var error = errorFactory.getError(ErrEnum.NoInputImageIdentifierError).getMessage();
-      next(error)
-    }
+    else 
+      flag = 1;
+    if (!flag)
+      next();
+    else{
+        var error = errorFactory.getError(ErrEnum.NoInputImageIdentifierError).getMessage();
+        next(error);
+      }
   }
   catch (error: any) {
     var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
@@ -156,12 +162,12 @@ export const checkImageIdentifierList = function (req: any, res: any, next: any)
  * @param res response
  * @param next next middleware
  */
-export const checkBoundingBoxesName = function (req: any, res: any, next: any) {
+export const checkBoundingBoxes = function (req: any, res: any, next: any) {
   try {
     // no error if neither the 3 params aren't specified, if they are specified must be normalized
-    if ((req.body.height < 1.0 && req.body.height > 0.0 &&
-      req.body.width < 1.0 && req.body.width > 0.0 &&
-      req.body.center < 1.0 && req.body.center > 0.0) ||
+    if ((req.body.height <= 1.0 && req.body.height >= 0.0 &&
+      req.body.width <= 1.0 && req.body.width >= 0.0 &&
+      req.body.center <= 1.0 && req.body.center >= 0.0) ||
       (!req.body.height && !req.body.width && !req.body.center)) next()
     else {
       var error = errorFactory.getError(ErrEnum.NoInputValidBoundingBoxesError).getMessage();
@@ -180,27 +186,28 @@ export const checkBoundingBoxesName = function (req: any, res: any, next: any) {
  * @param res response
  * @param next next middleware
  */
-export const checkBoundingBoxesNameList = function (req: any, res: any, next: any) {
+export const checkBoundingBoxesList = function (req: any, res: any, next: any) {
   try {
-    if (req.body.labelList.length !== 0) {
-      req.body.labelList.forEach((element: any) => {
-        // no error if neither the 3 params aren't specified, if they are specified must be normalized
-        if ((element.height < 1.0 && element.height > 0.0 &&
-          element.width < 1.0 && element.width > 0.0 &&
-          element.center < 1.0 && element.center > 0.0) ||
-          (!element.height && !element.width && !element.center)) next()
-        else {
-          var error = errorFactory.getError(ErrEnum.NoInputValidBoundingBoxesError).getMessage();
-          next(error)
-        }
-      });
-    }
-    else {
-      var error = errorFactory.getError(ErrEnum.NoInputValidBoundingBoxesError).getMessage();
-      next(error)
-    }
+    let flag = 0;
+    if (req.body.length !== 0) {
+      for(let index = 0; index < req.body.length; index++){
+        let element = req.body[index];
+        if (!((element.height <= 1.0 && element.height >= 0.0 &&
+          element.width <= 1.0 && element.width >= 0.0 &&
+          element.center <= 1.0 && element.center >= 0.0) ||
+          (!element.height && !element.width && !element.center)))
+          flag = 1;
+      }
+    } else
+        flag = 1;
+      if(!flag)
+        next();
+      else {
+        var error = errorFactory.getError(ErrEnum.NoInputValidBoundingBoxesError).getMessage();
+        next(error)
+      }
   }
-  catch (error: any) {
+  catch (err: any) {
     var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
     next(error)
   };
@@ -220,6 +227,44 @@ export const checkClasses = function (req: any, res: any, next: any) {
       next(error);
     } else next();
   } catch (error: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};
+
+/**
+ * Check if the input body contains valid number classes of dataset
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkClassesUpdate = function (req: any, res: any, next: any) {
+  try {
+    //checking if model_name is valid
+    if (typeof req.body.classes == 'number' || !req.body.classes) {
+      next();
+    } else {
+      var error = errorFactory.getError(ErrEnum.NotClassesNumberError).getMessage();
+      next(error);
+  } }catch (error: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};
+
+export const checkDatasetNameUpdate = function (req: any, res: any, next: any) {
+  try {
+    //checking if model_name is valid
+    if (typeof req.body.newDatasetName == 'string' || !req.body.newDatasetName) {
+      next();
+    } else {
+      var error = errorFactory.getError(ErrEnum.NewDatasetNameError).getMessage();
+      next(error);
+  } }catch (error: any) {
     var error: Response = errorFactory
       .getError(ErrEnum.InternalError)
       .getMessage();
@@ -269,9 +314,31 @@ export const checkImageFile = function (req: any, res: any, next: any) {
       .getMessage();
     next(error);
   }
-
-
 };
+
+  /**
+ * Check if the keywords param in the body request is valid
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+export const checKeywordsUpdate = function (req: any, res: any, next: any) {
+  try {
+    //checking if keywords is not empty, is an array or there are no fields duplicate
+    if (!req.body.keywords || (util.isArray(req.body.keywords) && req.body.keywords.length == new Set(req.body.keywords).size)) {
+      next();
+    }
+    else {
+      var error = errorFactory.getError(ErrEnum.ArrayKeywordsError).getMessage();
+      next(error);
+    }
+  }
+  catch (error: any) {
+    var error: Response = errorFactory.getError(ErrEnum.InternalError).getMessage();
+    next(error);
+  };
+};
+
 /**
  * Check if the input body contains valid number classes of dataset
  * @param req user request

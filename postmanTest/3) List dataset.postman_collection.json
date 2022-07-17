@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e3af8c7d-c0f1-400a-bd4a-4d251560f4c3",
+		"_postman_id": "18832543-a04a-4dac-99f2-8a28df20cc9c",
 		"name": "3) List dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -41,13 +41,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/list",
+					"raw": "localhost:8080/dataset/list",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
+						"dataset",
 						"list"
 					]
 				}
