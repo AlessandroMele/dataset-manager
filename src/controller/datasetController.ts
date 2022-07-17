@@ -14,6 +14,7 @@ import { KeywordTable } from "../model/tables/Keywords";
 import { ImageTable } from "../model/tables/Images";
 import { LabelTable } from "../model/tables/Labels";
 import { ModelTable } from "../model/tables/Models";
+import { UserTable } from "../model/tables/Users";
 
 const path = require("path");
 const fs = require("fs");
@@ -189,86 +190,104 @@ export const imageInsert = async function (req: any, token: string, res: any) {
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
     let datasetName = req.body.datasetName;
-    // search if dataset exixts
-    let dataset: DatasetTable | null = await DatasetTable.findOne({
-      where: { user: username, name: datasetName, deleted: false },
+    // search user tokens
+    let user: UserTable | null = await UserTable.findOne({
+      where: { username: username },
     });
-    // error if doesn't exists
-    if (!dataset) {
+    let userTokens: number = user?.getDataValue("token");
+    // error if token are not sufficients
+    if (userTokens < 0.1) {
       formatResponse(
         res,
-        errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
+        errorFactory.getError(ErrEnum.AuthError).getMessage()
       );
     } else {
-      // get the datasetId
-      let datasetId: number = dataset.getDataValue("id");
-      // extract image from the form
-      let file = req.files.fileName;
-      // create path for the image
-      let savePath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "datasets",
-        username,
-        datasetName,
-        datasetId.toString() // needed to avoid collisions when dataset is deleted and recreated
-      );
-
-      // create the path to store in the database
-      const final_path: string = path.join(
-        "datasets",
-        username,
-        datasetName,
-        datasetId.toString(),
-        file.name
-      );
-      // check if the image already exists
-      let image: ImageTable | null = await ImageTable.findOne({
-        where: {
-          dataset: datasetId,
-          path: final_path,
-          deleted: false,
+      await UserTable.update(
+        {
+          token: userTokens - 0.001,
         },
+        { where: { username: username } }
+      );
+      // search if dataset exixts
+      let dataset: DatasetTable | null = await DatasetTable.findOne({
+        where: { user: username, name: datasetName, deleted: false },
       });
-      console.log(image);
-      // if it exists return error
-      if (image) {
+      // error if doesn't exists
+      if (!dataset) {
         formatResponse(
           res,
-          errorFactory.getError(ErrEnum.ImageAlreadyExists).getMessage()
+          errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
         );
       } else {
-        await ImageTable.create({
-          dataset: datasetId,
-          path: final_path,
-        });
-        await DatasetTable.update(
-          {
+        // get the datasetId
+        let datasetId: number = dataset.getDataValue("id");
+        // extract image from the form
+        let file = req.files.fileName;
+        // create path for the image
+        let savePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "datasets",
+          username,
+          datasetName,
+          datasetId.toString() // needed to avoid collisions when dataset is deleted and recreated
+        );
+
+        // create the path to store in the database
+        const final_path: string = path.join(
+          "datasets",
+          username,
+          datasetName,
+          datasetId.toString(),
+          file.name
+        );
+        // check if the image already exists
+        let image: ImageTable | null = await ImageTable.findOne({
+          where: {
+            dataset: datasetId,
             path: final_path,
+            deleted: false,
           },
-          { where: { name: datasetName, user: username } }
-        );
-
-        // if the directory doesn't exists create it
-        if (!fs.existsSync(savePath)) {
-          fs.mkdirSync(savePath, { recursive: true });
-        }
-        // insert the image in the directory created
-        await file.mv(savePath + "/" + file.name);
-
-        formatResponseWithData(
-          res,
-          successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-          {
-            data: {
+        });
+        // if it exists return error
+        if (image) {
+          formatResponse(
+            res,
+            errorFactory.getError(ErrEnum.ImageAlreadyExists).getMessage()
+          );
+        } else {
+          await ImageTable.create({
+            dataset: datasetId,
+            path: final_path,
+          });
+          await DatasetTable.update(
+            {
               path: final_path,
-              fileName: req.files.fileName.name,
-              datasetName: datasetName,
-              status: "Image loaded",
             },
+            { where: { name: datasetName, user: username } }
+          );
+
+          // if the directory doesn't exists create it
+          if (!fs.existsSync(savePath)) {
+            fs.mkdirSync(savePath, { recursive: true });
           }
-        );
+          // insert the image in the directory created
+          await file.mv(savePath + "/" + file.name);
+
+          formatResponseWithData(
+            res,
+            successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
+            {
+              data: {
+                path: final_path,
+                fileName: req.files.fileName.name,
+                datasetName: datasetName,
+                status: "Image loaded",
+              },
+            }
+          );
+        }
       }
     }
   } catch (err) {
@@ -352,65 +371,86 @@ export const labelInsert = async function (
   try {
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
-    // check if the user has an image with this path
-    let image: DatasetTable | null = await DatasetTable.findOne({
-      where: {
-        user: username,
-        deleted: false,
-      },
-      include: [
-        {
-          model: ImageTable,
-          required: true,
-          where: {
-            path: imagePath,
-            deleted: false,
-          },
-        },
-      ],
+    // search user tokens
+    let user: UserTable | null = await UserTable.findOne({
+      where: { username: username },
     });
-    // if images does not exists
-    if (!image) {
+    let userTokens: number = user?.getDataValue("token");
+    // error if token are not sufficients
+    if (userTokens < 0.05) {
       formatResponse(
         res,
-        errorFactory.getError(ErrEnum.ImageDoesNotExists).getMessage()
+        errorFactory.getError(ErrEnum.AuthError).getMessage()
       );
     } else {
-      // if values are undefined, they are set to true
-      let widthReal = width ? width : null;
-      let heightReal = height ? height : null;
-      let centerReal = center ? center : null;
-      let imageId = image.getDataValue("images")[0].id;
-      // check if already exists this label for this same image
-      let label: LabelTable | null = await LabelTable.findOne({
+      await UserTable.update(
+        {
+          token: userTokens - 0.05,
+        },
+        { where: { username: username } }
+      );
+      // check if the user has an image with this path
+      let image: DatasetTable | null = await DatasetTable.findOne({
         where: {
-          image: imageId,
-          label: className,
-          width: widthReal,
-          height: heightReal,
-          center: centerReal,
+          user: username,
           deleted: false,
         },
+        include: [
+          {
+            model: ImageTable,
+            required: true,
+            where: {
+              path: imagePath,
+              deleted: false,
+            },
+          },
+        ],
       });
-      // if a label already exists return error
-      if (label) {
+      // if images does not exists
+      if (!image) {
         formatResponse(
           res,
-          errorFactory.getError(ErrEnum.LabelAlreadyExists).getMessage()
+          errorFactory.getError(ErrEnum.ImageDoesNotExists).getMessage()
         );
       } else {
-        // label creation
-        await LabelTable.create({
-          image: imageId,
-          label: className,
-          width: widthReal,
-          height: heightReal,
-          center: centerReal,
+        // if values are undefined, they are set to true
+        let widthReal = width ? width : null;
+        let heightReal = height ? height : null;
+        let centerReal = center ? center : null;
+        let imageId = image.getDataValue("images")[0].id;
+        // check if already exists this label for this same image
+        let label: LabelTable | null = await LabelTable.findOne({
+          where: {
+            image: imageId,
+            label: className,
+            width: widthReal,
+            height: heightReal,
+            center: centerReal,
+            deleted: false,
+          },
         });
-        formatResponse(
-          res,
-          successFactory.getSuccess(SuccessEnum.LabelCreateSuccess).getMessage()
-        );
+        // if a label already exists return error
+        if (label) {
+          formatResponse(
+            res,
+            errorFactory.getError(ErrEnum.LabelAlreadyExists).getMessage()
+          );
+        } else {
+          // label creation
+          await LabelTable.create({
+            image: imageId,
+            label: className,
+            width: widthReal,
+            height: heightReal,
+            center: centerReal,
+          });
+          formatResponse(
+            res,
+            successFactory
+              .getSuccess(SuccessEnum.LabelCreateSuccess)
+              .getMessage()
+          );
+        }
       }
     }
   } catch (error: any) {
@@ -431,89 +471,104 @@ export const labelInsertList = async function (
   // extract username from token
   let payload = jwt.getPayload(token);
   let username: string = payload.payload.username;
-
   let finalJSON: any = JSON.parse('{ "response": [] }');
-  // iterate over the list of labels
-  for (let index: number = 0; index < labelList.length - 1; index++) {
-    try {
-      let element: any = labelList[index];
-      let imagePath: string = element.imagePath;
-      let className: any = element.className;
-      let height: number = element.height;
-      let width: number = element.width;
-      let center: number = element.center;
+  // search user tokens
+  let user: UserTable | null = await UserTable.findOne({
+    where: { username: username },
+  });
+  let userTokens: number = user?.getDataValue("token");
+  // error if token are not sufficients
+  if (userTokens < 0.05 * (labelList.length - 1)) {
+    formatResponse(res, errorFactory.getError(ErrEnum.AuthError).getMessage());
+  } else {
+    await UserTable.update(
+      {
+        token: userTokens - 0.05 * (labelList.length - 1),
+      },
+      { where: { username: username } }
+    );
+    // iterate over the list of labels
+    for (let index: number = 0; index < labelList.length - 1; index++) {
+      try {
+        let element: any = labelList[index];
+        let imagePath: string = element.imagePath;
+        let className: any = element.className;
+        let height: number = element.height;
+        let width: number = element.width;
+        let center: number = element.center;
 
-      // create the new element in json
-      finalJSON.response.push({ info: [{ path: imagePath }] });
-      // check if the user has an image with this path
-      let image: DatasetTable | null = await DatasetTable.findOne({
-        where: {
-          user: username,
-          deleted: false,
-        },
-        include: [
-          {
-            model: ImageTable,
-            required: true,
-            where: {
-              path: imagePath,
-              deleted: false,
-            },
-          },
-        ],
-      });
-      // if images does not exists
-      if (!image) {
-        finalJSON.response[index].info.push({
-          message: errorFactory
-            .getError(ErrEnum.ImageDoesNotExists)
-            .getMessage().message,
-        });
-      } else {
-        // if values are undefined, they are set to true
-        let widthReal = width ? width : null;
-        let heightReal = height ? height : null;
-        let centerReal = center ? center : null;
-        let imageId = image.getDataValue("images")[0].id;
-        // check if already exists this label for this same image
-        let label: LabelTable | null = await LabelTable.findOne({
+        // create the new element in json
+        finalJSON.response.push({ info: [{ path: imagePath }] });
+        // check if the user has an image with this path
+        let image: DatasetTable | null = await DatasetTable.findOne({
           where: {
-            image: imageId,
-            label: className,
-            width: widthReal,
-            height: heightReal,
-            center: centerReal,
+            user: username,
             deleted: false,
           },
+          include: [
+            {
+              model: ImageTable,
+              required: true,
+              where: {
+                path: imagePath,
+                deleted: false,
+              },
+            },
+          ],
         });
-        // if a label already exists return error
-        if (label) {
+        // if images does not exists
+        if (!image) {
           finalJSON.response[index].info.push({
             message: errorFactory
-              .getError(ErrEnum.LabelAlreadyExists)
+              .getError(ErrEnum.ImageDoesNotExists)
               .getMessage().message,
           });
         } else {
-          // label creation
-          await LabelTable.create({
-            image: imageId,
-            label: className,
-            width: widthReal,
-            height: heightReal,
-            center: centerReal,
+          // if values are undefined, they are set to true
+          let widthReal = width ? width : null;
+          let heightReal = height ? height : null;
+          let centerReal = center ? center : null;
+          let imageId = image.getDataValue("images")[0].id;
+          // check if already exists this label for this same image
+          let label: LabelTable | null = await LabelTable.findOne({
+            where: {
+              image: imageId,
+              label: className,
+              width: widthReal,
+              height: heightReal,
+              center: centerReal,
+              deleted: false,
+            },
           });
-          finalJSON.response[index].info.push({
-            message: successFactory
-              .getSuccess(SuccessEnum.LabelCreateSuccess)
-              .getMessage().message,
-          });
+          // if a label already exists return error
+          if (label) {
+            finalJSON.response[index].info.push({
+              message: errorFactory
+                .getError(ErrEnum.LabelAlreadyExists)
+                .getMessage().message,
+            });
+          } else {
+            // label creation
+            await LabelTable.create({
+              image: imageId,
+              label: className,
+              width: widthReal,
+              height: heightReal,
+              center: centerReal,
+            });
+            finalJSON.response[index].info.push({
+              message: successFactory
+                .getSuccess(SuccessEnum.LabelCreateSuccess)
+                .getMessage().message,
+            });
+          }
         }
+      } catch (error: any) {
+        finalJSON.response[index].info.push({
+          message: errorFactory.getError(ErrEnum.InternalError).getMessage()
+            .message,
+        });
       }
-    } catch (error: any) {
-      finalJSON.response[index].info.push({
-        message: errorFactory.getError(ErrEnum.InternalError).getMessage()
-          .message,
-      });
     }
   }
   formatResponseWithData(
