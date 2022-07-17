@@ -1,5 +1,5 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
-import { Singleton } from "../Singleton";
+import {DataTypes, Model, Sequelize} from "sequelize";
+import {Singleton} from "../Singleton";
 const connection: Sequelize = Singleton.getConnection();
 
 export class LabelTable extends Model {}
@@ -11,12 +11,10 @@ LabelTable.init(
       autoIncrement: true,
       primaryKey: true,
     },
-
     label: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
     width: {
       type: DataTypes.FLOAT,
       defaultValue: null,

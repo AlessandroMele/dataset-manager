@@ -13,7 +13,7 @@ const errorFactory: ErrorFactory = new ErrorFactory();
 export const checkModelName = function (req: any, res: any, next: any) {
     try {
         //checking if model_name is valid
-        if (typeof req.body.modelName !== 'string') {
+        if (!req.body || typeof req.body.modelName !== 'string') {
             var error = errorFactory.getError(ErrEnum.NoInputModelError).getMessage();
             next(error);
         }
@@ -31,7 +31,7 @@ export const checkModelName = function (req: any, res: any, next: any) {
  * @param res response
  * @param next next middleware
  */
- export const checkMetadata = function (req: any, res: any, next: any) {
+export const checkMetadata = function (req: any, res: any, next: any) {
     try {
         //checking if metadata are valid
         if (typeof req.body.newModelName !== 'string' && typeof req.body.datasetName !== 'string') {
@@ -53,7 +53,8 @@ export const checkModelName = function (req: any, res: any, next: any) {
  * @param res response
  * @param next next middleware
  */
- export const checkInputFile = function (req: any, res: any, next: any) {
+export const checkInputFile = function (req: any, res: any, next: any) {
+
     try {
         //checking if exists fileName
         if (!req.files.fileName) {

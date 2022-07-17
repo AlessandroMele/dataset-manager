@@ -1,11 +1,11 @@
-import { SuccessEnum, Response } from "./util";
+import {SuccessEnum, Response} from "./util";
 
 interface SuccessMessage {
-  getMessage(): Response;
+  getMessage (): Response;
 }
 
 class UserCreateSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "User created with success",
       status: 201,
@@ -14,7 +14,7 @@ class UserCreateSuccess implements SuccessMessage {
 }
 
 class RemovedSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Item has been removed successfully",
       status: 200,
@@ -23,7 +23,7 @@ class RemovedSuccess implements SuccessMessage {
 }
 
 class DatasetCreateSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Dataset has been created with success",
       status: 200,
@@ -33,7 +33,7 @@ class DatasetCreateSuccess implements SuccessMessage {
 
 
 class ModelCreateSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Model created with success",
       status: 201,
@@ -42,7 +42,7 @@ class ModelCreateSuccess implements SuccessMessage {
 }
 
 class JWTSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "JWT Token created with success",
       status: 201,
@@ -51,7 +51,7 @@ class JWTSuccess implements SuccessMessage {
 }
 
 class UpdateSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Value correctly modified",
       status: 200,
@@ -60,7 +60,7 @@ class UpdateSuccess implements SuccessMessage {
 }
 
 class GetSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Ok get",
       status: 200,
@@ -69,7 +69,7 @@ class GetSuccess implements SuccessMessage {
 }
 
 class DefaultSuccess implements SuccessMessage {
-  getMessage(): Response {
+  getMessage (): Response {
     return {
       message: "Good results",
       status: 200,
@@ -77,9 +77,19 @@ class DefaultSuccess implements SuccessMessage {
   }
 }
 
+class LabelCreateSuccess implements SuccessMessage {
+  getMessage (): Response {
+    return {
+      message: "Label created with success",
+      status: 200,
+    };
+  }
+}
+
+
 export class SuccessFactory {
-  constructor() {}
-  getSuccess(type: SuccessEnum): SuccessMessage {
+  constructor () {}
+  getSuccess (type: SuccessEnum): SuccessMessage {
     let success: SuccessMessage | null = null;
     switch (type) {
       case SuccessEnum.JWTSuccess:
@@ -88,7 +98,7 @@ export class SuccessFactory {
       case SuccessEnum.GetSuccess:
         success = new GetSuccess();
         break;
-        case SuccessEnum.DatasetCreateSuccess:
+      case SuccessEnum.DatasetCreateSuccess:
         success = new DatasetCreateSuccess();
         break;
       case SuccessEnum.UpdateSuccess:
@@ -102,6 +112,9 @@ export class SuccessFactory {
         break;
       case SuccessEnum.RemovedSuccess:
         success = new RemovedSuccess();
+        break;
+      case SuccessEnum.LabelCreateSuccess:
+        success = new LabelCreateSuccess();
         break;
       default:
         success = new DefaultSuccess();

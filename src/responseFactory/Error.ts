@@ -55,10 +55,20 @@ class NoInputKeywordsError implements ErrorMessage {
     };
   }
 }
+
 class NoInputClassesError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify 'classes'",
+      message: "You have to specify number 'classes'",
+      status: 400,
+    };
+  }
+}
+
+class NoInputClassNameError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "You have to specify string 'className'",
       status: 400,
     };
   }
@@ -190,6 +200,15 @@ class NoJSONRequest implements ErrorMessage {
   }
 }
 
+class NoFormRequest implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "Your request body need to be a Form",
+      status: 400,
+    };
+  }
+}
+
 class NoInputPasswordError implements ErrorMessage {
   public getMessage(): Response {
     return {
@@ -252,6 +271,61 @@ class NoModelFoundError implements ErrorMessage {
   }
 }
 
+class NoInputValidBoundingBoxesError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message:
+        "If you want to insert BoundingBoxes you need to specify normalized height, width and center",
+      status: 400,
+    };
+  }
+}
+
+class NoInputImageIdentifierError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "Need to specify string 'imagePath'",
+      status: 400,
+    };
+  }
+}
+
+class LabelAlreadyExists implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "This image already has this label",
+      status: 409,
+    };
+  }
+}
+
+class NoInputLabelListError implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "Need to specify array 'labelList'",
+      status: 400,
+    };
+  }
+}
+
+class ImageDoesNotExists implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "No image find with this 'imagePath'",
+      status: 404,
+    };
+  }
+}
+
+class ImageAlreadyExists implements ErrorMessage {
+  public getMessage(): Response {
+    return {
+      message: "In this dataset already exists an image with this name",
+      status: 409,
+    };
+  }
+}
+
 export class ErrorFactory {
   constructor() {}
   getError(type: ErrEnum): ErrorMessage {
@@ -259,10 +333,21 @@ export class ErrorFactory {
     switch (type) {
       case ErrEnum.AuthError:
         error = new AuthError();
-        NoInputPasswordError;
+        break;
+      case ErrEnum.LabelAlreadyExists:
+        error = new LabelAlreadyExists();
         break;
       case ErrEnum.AdminAuthError:
         error = new AdminAuthError();
+        break;
+      case ErrEnum.NoInputClassNameError:
+        error = new NoInputClassNameError();
+        break;
+      case ErrEnum.ImageAlreadyExists:
+        error = new ImageAlreadyExists();
+        break;
+      case ErrEnum.NoInputValidBoundingBoxesError:
+        error = new NoInputValidBoundingBoxesError();
         break;
       case ErrEnum.DatasetAlreadyExists:
         error = new DatasetAlreadyExists();
@@ -270,8 +355,14 @@ export class ErrorFactory {
       case ErrEnum.UserAlreadyExists:
         error = new UserAlreadyExists();
         break;
+      case ErrEnum.NoInputImageIdentifierError:
+        error = new NoInputImageIdentifierError();
+        break;
       case ErrEnum.NoInputPasswordError:
         error = new NoInputPasswordError();
+        break;
+      case ErrEnum.NoInputLabelListError:
+        error = new NoInputLabelListError();
         break;
       case ErrEnum.RequestErrorJSON:
         error = new RequestErrorJSON();
@@ -306,6 +397,9 @@ export class ErrorFactory {
       case ErrEnum.NoJSONRequest:
         error = new NoJSONRequest();
         break;
+      case ErrEnum.NoFormRequest:
+        error = new NoFormRequest();
+        break;
       case ErrEnum.NoInputTokenNumberError:
         error = new NoInputTokenNumberError();
         break;
@@ -336,14 +430,15 @@ export class ErrorFactory {
       case ErrEnum.NoModelFoundError:
         error = new NoModelFoundError();
         break;
-        case ErrEnum.ModelFileExistsError:
-          error = new ModelFileExistsError();
-          break;
-          case ErrEnum.NoModelFileFoundError:
-            error = new NoModelFileFoundError();
-            break;
-
-          
+      case ErrEnum.ModelFileExistsError:
+        error = new ModelFileExistsError();
+        break;
+      case ErrEnum.NoModelFileFoundError:
+        error = new NoModelFileFoundError();
+        break;
+      case ErrEnum.ImageDoesNotExists:
+        error = new ImageDoesNotExists();
+        break;
       default:
         error = new InternalError();
     }

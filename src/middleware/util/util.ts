@@ -49,3 +49,31 @@ export const checkRequestContent = (req: any, res: any, next: any): void => {
     next(error);
   }
 };
+
+/**
+ * Check if content type is set to form
+ * @param req request
+ * @param res response
+ * @param next next middleware
+ */
+export const checkRequestContentForm = (
+  req: any,
+  res: any,
+  next: any
+): void => {
+  try {
+    if (req.headers["content-type"].split(";")[0] == "multipart/form-data")
+      next();
+    else {
+      var error: Response = errorFactory
+        .getError(ErrEnum.NoFormRequest)
+        .getMessage();
+      next(error);
+    }
+  } catch {
+    var error: Response = errorFactory
+      .getError(ErrEnum.NoInputFileModelError)
+      .getMessage();
+    next(error);
+  }
+};

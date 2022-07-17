@@ -5,14 +5,15 @@ const jwt = require("../middleware/util/jwtUtil");
 import {
   SuccessEnum,
   ErrEnum,
-  Response,
   formatResponse,
   formatResponseWithData,
 } from "../responseFactory/util";
 import { ErrorFactory } from "../responseFactory/Error";
 import { SuccessFactory } from "../responseFactory/Success";
 import { KeywordTable } from "../model/tables/Keywords";
-import { checKeywords } from "middleware/dataset";
+import { ImageTable } from "../model/tables/Images";
+import { LabelTable } from "../model/tables/Labels";
+import { ModelTable } from "../model/tables/Models";
 
 const path = require("path");
 const fs = require("fs");
@@ -61,37 +62,61 @@ export const create = async function (
       );
     }
   } catch (error: any) {
-    formatResponseWithData(
+    formatResponse(
       res,
-      errorFactory.getError(ErrEnum.InternalError).getMessage(),
-      error
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
     );
   }
 };
 
 //remove model
 export const remove = async function (
-  dataset: string,
+  datasetName: string,
   token: string,
   res: any
 ) {
   try {
-    let payload = jwt.getPayload(token);
-    let username: string = payload.payload.username;
-    let userDatasetRemoved: number = await DatasetTable.destroy({
-      where: { user: username, name: dataset },
+    var payload = jwt.getPayload(token);
+    var username: string = payload.payload.username;
+    // extract dataset data
+    let user_dataset: DatasetTable | null = await DatasetTable.findOne({
+      where: { user: username, name: datasetName, deleted: false },
     });
-    if (userDatasetRemoved == 0)
+    // error if dataset does not exists
+    if (!user_dataset) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
       );
-    else
+    } else {
+      let datasetId: number = user_dataset.getDataValue("id");
+      // delete the dataset
+      await DatasetTable.update(
+        { deleted: true },
+        { where: { user: username, name: datasetName, deleted: false } }
+      );
+      //delete associated models, images and keywords
+      await ModelTable.update(
+        { deleted: true },
+        { where: { dataset: datasetId, deleted: false } }
+      );
+      await ImageTable.update(
+        { deleted: true },
+        { where: { dataset: datasetId, deleted: false } }
+      );
+
+      await KeywordTable.update(
+        { deleted: true },
+        { where: { dataset: datasetId, deleted: false } }
+      );
+
       formatResponse(
         res,
         successFactory.getSuccess(SuccessEnum.RemovedSuccess).getMessage()
       );
+    }
   } catch (error: any) {
+    console.log(error);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -106,13 +131,34 @@ export const list = async function (token: string, res: any) {
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
     let datasetList: DatasetTable[] | null = await DatasetTable.findAll({
+      attributes: ["name", "classes", "user"],
       where: { user: username, deleted: false },
       include: [
         {
           model: KeywordTable,
+          attributes: ["keyword"],
+          required: false,
           where: {
             deleted: false,
           },
+        },
+        {
+          model: ImageTable,
+          attributes: ["id", "path"],
+          required: false,
+          where: {
+            deleted: false,
+          },
+          include: [
+            {
+              model: LabelTable,
+              attributes: ["label", "width", "center", "height"],
+              required: false,
+              where: {
+                deleted: false,
+              },
+            },
+          ],
         },
       ],
     });
@@ -129,10 +175,9 @@ export const list = async function (token: string, res: any) {
       );
     }
   } catch (error: any) {
-    formatResponseWithData(
+    formatResponse(
       res,
-      errorFactory.getError(ErrEnum.InternalError).getMessage(),
-      error
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
     );
   }
 };
@@ -144,44 +189,87 @@ export const imageInsert = async function (req: any, token: string, res: any) {
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
     let datasetName = req.body.datasetName;
+    // search if dataset exixts
     let dataset: DatasetTable | null = await DatasetTable.findOne({
-      where: { user: username, name: datasetName },
+      where: { user: username, name: datasetName, deleted: false },
     });
+    // error if doesn't exists
     if (!dataset) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
       );
     } else {
+      // get the datasetId
+      let datasetId: number = dataset.getDataValue("id");
+      // extract image from the form
       let file = req.files.fileName;
+      // create path for the image
       let savePath = path.join(
         __dirname,
         "..",
         "..",
         "datasets",
         username,
-        datasetName
+        datasetName,
+        datasetId.toString() // needed to avoid collisions when dataset is deleted and recreated
       );
-      if (!fs.existsSync(savePath)) {
-        console.log(savePath);
-        fs.mkdirSync(savePath, { recursive: true });
-      }
-      await file.mv(savePath + "/" + file.name);
-      await DatasetTable.update(
-        { path: savePath },
-        { where: { name: datasetName, user: username } }
+
+      // create the path to store in the database
+      const final_path: string = path.join(
+        "datasets",
+        username,
+        datasetName,
+        datasetId.toString(),
+        file.name
       );
-      formatResponseWithData(
-        res,
-        successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-        {
-          data: {
-            fileName: req.files.fileName.name,
-            mimetype: req.files.fileName.mimetype,
-            datasetName: datasetName,
+      // check if the image already exists
+      let image: ImageTable | null = await ImageTable.findOne({
+        where: {
+          dataset: datasetId,
+          path: final_path,
+          deleted: false,
+        },
+      });
+      console.log(image);
+      // if it exists return error
+      if (image) {
+        formatResponse(
+          res,
+          errorFactory.getError(ErrEnum.ImageAlreadyExists).getMessage()
+        );
+      } else {
+        await ImageTable.create({
+          dataset: datasetId,
+          path: final_path,
+        });
+        await DatasetTable.update(
+          {
+            path: final_path,
           },
+          { where: { name: datasetName, user: username } }
+        );
+
+        // if the directory doesn't exists create it
+        if (!fs.existsSync(savePath)) {
+          fs.mkdirSync(savePath, { recursive: true });
         }
-      );
+        // insert the image in the directory created
+        await file.mv(savePath + "/" + file.name);
+
+        formatResponseWithData(
+          res,
+          successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
+          {
+            data: {
+              path: final_path,
+              fileName: req.files.fileName.name,
+              datasetName: datasetName,
+              status: "Image loaded",
+            },
+          }
+        );
+      }
     }
   } catch (err) {
     formatResponse(
@@ -217,10 +305,8 @@ export const zipInsert = async function (req: any, token: string, res: any) {
         datasetName
       );
       if (!fs.existsSync(savePath)) {
-        console.log(savePath);
         fs.mkdirSync(savePath, { recursive: true });
       }
-      console.log(req.files.fileName);
       //scompattare lo zip e controllare che ogni file sia un'immagine, poi prosegui
       fs.createReadStream(req.files.fileName.tempFilePath + "/" + file.name)
         .pipe(unzipper.parse())
@@ -240,12 +326,12 @@ export const zipInsert = async function (req: any, token: string, res: any) {
             fileName: req.files.fileName.name,
             mimetype: req.files.fileName.mimetype,
             datasetName: datasetName,
+            status: "Image  loaded",
           },
         }
       );
     }
   } catch (err) {
-    console.log(err);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -253,8 +339,189 @@ export const zipInsert = async function (req: any, token: string, res: any) {
   }
 };
 
-//insert a label on a specific image on the specified dataset
-export const labelInsert = function (req: any, token: string, res: any) {};
+//insert a label on a specific image
+export const labelInsert = async function (
+  imagePath: string,
+  className: any,
+  height: number,
+  width: number,
+  center: number,
+  token: string,
+  res: any
+) {
+  try {
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+    // check if the user has an image with this path
+    let image: DatasetTable | null = await DatasetTable.findOne({
+      where: {
+        user: username,
+        deleted: false,
+      },
+      include: [
+        {
+          model: ImageTable,
+          required: true,
+          where: {
+            path: imagePath,
+            deleted: false,
+          },
+        },
+      ],
+    });
+    // if images does not exists
+    if (!image) {
+      formatResponse(
+        res,
+        errorFactory.getError(ErrEnum.ImageDoesNotExists).getMessage()
+      );
+    } else {
+      // if values are undefined, they are set to true
+      let widthReal = width ? width : null;
+      let heightReal = height ? height : null;
+      let centerReal = center ? center : null;
+      let imageId = image.getDataValue("images")[0].id;
+      // check if already exists this label for this same image
+      let label: LabelTable | null = await LabelTable.findOne({
+        where: {
+          image: imageId,
+          label: className,
+          width: widthReal,
+          height: heightReal,
+          center: centerReal,
+          deleted: false,
+        },
+      });
+      // if a label already exists return error
+      if (label) {
+        formatResponse(
+          res,
+          errorFactory.getError(ErrEnum.LabelAlreadyExists).getMessage()
+        );
+      } else {
+        // label creation
+        await LabelTable.create({
+          image: imageId,
+          label: className,
+          width: widthReal,
+          height: heightReal,
+          center: centerReal,
+        });
+        formatResponse(
+          res,
+          successFactory.getSuccess(SuccessEnum.LabelCreateSuccess).getMessage()
+        );
+      }
+    }
+  } catch (error: any) {
+    console.log(error);
+    formatResponse(
+      res,
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
+    );
+  }
+};
+
+//insert a label on a list of images
+export const labelInsertList = async function (
+  labelList: any[],
+  token: string,
+  res: any
+) {
+  // extract username from token
+  let payload = jwt.getPayload(token);
+  let username: string = payload.payload.username;
+
+  let finalJSON: any = JSON.parse('{ "response": [] }');
+  // iterate over the list of labels
+  for (let index: number = 0; index < labelList.length - 1; index++) {
+    try {
+      let element: any = labelList[index];
+      let imagePath: string = element.imagePath;
+      let className: any = element.className;
+      let height: number = element.height;
+      let width: number = element.width;
+      let center: number = element.center;
+
+      // create the new element in json
+      finalJSON.response.push({ info: [{ path: imagePath }] });
+      // check if the user has an image with this path
+      let image: DatasetTable | null = await DatasetTable.findOne({
+        where: {
+          user: username,
+          deleted: false,
+        },
+        include: [
+          {
+            model: ImageTable,
+            required: true,
+            where: {
+              path: imagePath,
+              deleted: false,
+            },
+          },
+        ],
+      });
+      // if images does not exists
+      if (!image) {
+        finalJSON.response[index].info.push({
+          message: errorFactory
+            .getError(ErrEnum.ImageDoesNotExists)
+            .getMessage().message,
+        });
+      } else {
+        // if values are undefined, they are set to true
+        let widthReal = width ? width : null;
+        let heightReal = height ? height : null;
+        let centerReal = center ? center : null;
+        let imageId = image.getDataValue("images")[0].id;
+        // check if already exists this label for this same image
+        let label: LabelTable | null = await LabelTable.findOne({
+          where: {
+            image: imageId,
+            label: className,
+            width: widthReal,
+            height: heightReal,
+            center: centerReal,
+            deleted: false,
+          },
+        });
+        // if a label already exists return error
+        if (label) {
+          finalJSON.response[index].info.push({
+            message: errorFactory
+              .getError(ErrEnum.LabelAlreadyExists)
+              .getMessage().message,
+          });
+        } else {
+          // label creation
+          await LabelTable.create({
+            image: imageId,
+            label: className,
+            width: widthReal,
+            height: heightReal,
+            center: centerReal,
+          });
+          finalJSON.response[index].info.push({
+            message: successFactory
+              .getSuccess(SuccessEnum.LabelCreateSuccess)
+              .getMessage().message,
+          });
+        }
+      }
+    } catch (error: any) {
+      finalJSON.response[index].info.push({
+        message: errorFactory.getError(ErrEnum.InternalError).getMessage()
+          .message,
+      });
+    }
+  }
+  formatResponseWithData(
+    res,
+    successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage(),
+    finalJSON.response
+  );
+};
 
 //update dataset
 export const update = function (req: any, res: any) {};

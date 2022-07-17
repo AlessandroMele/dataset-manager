@@ -1,4 +1,7 @@
-import { checkRequestContent } from "../middleware/util/util";
+import {
+  checkRequestContent,
+  checkRequestContentForm,
+} from "../middleware/util/util";
 import {
   create,
   update,
@@ -7,27 +10,62 @@ import {
   imageInsert,
   zipInsert,
   labelInsert,
+  labelInsertList,
 } from "../controller/datasetController";
 
-import {checkDatasetName, checKeywords, checkClasses, checkImage, checkZip} from "../middleware/dataset"
+import {
+  checkDatasetName,
+  checKeywords,
+  checkClasses,
+  checkImageFile,
+  checkZip,
+  checkClassName,
+  checkBoundingBoxesName,
+  checkImageIdentifier,
+  checkClassNameList,
+  checkBoundingBoxesNameList,
+  checkImageIdentifierList,
+  checkLabelList,
+} from "../middleware/dataset";
+import { checkInputFile } from "../middleware/model";
 
 var express = require("express");
 var router = express.Router();
 
 //creating dataset
-router.put("/create", [checkRequestContent, express.json(), checkDatasetName, checKeywords, checkClasses], function (req: any, res: any) {
-  create(req.body.datasetName,req.body.classes, req.body.keywords, req.headers["authorization"], res);
-});
+router.put(
+  "/create",
+  [
+    checkRequestContent,
+    express.json(),
+    checkDatasetName,
+    checKeywords,
+    checkClasses,
+  ],
+  function (req: any, res: any) {
+    create(
+      req.body.datasetName,
+      req.body.classes,
+      req.body.keywords,
+      req.headers["authorization"],
+      res
+    );
+  }
+);
 
 //updating dataset
-router.put("/:id/update", function (req: any, res: any) {
+router.put("/update", function (req: any, res: any) {
   update(req, res);
 });
 
 //deleting dataset
-router.delete("/:id/delete",[checkRequestContent, express.json()], function (req: any, res: any) {
-  remove(req.headers.datasetName, req.headers["authorization"], res);
-});
+router.delete(
+  "/delete",
+  [checkRequestContent, express.json(), checkDatasetName],
+  function (req: any, res: any) {
+    remove(req.body.datasetName, req.headers["authorization"], res);
+  }
+);
 
 //dataset's list
 router.get("/list", function (req: any, res: any) {
@@ -35,18 +73,62 @@ router.get("/list", function (req: any, res: any) {
 });
 
 //insert a single image on the specified dataset
-router.put("/image", [checkImage],function (req: any, res: any) {
-  imageInsert(req, req.headers["authorization"], res);
-});
+router.put(
+  "/image",
+  [checkRequestContentForm, checkInputFile, checkImageFile, checkDatasetName],
+  function (req: any, res: any) {
+    imageInsert(req, req.headers["authorization"], res);
+  }
+);
 
 //insert a zip images on the specified dataset
-router.put("/zip", [checkZip],function (req: any, res: any) {
-  zipInsert(req, req.headers["authorization"], res);
-});
+router.put(
+  "/zip",
+  [checkRequestContentForm, checkInputFile, checkZip],
+  function (req: any, res: any) {
+    zipInsert(req, req.headers["authorization"], res);
+  }
+);
 
-//insert a label on a specific image on the specified dataset
-router.put("/label",[checkRequestContent, express.json()], function (req: any, res: any) {
-  labelInsert(req, req.headers["authorization"], res);
-});
+//insert a label on a specific image
+router.post(
+  "/label",
+  [
+    checkRequestContent,
+    express.json(),
+    checkClassName,
+    checkBoundingBoxesName,
+    checkImageIdentifier,
+  ],
+  function (req: any, res: any) {
+    // if bounding boxes parameters are set, then call the apposite function
+    labelInsert(
+      req.body.imagePath,
+      req.body.className,
+      req.body.height,
+      req.body.width,
+      req.body.center,
+      req.headers["authorization"],
+      res
+    );
+  }
+);
+
+//insert list of label
+router.post(
+  "/insertList",
+  [
+    checkRequestContent,
+    express.json(),
+    checkLabelList,
+    checkClassNameList,
+    checkBoundingBoxesNameList,
+    checkImageIdentifierList,
+  ],
+  function (req: any, res: any) {
+    // if bounding boxes parameters are set, then call the apposite function
+    labelInsertList(req.body.labelList, req.headers["authorization"], res);
+  }
+);
 
 module.exports = router;

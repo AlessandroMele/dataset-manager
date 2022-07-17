@@ -26,8 +26,17 @@ export enum ErrEnum {
   NoInputImageError,
   NoInputZipError,
   ModelFileExistsError,
-  NoModelFileFoundError
+  NoModelFileFoundError,
+  NoFormRequest,
+  NoInputClassNameError,
+  NoInputValidBoundingBoxesError,
+  NoInputImageIdentifierError,
+  NoInputLabelListError,
+  ImageDoesNotExists,
+  LabelAlreadyExists,
+  ImageAlreadyExists
 }
+
 
 export enum SuccessEnum {
   JWTSuccess,
@@ -37,7 +46,8 @@ export enum SuccessEnum {
   GetSuccess,
   ModelCreateSuccess,
   RemovedSuccess,
-  DatasetCreateSuccess
+  DatasetCreateSuccess,
+  LabelCreateSuccess
 }
 
 export interface Response {

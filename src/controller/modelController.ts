@@ -31,8 +31,10 @@ export const create = async function (
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: model, deleted: false },
     });
+    console.log("ciaociao11");
     // if a model already exists
     if (userModel != null) {
+      console.log("ciaociao22");
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.ModelAlreadyExists).getMessage()
@@ -51,7 +53,6 @@ export const create = async function (
       } else {
         // extract datasetId from the response
         let datasetId = userDataset.getDataValue("id");
-        console.log(datasetId);
         // insert the model in the table
         let results: ModelTable | null = await ModelTable.create({
           name: model,
@@ -67,11 +68,11 @@ export const create = async function (
         );
       }
     }
-  } catch (error: any) {
+  } catch (err: any) {
     formatResponseWithData(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage(),
-      error
+      err
     );
   }
 };
@@ -161,7 +162,6 @@ export const updateDatasetName = async function (
           { datasetId: datasetId },
           { where: { name: modelName, user: username, deleted: false } }
         );
-        console.log(datasetId, modelName, username);
         formatResponse(
           res,
           successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage()
@@ -269,8 +269,21 @@ export const list = async function (token: string, res: any) {
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
-    let model_list: ModelTable[] | null = await ModelTable.findAll({
+    let model_list: DatasetTable[] | null = await DatasetTable.findAll({
+      // rename to datasetName
+      attributes: [["name", "databaseName"]],
       where: { user: username, deleted: false },
+      raw: true,
+      include: [
+        {
+          model: ModelTable,
+          // rename to modelName
+          attributes: [["name", "modelName"], "path", "user"],
+          where: {
+            deleted: false,
+          },
+        },
+      ],
     });
     if (model_list != null) {
       formatResponseWithData(
@@ -285,6 +298,7 @@ export const list = async function (token: string, res: any) {
       );
     }
   } catch (error: any) {
+    console.log(error);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -313,15 +327,30 @@ export const loadFile = async function (
       );
     } else {
       if (!model.getDataValue("path")) {
+        let modelId: number = model.getDataValue("id");
+        console.log(modelId);
         let file = files.fileName;
-        let savePath = path.join(__dirname, "..", "..", "models", username);
+        let savePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "models",
+          username,
+          modelId.toString()
+        );
         if (!fs.existsSync(savePath)) {
           fs.mkdirSync(savePath, { recursive: true });
         }
-        const completePath = savePath + "/" + file.name
+        const completePath: string = savePath + "/" + file.name;
         await file.mv(completePath);
+        const final_path: string = path.join(
+          "models",
+          username,
+          modelId.toString(),
+          file.name
+        );
         await ModelTable.update(
-          { path: completePath },
+          { path: final_path },
           { where: { name: modelName, user: username } }
         );
         formatResponseWithData(
@@ -329,9 +358,10 @@ export const loadFile = async function (
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
           {
             data: {
+              path: final_path,
               fileName: files.fileName.name,
-              mimetype: files.fileName.mimetype,
               modelName: modelName,
+              status: "File loaded",
             },
           }
         );
@@ -343,7 +373,6 @@ export const loadFile = async function (
       }
     }
   } catch (err) {
-    console.log(err)
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -372,15 +401,30 @@ export const updateFile = async function (
       );
     } else {
       if (model.getDataValue("path")) {
+        let modelId: number = model.getDataValue("id");
+        console.log(modelId);
         let file = files.fileName;
-        let savePath = path.join(__dirname, "..", "..", "models", username);
+        let savePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "models",
+          username,
+          modelId.toString()
+        );
         if (!fs.existsSync(savePath)) {
           fs.mkdirSync(savePath, { recursive: true });
         }
-        const completePath = savePath + "/" + file.name
+        const completePath = savePath + "/" + file.name;
         await file.mv(completePath);
+        const final_path: string = path.join(
+          "models",
+          username,
+          modelId.toString(),
+          file.name
+        );
         await ModelTable.update(
-          { path: completePath },
+          { path: final_path },
           { where: { name: modelName, user: username } }
         );
         formatResponseWithData(
@@ -388,17 +432,18 @@ export const updateFile = async function (
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
           {
             data: {
+              path: final_path,
               fileName: files.fileName.name,
-              mimetype: files.fileName.mimetype,
               modelName: modelName,
+              status: "File updated",
             },
           }
         );
-      }
-      else
-      formatResponse(
-        res,
-        errorFactory.getError(ErrEnum.NoModelFileFoundError).getMessage());
+      } else
+        formatResponse(
+          res,
+          errorFactory.getError(ErrEnum.NoModelFileFoundError).getMessage()
+        );
     }
   } catch (err) {
     formatResponse(
@@ -409,6 +454,4 @@ export const updateFile = async function (
 };
 
 //calculating inference of a specific image on a specific model
-export const inference = function (req: any, res: any) {
-  
-};
+export const inference = function (req: any, res: any) {};
