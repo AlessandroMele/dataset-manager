@@ -65,6 +65,40 @@ Si chiede di commentare opportunamente il codice.<br />
 
 ## Middleware
 
+# Rotte
+Metodo | Rotta | Tipologia Utente | Autenticazione JWT | 
+--- | --- | --- | --- |
+POST | /user/signup | guest | NO |
+POST | /user/login | user/admin | NO |
+GET | /user/residualToken | user/admin | YES |
+POST | /user/updateToken | admin | YES |
+POST | /model/create | user/admin | YES |
+POST | /model/loadFile | user/admin | YES |
+GET | /model/list | user/admin | YES |
+PUT | /model/updateMetadata | user/admin | YES |
+PUT | /model/updateFile | user/admin | YES |
+DELETE | /model/delete | user/admin | YES |
+POST | /model/inference | user/admin | YES |
+PUT | /dataset/create | user/admin | YES |
+PUT | /dataset/update | user/admin | YES |
+GET | /dataset/list | user/admin | YES |
+DELETE | /dataset/delete | user/admin | YES |
+POST | /dataset/zip | user/admin | YES |
+POST | /dataset/image | user/admin | YES |
+POST | /dataset/label | user/admin | YES |
+POST | /dataset/labelList | user/admin | YES |
+
+## Descrizione rotte 
+
+### /user
+
+#### Signup
+
+Rotta attraverso la quale è possibile registrarsi nel sito inserendo i parametri opportuni. Nel caso in cui uno di essi non sia presente verrà restituito un messaggio di errore con codice 400 specificando il parametro che ha sollevato l'eccezione. In caso di inserimento di un username già in uso, verrà restituito un errore con codice 409. Se l'operazione va a buon fine l'utente viene registrato nel database. 
+
+#### Signup
+
+
 # Configurazione
 
 ## Avvio del progetto
