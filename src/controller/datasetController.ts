@@ -203,7 +203,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
     } else {
       await UserTable.update(
         {
-          token: userTokens - 0.001,
+          token: userTokens - 0.1,
         },
         { where: { username: username } }
       );
@@ -566,18 +566,19 @@ export const labelInsertList = async function (
           }
         }
       } catch (error: any) {
+        console.log(error);
         finalJSON.response[index].info.push({
           message: errorFactory.getError(ErrEnum.InternalError).getMessage()
             .message,
         });
       }
     }
+    formatResponseWithData(
+      res,
+      successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage(),
+      finalJSON.response
+    );
   }
-  formatResponseWithData(
-    res,
-    successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage(),
-    finalJSON.response
-  );
 };
 
 //update dataset's metadata

@@ -69,7 +69,7 @@ INSERT INTO `users`(`email`, `username`, `token`, `password`, `role`)
 VALUES (
     'admin@admin.it',
     'admin',
-    100,
+    1,
     'password1',
     'admin'
   ),
