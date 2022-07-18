@@ -105,6 +105,7 @@ Input:
 - email: email dell'utente
 - username: username dell'utente
 - password: password dell'utente
+
 Errori:
 - Inserimento di un username già in uso: 404
 
@@ -126,6 +127,7 @@ Input:
 - username: username dell'utente
 - password: password dell'utente
 - role: ruolo dell'utente (user/admin)
+
 Errori: 
 - Username non presente nel database o password non corretta: 400
 
@@ -152,6 +154,7 @@ Rotta attravero la quale l'utente può accedere al numero di token rimasti. Non 
 Rotta attraverso la quale l'admin ha la possibilità di aggiornare il numero di token in possesso di uno degli altri utenti registrati.
 Input:
 - username: username dell'utente
+
 Errori:
 - Nessun utente con lo username fornito: 404 
 
@@ -174,6 +177,7 @@ Rotta attraverso la quale è possible creare un nuovo modello collegandolo ad un
 Input:
 - datasetName: nome del dataset a cui si vuole collegare il modello
 - modelName: nome del modello che si vuole creare
+
 Errori:
 - L'utente non possiede alcun dataset con il nome indicato: 404 
 - L'utente possiede già un model con il nome indicato: 409
@@ -195,6 +199,7 @@ Rotta attraverso la quale è possibile caricare un file ed associarlo ad uno spe
 Input:
 - fileName: file da associare al modello
 - modelName: nome del modello a cui associare il file
+
 Errori:
 - L'utente non possiede alcune modello con il nome indicato: 404 
 - Esiste già un file associato al modello: 409
@@ -210,6 +215,7 @@ Rotta attraverso la quale è possibile aggiornare un file associato ad uno speci
 Input:
 - fileName: file da aggiornare
 - modelName: nome del modello a cui associare il file
+
 Errori:
 - L'utente non possiede alcune modello con il nome indicato: 404 
 - Il modello non ha alcun file associato: 404
@@ -228,6 +234,7 @@ Input:
 - modelName: nome del modello del quale si vogliono aggiornare i metadati
 - newModelName: nuovo nome del modello (OPZIONALE)
 - datasetName: nuovo dataset a cui si vuole associare il modello (OPZIONALE) 
+
 Errori:
 - Il nuovo nome del modello corrisponde al nome di un altro modello dell'utente: 409
 - Il nome del dataset a cui associare il modello non esiste: 404
@@ -249,6 +256,7 @@ Rotta attraverso la quale un utente può eliminare un proprio modello con uno sp
 
 Input:
 - modelName: nome del modello del quale si vogliono aggiornare i metadati
+
 Errori:
 - L'utente non possiede alcune modello con il nome indicato: 404 
 
@@ -279,6 +287,7 @@ Input:
 - datasetName: nome del dataset da creare
 - keywords: lista di parole chiave associate al dataset
 - classes: numero di classi nel dataset
+
 Errori:
 - L'utente possiede già un dataset con il nome indicato: 409
 
@@ -302,6 +311,7 @@ Input:
 - newDatasetName: nuovo nome del dataset (OPZIONALE)
 - keywords: lista di parole chiave associate al dataset (OPZIONALE)
 - classes: numero di classi nel dataset (OPZIONALE)
+
 Errori:
 - L'utente possiede già un dataset con il nome indicato: 409
 
@@ -330,6 +340,7 @@ Rotta attraverso la quale un utente può eliminare un proprio dataset con uno sp
 
 Input:
 - datasetName: nome del dataset da eliminare
+
 Errori:
 - L'utente non possiede alcun dataset con il nome indicato: 404
 
@@ -349,6 +360,7 @@ Rotta attraverso la quale un utente inserisce un'immagine da associare ad uno sp
 Input:
 - fileName: immagine
 - datasetName: nome del dataset a cui associare l'immagine
+
 Errori:
 - L'utente non possiede alcune dataset con il nome indicato: 404 
 - Token insufficienti: 401
@@ -365,6 +377,7 @@ Rotta attraverso la quale un utente inserisce uno zip contenente immagini da ins
 Input:
 - fileName: file zip contenente le immagini
 - datasetName: nome del dataset a cui associare le immagini
+
 Errori:
 - L'utente non possiede alcune dataset con il nome indicato: 404 
 Il server risponde con un array JSON contenente un elemento per ogni elemento nello zip, le possibili risposte dipendono dall'esito dell'inserimento dell'immagine:
@@ -384,6 +397,7 @@ Input:
 - center: posizione centrale del BB (OPZIONALE)
 - width: larghezza del BB (OPZIONALE)
 - height: altezza del BB (OPZIONALE)
+
 Errori:
 - L'utente non possiede alcuna immagine con il path indicato: 404
 - I bounding boxes non sono normalizzati: 400
@@ -414,6 +428,7 @@ Input, un array costituito da:
 - center: posizione centrale del BB (OPZIONALE)
 - width: larghezza del BB (OPZIONALE)
 - height: altezza del BB (OPZIONALE)
+
 Errori:
 - L'utente non possiede alcuna immagine con il path indicato: 404
 Il server risponde con un array JSON contenente un elemento per ogni elemento nel vettore di input, le possibili risposte dipendono dall'esito dell'inserimento della label:
