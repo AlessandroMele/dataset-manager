@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4fd4c5a7-7dd8-4dfe-9bb7-bfcf31a00a76",
+		"_postman_id": "4e8bd9ab-9a32-4811-a647-3b0f49bfd6eb",
 		"name": "3) Insert label",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -512,7 +512,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).equals(\"No image find with this 'imagePath'\");",
+							"  pm.expect(jsonData.message).equals(\"No image found with this 'imagePath'\");",
 							"});"
 						],
 						"type": "text/javascript"

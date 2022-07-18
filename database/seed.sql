@@ -9,7 +9,7 @@ CREATE TABLE `users` (
   `username` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `token` DECIMAL(8,3) NOT NULL DEFAULT 100,
+  `token` DECIMAL(8,3) NOT NULL DEFAULT 1,
   `role` enum('user', 'admin') NOT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
@@ -112,6 +112,13 @@ VALUES (
     2,
     'my_eye_models_1',
     'models/user/2/my_eye_models_1.py',
+    2,
+    'user'
+  ),
+    (
+    3,
+    'my_eye_models_2',
+    NULL,
     2,
     'user'
   );

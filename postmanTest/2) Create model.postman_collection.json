@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6185801d-8aa3-4879-b99e-9ea5880bf72e",
+		"_postman_id": "96f5751f-f22a-446b-b58e-ef21eac221f8",
 		"name": "2) Create model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -339,7 +339,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"No dataset found with this name\", function () {\r",
-							"  pm.response.to.have.status(404);\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
@@ -456,7 +456,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.model.id).to.eql(3);\r",
+							"  pm.expect(jsonData.model.id).to.eql(4);\r",
 							"  pm.expect(jsonData.model.name).to.eql(\"nuovo modello\");\r",
 							"  pm.expect(jsonData.model.dataset).to.eql(1);\r",
 							"  pm.expect(jsonData.model.user).to.eql(\"user\");\r",

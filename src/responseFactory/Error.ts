@@ -12,15 +12,25 @@ class UserAlreadyExists implements ErrorMessage {
     };
   }
 }
-
-class NoInputFileModelError implements ErrorMessage {
+class NoImageFoundError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "Need to specify a valid 'fileName' (max 40 char)",
+      message: "This file is not an image",
       status: 400,
     };
   }
 }
+
+
+class NoInputFileModelError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Need to specify a valid 'fileName' (max 40 char with .py extension)",
+      status: 400,
+    };
+  }
+}
+
 class ModelFileExistsError implements ErrorMessage {
   getMessage(): Response {
     return {
@@ -46,6 +56,16 @@ class NoInputZipError implements ErrorMessage {
     };
   }
 }
+
+class NoInputFileImageError implements ErrorMessage {
+  getMessage(): Response {
+    return {
+      message: "Need to specify a valid 'fileName' (max 40 char)",
+      status: 400,
+    };
+  }
+}
+
 
 class NoInputKeywordsError implements ErrorMessage {
   getMessage(): Response {
@@ -426,6 +446,9 @@ export class ErrorFactory {
       case ErrEnum.NoInputPasswordError:
         error = new NoInputPasswordError();
         break;
+        case ErrEnum.NoImageFoundError:
+          error = new NoImageFoundError();
+          break;
       case ErrEnum.NoInputLabelListError:
         error = new NoInputLabelListError();
         break;
@@ -453,6 +476,9 @@ export class ErrorFactory {
       case ErrEnum.NoInputEmailError:
         error = new NoInputEmailError();
         break;
+        case ErrEnum.NoInputFileImageError:
+          error = new NoInputFileImageError();
+          break;
       case ErrEnum.NoInputFileModelError:
         error = new NoInputFileModelError();
         break;

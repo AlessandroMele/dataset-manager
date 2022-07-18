@@ -1,24 +1,24 @@
 {
 	"info": {
-		"_postman_id": "36d658b1-6b82-4e5e-b071-39ab3617e6dc",
-		"name": "3) Insert zip dataset NON FUNZIONA",
+		"_postman_id": "8297e024-b82d-4eae-bf48-4e9e8231fdd0",
+		"name": "3) Insert zip dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "No dataset found",
+			"name": "No tokenJWT",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
+							"pm.test(\"No tokenJWT\", function () {",
+							"  pm.response.to.have.status(401);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -31,7 +31,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-user}}",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -44,7 +44,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
+							"src": "Archivio.zip"
 						},
 						{
 							"key": "modelName",
@@ -79,7 +79,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
+							"pm.test(\"Malformed tokenJWT\", function () {",
 							"  pm.response.to.have.status(401);",
 							"});",
 							"",
@@ -98,7 +98,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "cccc",
+							"value": "ccc",
 							"type": "string"
 						}
 					]
@@ -106,8 +106,19 @@
 				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "Archivio.zip"
+						},
+						{
+							"key": "modelName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,19 +140,19 @@
 			"response": []
 		},
 		{
-			"name": "No tokenJWT",
+			"name": "No dataset found",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
-							"  pm.response.to.have.status(401);",
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(404);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
+							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -154,7 +165,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "{{token-user}}",
 							"type": "string"
 						}
 					]
@@ -162,8 +173,87 @@
 				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "Archivio.zip"
+						},
+						{
+							"key": "datasetName",
+							"value": "dataset inesistente",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/zip",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"zip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No zip file input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid 'datasetName' (max 30 char)\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "Archivio.zip"
+						},
+						{
+							"key": "datasetName",
+							"value": "occhi_ritagliati",
+							"type": "default",
+							"disabled": true
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -191,13 +281,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
-							"});",
-							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"pm.test(\"Insert success\", function () {",
+							"  pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -223,7 +308,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "Archivio.zip"
+							"src": "Archivio2.zip"
 						},
 						{
 							"key": "datasetName",

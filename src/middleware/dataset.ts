@@ -14,6 +14,7 @@ export const checkDatasetName = function (req: any, res: any, next: any) {
   try {
     //checking if dataset is valid
     if (
+      req.body == undefined ||
       typeof req.body.datasetName !== "string" ||
       req.body.datasetName.length > 30
     ) {
@@ -23,6 +24,7 @@ export const checkDatasetName = function (req: any, res: any, next: any) {
       next(error);
     } else next();
   } catch (error: any) {
+    console.log(error)
     var error: Response = errorFactory
       .getError(ErrEnum.InternalError)
       .getMessage();
@@ -435,6 +437,63 @@ export const checkZip = function (req: any, res: any, next: any) {
       next(error);
     } else next();
   } catch (error: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};
+
+
+/**
+ * Check if request contains file
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkInputZip = function (req: any, res: any, next: any) {
+  try {
+    //checking if exists fileName and if name has less than 40 chars
+    if (
+      !req.files ||
+      !req.files.fileName ||
+      req.files.fileName.name.length > 40
+    ) {
+      var error = errorFactory
+        .getError(ErrEnum.NoInputZipError)
+        .getMessage();
+      next(error);
+    } else next();
+  } catch (err: any) {
+    var error: Response = errorFactory
+      .getError(ErrEnum.InternalError)
+      .getMessage();
+    next(error);
+  }
+};
+
+
+
+/**
+ * Check if request contains file
+ * @param req user request
+ * @param res response
+ * @param next next middleware
+ */
+ export const checkImageName = function (req: any, res: any, next: any) {
+  try {
+    //checking if exists fileName and if name has less than 40 chars
+    if (
+      !req.files ||
+      !req.files.fileName ||
+      req.files.fileName.name.length > 40
+    ) {
+      var error = errorFactory
+        .getError(ErrEnum.NoInputFileImageError)
+        .getMessage();
+      next(error);
+    } else next();
+  } catch (err: any) {
     var error: Response = errorFactory
       .getError(ErrEnum.InternalError)
       .getMessage();

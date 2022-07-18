@@ -27,7 +27,9 @@ import {
   checkLabelList,
   checKeywordsUpdate,
   checkClassesUpdate,
-  checkDatasetNameUpdate
+  checkDatasetNameUpdate,
+  checkInputZip,
+  checkImageName
 } from "../middleware/dataset";
 import { checkInputFile } from "../middleware/model";
 
@@ -77,7 +79,7 @@ router.get("/list", function (req: any, res: any) {
 //insert a single image on the specified dataset
 router.put(
   "/image",
-  [checkRequestContentForm, checkInputFile, checkImageFile, checkDatasetName],
+  [checkRequestContentForm, checkImageName, checkImageFile, checkDatasetName],
   function (req: any, res: any) {
     imageInsert(req, req.headers["authorization"], res);
   }
@@ -86,7 +88,7 @@ router.put(
 //insert a zip images on the specified dataset
 router.put(
   "/zip",
-  [checkRequestContentForm, checkInputFile, checkZip],
+  [checkRequestContentForm, checkDatasetName, checkInputZip, checkZip],
   function (req: any, res: any) {
     zipInsert(req, req.headers["authorization"], res);
   }

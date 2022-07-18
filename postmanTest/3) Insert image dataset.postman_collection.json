@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9daf8565-82e8-4e97-98a2-f39550d693fe",
+		"_postman_id": "fd3ff545-4d07-42fc-ac12-e398596773fd",
 		"name": "3) Insert image dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -212,7 +212,74 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "/C:/Users/david/OneDrive/Immagini/csv_keyword_2.PNG"
+							"src": "matrix.jpg"
+						},
+						{
+							"key": "datasetName",
+							"value": "dataset inesistente",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/image",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No fileName found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid 'fileName' (max 40 char)\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": []
 						},
 						{
 							"key": "datasetName",
@@ -279,7 +346,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "/C:/Users/david/OneDrive/Immagini/dokidoki2.jpg"
+							"src": "matrix.jpg"
 						},
 						{
 							"key": "datasetName",

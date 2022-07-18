@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "d59a32bd-041a-4af3-9834-1719d901ca71",
+		"_postman_id": "d8e31e4a-b2a8-4e4e-ae09-a35a9222922d",
 		"name": "2) Inference NON FUNZIONA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "No dataset found",
+			"name": "No model found",
 			"event": [
 				{
 					"listen": "test",
@@ -36,7 +36,7 @@
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "formdata",
@@ -44,7 +44,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
+							"src": "545.carousel4-potassium-1024w-1366h@2xipad.jpg"
 						},
 						{
 							"key": "modelName",
@@ -59,14 +59,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/zip",
+					"raw": "localhost:8080/model/inference",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"zip"
+						"model",
+						"inference"
 					]
 				}
 			},
@@ -79,7 +79,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
+							"pm.test(\"Malformed tokenJWT\", function () {",
 							"  pm.response.to.have.status(401);",
 							"});",
 							"",
@@ -98,16 +98,27 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "cccc",
+							"value": "{{token-user}}",
 							"type": "string"
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "prova.py"
+						},
+						{
+							"key": "modelName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,14 +126,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/zip",
+					"raw": "localhost:8080/model/inference",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"zip"
+						"model",
+						"inference"
 					]
 				}
 			},
@@ -135,7 +146,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Unauthorized\", function () {",
+							"pm.test(\"No tokenJWT\", function () {",
 							"  pm.response.to.have.status(401);",
 							"});",
 							"",
@@ -159,11 +170,22 @@
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "prova.py"
+						},
+						{
+							"key": "modelName",
+							"value": "occhi_ritagliati",
+							"type": "default"
+						}
+					],
 					"options": {
 						"raw": {
 							"language": "json"
@@ -171,21 +193,21 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/zip",
+					"raw": "localhost:8080/model/inference",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"zip"
+						"model",
+						"inference"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Insert zip success",
+			"name": "Inference success",
 			"event": [
 				{
 					"listen": "test",
@@ -215,7 +237,7 @@
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "formdata",
@@ -223,10 +245,10 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "Archivio.zip"
+							"src": "matrix.jpg"
 						},
 						{
-							"key": "datasetName",
+							"key": "modelName",
 							"value": "occhi_ritagliati",
 							"type": "default"
 						}
@@ -238,14 +260,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/zip",
+					"raw": "localhost:8080/model/inference",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"zip"
+						"model",
+						"inference"
 					]
 				}
 			},

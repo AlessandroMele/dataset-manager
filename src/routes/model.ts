@@ -3,7 +3,7 @@ import {
   checkModelName,
   checkInputFile,
 } from "../middleware/model";
-import { checkDatasetName } from "../middleware/dataset";
+import { checkDatasetName, checkImageFile,checkImageName } from "../middleware/dataset";
 import {
   create,
   updateMetadata,
@@ -104,9 +104,13 @@ router.put(
   }
 );
 
-//calculating inference of a specific image on a specific model
-router.get(":id/inference/image/:id", function (req: any, res: any) {
-  inference(req, res);
-});
+//calculating inference of a specific model on a specific image
+router.post(
+  "/inference",
+  [checkRequestContentForm, checkImageName,checkImageFile, checkModelName],
+  function (req: any, res: any) {
+    inference(req.files, req.body.modelName, req.headers["authorization"], res);
+  }
+);
 
 module.exports = router;

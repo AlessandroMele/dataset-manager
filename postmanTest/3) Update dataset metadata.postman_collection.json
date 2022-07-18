@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "84c4e0e4-7034-45e5-8d8d-ebf95902d11c",
+		"_postman_id": "d378d86e-6455-4049-b89f-4beea5768f53",
 		"name": "3) Update dataset metadata",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -606,7 +606,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"datasetName\": \"nuovo nome del dataset3\",\r\n    \"newDatasetName\": \"nuovo nome del dataset4\",\r\n    \"classes\": 111,\r\n    \"keywords\": [\"canarino\"]\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"nuovo nome del dataset\",\r\n    \"newDatasetName\": \"uccelli selvatici\",\r\n    \"classes\": 111,\r\n    \"keywords\": [\"canarino\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -662,7 +662,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"datasetName\": \"nuovo nome del dataset\",\r\n    \"newDatasetName\": \"nuovo nome del dataset2\",\r\n    \"classes\": 111\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"uccelli selvatici\",\r\n    \"newDatasetName\": \"pappagalli parlanti\",\r\n    \"classes\": 111\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

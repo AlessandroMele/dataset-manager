@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d7ff33b0-8153-48da-aab1-d521ce763ccd",
+		"_postman_id": "3826b8fe-fbfd-4304-bb59-7bf385883844",
 		"name": "3) Create dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -400,10 +400,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.model.id).to.eql(3);\r",
-							"  pm.expect(jsonData.model.name).to.eql(\"dogs&cats\");\r",
-							"  pm.expect(jsonData.model.classes).to.eql(2);\r",
-							"  pm.expect(jsonData.model.user).to.eql(\"user\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Dataset has been created with success\");\r",
 							"});"
 						],
 						"type": "text/javascript"

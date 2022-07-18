@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "879209a1-2f18-4c73-bfbf-64710280e1aa",
+		"_postman_id": "83138070-8de7-4d05-ae9a-91c99e863463",
 		"name": "1) Refill tokens",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -461,7 +461,7 @@
 							"  pm.expect(jsonData.role).to.eql(\"user\");\r",
 							"  pm.expect(jsonData.password).to.eql(\"password2\");\r",
 							"  pm.expect(jsonData.email).to.eql(\"users1@users1.it\");\r",
-							"  pm.expect(jsonData.token).to.eql(80);\r",
+							"  pm.expect(jsonData.token).to.eql(\"80.000\");\r",
 							"});"
 						],
 						"type": "text/javascript"

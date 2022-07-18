@@ -66,7 +66,8 @@ export const checkInputFile = function (req: any, res: any, next: any) {
     if (
       !req.files ||
       !req.files.fileName ||
-      req.files.fileName.name.length > 40
+      req.files.fileName.name.length > 40 ||
+      req.files.fileName.name.split(".").pop() !== "py"
     ) {
       var error = errorFactory
         .getError(ErrEnum.NoInputFileModelError)

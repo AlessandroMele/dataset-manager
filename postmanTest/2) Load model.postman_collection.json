@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2d0232a8-3890-4470-b099-1c4ba6a38c56",
+		"_postman_id": "8c7b498d-895e-462d-8e2c-2093bc7de996",
 		"name": "2) Load model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -212,7 +212,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "/C:/Users/david/OneDrive/Immagini/Grafico_condizioni_di_accesso.PNG"
+							"src": "prova.py"
 						},
 						{
 							"key": "modelName",
@@ -276,11 +276,11 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "/C:/Users/david/OneDrive/Immagini/csv_keyword_2.PNG"
+							"src": "prova.py"
 						},
 						{
 							"key": "modelName",
-							"value": "nuovo modello",
+							"value": "my_eye_models_2",
 							"type": "default"
 						}
 					],

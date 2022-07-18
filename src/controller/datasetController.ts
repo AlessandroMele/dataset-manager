@@ -18,7 +18,7 @@ import { UserTable } from "../model/tables/Users";
 
 const path = require("path");
 const fs = require("fs");
-const unzipper = require("unzipper");
+const AdmZip = require("adm-zip");
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 const successFactory: SuccessFactory = new SuccessFactory();
@@ -35,11 +35,11 @@ export const create = async function (
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
     // search if the user has a dataset with the same name
-    let user_dataset: DatasetTable | null = await DatasetTable.findOne({
+    let userDataset: DatasetTable | null = await DatasetTable.findOne({
       where: { user: username, name: datasetName, deleted: false },
     });
     // if a dataset already exists
-    if (user_dataset != null) {
+    if (userDataset != null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.DatasetAlreadyExists).getMessage()
@@ -70,7 +70,7 @@ export const create = async function (
   }
 };
 
-//remove model
+//remove dataset
 export const remove = async function (
   datasetName: string,
   token: string,
@@ -80,17 +80,17 @@ export const remove = async function (
     var payload = jwt.getPayload(token);
     var username: string = payload.payload.username;
     // extract dataset data
-    let user_dataset: DatasetTable | null = await DatasetTable.findOne({
+    let userDataset: DatasetTable | null = await DatasetTable.findOne({
       where: { user: username, name: datasetName, deleted: false },
     });
     // error if dataset does not exists
-    if (!user_dataset) {
+    if (!userDataset) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
       );
     } else {
-      let datasetId: number = user_dataset.getDataValue("id");
+      let datasetId: number = userDataset.getDataValue("id");
       // delete the dataset
       await DatasetTable.update(
         { deleted: true },
@@ -124,7 +124,7 @@ export const remove = async function (
   }
 };
 
-//list of models
+//list of datasets
 export const list = async function (token: string, res: any) {
   try {
     // get  from token
@@ -234,7 +234,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
         );
 
         // create the path to store in the database
-        const final_path: string = path.join(
+        const finalPath: string = path.join(
           "datasets",
           username,
           datasetName,
@@ -245,7 +245,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
         let image: ImageTable | null = await ImageTable.findOne({
           where: {
             dataset: datasetId,
-            path: final_path,
+            path: finalPath,
             deleted: false,
           },
         });
@@ -258,11 +258,11 @@ export const imageInsert = async function (req: any, token: string, res: any) {
         } else {
           await ImageTable.create({
             dataset: datasetId,
-            path: final_path,
+            path: finalPath,
           });
           await DatasetTable.update(
             {
-              path: final_path,
+              path: finalPath,
             },
             { where: { name: datasetName, user: username } }
           );
@@ -276,10 +276,10 @@ export const imageInsert = async function (req: any, token: string, res: any) {
 
           formatResponseWithData(
             res,
-            successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
+            successFactory.getSuccess(SuccessEnum.ImageInsertSuccess).getMessage(),
             {
               data: {
-                path: final_path,
+                path: finalPath,
                 fileName: req.files.fileName.name,
                 datasetName: datasetName,
                 status: "Image loaded",
@@ -288,66 +288,6 @@ export const imageInsert = async function (req: any, token: string, res: any) {
           );
         }
       }
-    }
-  } catch (err) {
-    formatResponse(
-      res,
-      errorFactory.getError(ErrEnum.InternalError).getMessage()
-    );
-  }
-};
-
-//insert a zip images on the specified dataset
-export const zipInsert = async function (req: any, token: string, res: any) {
-  try {
-    // get username from token
-    let payload = jwt.getPayload(token);
-    let username: string = payload.payload.username;
-    let datasetName = req.body.datasetName;
-    let dataset: DatasetTable | null = await DatasetTable.findOne({
-      where: { user: username, name: datasetName },
-    });
-    if (!dataset) {
-      formatResponse(
-        res,
-        errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
-      );
-    } else {
-      let file = req.files.fileName;
-      let savePath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "datasets",
-        username,
-        datasetName
-      );
-      if (!fs.existsSync(savePath)) {
-        fs.mkdirSync(savePath, { recursive: true });
-      }
-      //scompattare lo zip e controllare che ogni file sia un'immagine, poi prosegui
-      fs.createReadStream(req.files.fileName.tempFilePath + "/" + file.name)
-        .pipe(unzipper.parse())
-        .on("entry", async function (entry: any) {
-          await entry.pipe(fs.createWriteStream(savePath + "/" + file.name));
-        });
-
-      await DatasetTable.update(
-        { path: savePath },
-        { where: { name: datasetName, user: username } }
-      );
-      formatResponseWithData(
-        res,
-        successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-        {
-          data: {
-            fileName: req.files.fileName.name,
-            mimetype: req.files.fileName.mimetype,
-            datasetName: datasetName,
-            status: "Image  loaded",
-          },
-        }
-      );
     }
   } catch (err) {
     formatResponse(
@@ -648,6 +588,150 @@ export const update = async function (
         );
     }
   } catch (err) {
+    formatResponse(
+      res,
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
+    );
+  }
+};
+
+//insert a zip images on the specified dataset
+export const zipInsert = async function (req: any, token: string, res: any) {
+  try {
+    // get username from token
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+    let datasetName = req.body.datasetName;
+    let dataset: DatasetTable | null = await DatasetTable.findOne({
+      where: { user: username, name: datasetName },
+    });
+    if (!dataset) {
+      formatResponse(
+        res,
+        errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
+      );
+    } else {
+      let datasetId: number = dataset.getDataValue("id");
+      let file = req.files.fileName;
+      let savePath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "datasets",
+        username,
+        datasetName
+      );
+      if (!fs.existsSync(savePath)) {
+        fs.mkdirSync(savePath, { recursive: true });
+      }
+
+      //saving zip on tmp folder server
+      const zipPath: string = path.join(savePath, file.name);
+      await file.mv(zipPath);
+
+      //unzipping and loading all files in the dataset folder
+      const zip = new AdmZip(zipPath);
+      var zipEntries = zip.getEntries(); // an array of ZipEntry records
+
+      let finalJSON: any = JSON.parse('{ "response": [] }');
+      for (let index = 0; index < zipEntries.length; index++) {
+        let element: any = zipEntries[index];
+        console.log(element.entryName);
+
+        const filePath: string = path.join(
+          "datasets",
+          username,
+          datasetName,
+          datasetId.toString(),
+          element.entryName
+        );
+        finalJSON.response.push({ info: [] });
+
+        ////// AGGIUNGERE CONTROLLO TOKEN E LUNGHEZZA DEL FILEPATH /////////
+        let user: UserTable | null = await UserTable.findOne({
+          where: { username: username },
+        });
+        let userTokens: number = user?.getDataValue("token");
+        // error if token are not sufficients
+        if (userTokens < 0.1) {
+          finalJSON.response[index].info.push({
+            path: filePath,
+            message: errorFactory
+              .getError(ErrEnum.AuthError)
+              .getMessage().message,
+          });
+        }
+        else{
+          await UserTable.update(
+            {
+              token: userTokens - 0.1,
+            },
+            { where: { username: username } }
+          );
+
+        if (
+          (element.entryName.includes(".jpg") ||
+            element.entryName.includes(".jpeg") ||
+            element.entryName.includes(".png")) && (
+            !element.entryName.includes("/") && filePath.length < 100)
+        ) {
+          
+          // check if the image already exists
+          let image: ImageTable | null = await ImageTable.findOne({
+            where: {
+              dataset: datasetId,
+              path: filePath,
+              deleted: false,
+            },
+          });
+          // if it exists return error
+          if (image) {
+            finalJSON.response[index].info.push({
+              path: filePath,
+              message: errorFactory
+                .getError(ErrEnum.ImageAlreadyExists)
+                .getMessage().message,
+            });
+            console.log(finalJSON.response[0].info);
+          } else {
+            await ImageTable.create({
+              dataset: datasetId,
+              path: filePath,
+            });
+            zip.extractEntryTo(
+              /*entry name*/ element,
+              /*target path*/ savePath,
+              /*maintainEntryPath*/ false,
+              /*overwrite*/ true
+            );
+            finalJSON.response[index].info.push({
+              path: filePath,
+              message: successFactory
+                .getSuccess(SuccessEnum.ImageInsertSuccess)
+                .getMessage().message,
+            });
+          }
+        } else {
+          finalJSON.response[index].info.push({
+            path: filePath,
+            message: errorFactory
+              .getError(ErrEnum.NoImageFoundError)
+              .getMessage().message,
+          });
+        }
+      }
+    }
+      //deleting zip file
+      await fs.unlinkSync(zipPath);
+      formatResponseWithData(
+        res,
+        successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage(),
+        finalJSON.response
+      );
+    }
+  } 
+  catch (err) {
+    console.log(err);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()

@@ -26,7 +26,7 @@ class DatasetCreateSuccess implements SuccessMessage {
   getMessage(): Response {
     return {
       message: "Dataset has been created with success",
-      status: 200,
+      status: 201,
     };
   }
 }
@@ -85,6 +85,15 @@ class LabelCreateSuccess implements SuccessMessage {
   }
 }
 
+class ImageInsertSuccess implements SuccessMessage {
+  getMessage(): Response {
+    return {
+      message: "Image inserted with success",
+      status: 200,
+    };
+  }
+}
+
 export class SuccessFactory {
   constructor() {}
   getSuccess(type: SuccessEnum): SuccessMessage {
@@ -92,6 +101,9 @@ export class SuccessFactory {
     switch (type) {
       case SuccessEnum.JWTSuccess:
         success = new JWTSuccess();
+        break;
+      case SuccessEnum.ImageInsertSuccess:
+        success = new ImageInsertSuccess();
         break;
       case SuccessEnum.GetSuccess:
         success = new GetSuccess();

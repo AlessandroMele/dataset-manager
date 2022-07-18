@@ -1,6 +1,7 @@
 FROM node:lts-stretch-slim as base
 
 WORKDIR /home/node/app
+RUN apt-get update || : && apt-get install python -y
 
 COPY package.json ./
 

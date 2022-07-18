@@ -4,6 +4,8 @@ import { DatasetTable } from "../model/tables/Datasets";
 var jwt = require("../middleware/util/jwtUtil");
 var path = require("path");
 const fs = require("fs");
+const {spawn} = require("child_process");
+
 import {
   SuccessEnum,
   ErrEnum,
@@ -87,11 +89,11 @@ export const updateMetadata = async function (
     var payload = jwt.getPayload(token);
     var username: string = payload.payload.username;
     // search if the user's model exists
-    let user_model: ModelTable | null = await ModelTable.findOne({
+    let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
     // model does not exists
-    if (user_model == null) {
+    if (userModel == null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
@@ -138,11 +140,11 @@ export const updateDatasetName = async function (
     var payload = jwt.getPayload(token);
     var username: string = payload.payload.username;
     // search if the user's model exists
-    let user_model: ModelTable | null = await ModelTable.findOne({
+    let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
     // model does not exists
-    if (user_model == null) {
+    if (userModel == null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
@@ -190,11 +192,11 @@ export const updateModelName = async function (
     var payload = jwt.getPayload(token);
     var username: string = payload.payload.username;
     // search if the user's model exists
-    let user_model: ModelTable | null = await ModelTable.findOne({
+    let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
     // model does not exists
-    if (user_model == null) {
+    if (userModel == null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
@@ -267,7 +269,7 @@ export const list = async function (token: string, res: any) {
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
-    let model_list: DatasetTable[] | null = await DatasetTable.findAll({
+    let modelList: DatasetTable[] | null = await DatasetTable.findAll({
       // rename to datasetName
       attributes: [["name", "datasetName"]],
       where: { user: username, deleted: false },
@@ -283,11 +285,11 @@ export const list = async function (token: string, res: any) {
         },
       ],
     });
-    if (model_list != null) {
+    if (modelList != null) {
       formatResponseWithData(
         res,
         successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-        { model_list: model_list }
+        { modelList: modelList }
       );
     } else {
       formatResponse(
@@ -339,14 +341,14 @@ export const loadFile = async function (
         }
         const completePath: string = savePath + "/" + file.name;
         await file.mv(completePath);
-        const final_path: string = path.join(
+        const finalPath: string = path.join(
           "models",
           username,
           modelId.toString(),
           file.name
         );
         await ModelTable.update(
-          { path: final_path },
+          { path: finalPath },
           { where: { name: modelName, user: username } }
         );
         formatResponseWithData(
@@ -354,7 +356,7 @@ export const loadFile = async function (
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
           {
             data: {
-              path: final_path,
+              path: finalPath,
               fileName: files.fileName.name,
               modelName: modelName,
               status: "File loaded",
@@ -412,14 +414,14 @@ export const updateFile = async function (
         }
         const completePath = savePath + "/" + file.name;
         await file.mv(completePath);
-        const final_path: string = path.join(
+        const finalPath: string = path.join(
           "models",
           username,
           modelId.toString(),
           file.name
         );
         await ModelTable.update(
-          { path: final_path },
+          { path: finalPath },
           { where: { name: modelName, user: username } }
         );
         formatResponseWithData(
@@ -427,7 +429,7 @@ export const updateFile = async function (
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
           {
             data: {
-              path: final_path,
+              path: finalPath,
               fileName: files.fileName.name,
               modelName: modelName,
               status: "File updated",
@@ -449,4 +451,25 @@ export const updateFile = async function (
 };
 
 //calculating inference of a specific image on a specific model
-export const inference = function (req: any, res: any) {};
+export const inference = async function (
+  files: any,
+  modelName: string,
+  token: string,
+  res: any
+) {
+  try {
+    const pythonModel = spawn("python", [path.join(__dirname, "prova.py")]);
+
+    pythonModel.stdout.on("data", function (data: any) {
+      console.log(data.toString());
+      console.log(data);
+      console.log("end");
+    });
+  } catch (err) {
+    console.log(err);
+    formatResponse(
+      res,
+      errorFactory.getError(ErrEnum.InternalError).getMessage()
+    );
+  }
+};
