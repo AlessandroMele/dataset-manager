@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "18832543-a04a-4dac-99f2-8a28df20cc9c",
+		"_postman_id": "d2e7f765-47c5-4421-b394-46bb48068475",
 		"name": "3) List dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -126,7 +126,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.dataset_list).to.be.an(\"array\");",
+							"  pm.expect(jsonData.datasetList).to.be.an(\"array\");",
 							"});"
 						],
 						"type": "text/javascript"

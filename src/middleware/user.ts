@@ -1,6 +1,7 @@
 const jwt = require("./util/jwtUtil");
 import { ErrEnum, Response } from "../responseFactory/util";
 import { ErrorFactory } from "../responseFactory/Error";
+const emailvalidator = require("email-validator");
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 
@@ -77,7 +78,10 @@ export const checkAdmin = function (req: any, res: any, next: any) {
 export const checkInputUser = function (req: any, res: any, next: any) {
   try {
     //checking if username is valid
-    if (typeof req.body.username !== "string") {
+    if (
+      typeof req.body.username !== "string" ||
+      req.body.username.length > 30
+    ) {
       var error = errorFactory
         .getError(ErrEnum.NoInputUsernameError)
         .getMessage();
@@ -100,7 +104,10 @@ export const checkInputUser = function (req: any, res: any, next: any) {
 export const checkInputPassword = function (req: any, res: any, next: any) {
   try {
     //checking if password is valid
-    if (typeof req.body.password !== "string") {
+    if (
+      typeof req.body.password !== "string" ||
+      req.body.password.length > 50
+    ) {
       var error = errorFactory
         .getError(ErrEnum.NoInputPasswordError)
         .getMessage();
@@ -144,7 +151,11 @@ export const checkInputRole = function (req: any, res: any, next: any) {
 export const checkInputToken = function (req: any, res: any, next: any) {
   try {
     //checking if token number is valid
-    if (typeof req.body.token !== "number" || req.body.token <= 0) {
+    if (
+      typeof req.body.token !== "number" ||
+      req.body.token <= 0 ||
+      req.body.token >= 10000
+    ) {
       var error = errorFactory
         .getError(ErrEnum.NoInputTokenNumberError)
         .getMessage();
@@ -167,37 +178,12 @@ export const checkInputToken = function (req: any, res: any, next: any) {
 export const checkInputEmail = function (req: any, res: any, next: any) {
   try {
     //checking if email is valid
-    if (typeof req.body.email !== "string") {
+    if (
+      typeof req.body.email !== "string" ||
+      !emailvalidator.validate(req.body.email) ||
+      req.body.email.length > 50
+    ) {
       var error = errorFactory.getError(ErrEnum.NoInputEmailError).getMessage();
-      next(error);
-    } else next();
-  } catch (error: any) {
-    var error: Response = errorFactory
-      .getError(ErrEnum.InternalError)
-      .getMessage();
-    next(error);
-  }
-};
-
-/**
- * Check if the input body contains the same email in the token payload
- * @param req user request
- * @param res response
- * @param next next middleware
- */
-export const checkUserMatches = function (req: any, res: any, next: any) {
-  try {
-    //extracting token
-    let token = req.headers["authorization"];
-    var payload = jwt.getPayload(token);
-    let username = req.body.username;
-    var tokenUser: string = payload.payload.username;
-    var tokenRole: string = payload.payload.role;
-    //if username doesn't matches the username in the token and the role is not admin, call the error middleware
-    if (tokenUser !== username && tokenRole !== "admin") {
-      var error: Response = errorFactory
-        .getError(ErrEnum.UserNotMatchError)
-        .getMessage();
       next(error);
     } else next();
   } catch (error: any) {

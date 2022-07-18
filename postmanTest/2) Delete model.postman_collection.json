@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f10a5436-b2d0-4183-a02d-1658653223bf",
+		"_postman_id": "1070586b-8b54-4677-b8b6-32039bd030b0",
 		"name": "2) Delete model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -208,7 +208,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"modelName\": \"starwars8\"\n}",
+					"raw": "{\n    \"modelName\": \"nuovo modello\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

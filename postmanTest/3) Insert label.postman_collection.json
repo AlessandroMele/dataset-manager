@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9e43d1b8-65b1-499a-9e31-a7ff91412c2b",
+		"_postman_id": "4fd4c5a7-7dd8-4dfe-9bb7-bfcf31a00a76",
 		"name": "3) Insert label",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -120,7 +120,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"You have to specify string 'className'\");",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid 'className' (max 30 char)\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -288,7 +288,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'imagePath'\");",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid 'imagePath'\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -344,7 +344,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).equals(\"No image find with this 'imagePath'\");",
+							"  pm.expect(jsonData.message).equals(\"No image found with this 'imagePath'\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -366,7 +366,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"className\": \"porco caneeeee\",\r\n    \"imagePath\":\"datasets/user/dogs&/4/Grafico_volumi.PNG\"\r\n}",
+					"raw": "{\r\n    \"className\": \"classe 1\",\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -400,7 +400,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"No image find with this 'imagePath'\");",
+							"  pm.expect(jsonData.message).to.eql(\"No image found with this 'imagePath'\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -478,7 +478,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"className\": \"classe 5\",\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
+					"raw": "{\r\n    \"className\": \"classe 50\",\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -568,7 +568,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"No image find with this 'imagePath'\");",
+							"  pm.expect(jsonData.message).to.eql(\"No image found with this 'imagePath'\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -646,7 +646,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.3,\r\n    \"center\": 0.3,\r\n    \"width\": 0.4,\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
+					"raw": "{\r\n    \"className\": \"gatto\",\r\n    \"height\": 0.3,\r\n    \"center\": 0.3,\r\n    \"width\": 0.444,\r\n    \"imagePath\":\"/datasets/1/user/img_1.png\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

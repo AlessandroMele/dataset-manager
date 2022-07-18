@@ -8,7 +8,7 @@ class UserAlreadyExists implements ErrorMessage {
   getMessage(): Response {
     return {
       message: "User already exists",
-      status: 400,
+      status: 409,
     };
   }
 }
@@ -16,7 +16,7 @@ class UserAlreadyExists implements ErrorMessage {
 class NoInputFileModelError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "'fileName' not specified ",
+      message: "Need to specify a valid 'fileName' (max 40 char)",
       status: 400,
     };
   }
@@ -50,7 +50,8 @@ class NoInputZipError implements ErrorMessage {
 class NoInputKeywordsError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify 'keywords'",
+      message:
+        "You have to specify the 'keywords' array (max 30 char for element, no duplicates allowed)",
       status: 400,
     };
   }
@@ -59,7 +60,7 @@ class NoInputKeywordsError implements ErrorMessage {
 class NoInputClassesError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify number 'classes'",
+      message: "You have to specify number 'classes' (max 120)",
       status: 400,
     };
   }
@@ -68,7 +69,7 @@ class NoInputClassesError implements ErrorMessage {
 class NoInputClassNameError implements ErrorMessage {
   getMessage(): Response {
     return {
-      message: "You have to specify string 'className'",
+      message: "Need to specify a valid 'className' (max 30 char)",
       status: 400,
     };
   }
@@ -113,7 +114,7 @@ class AdminAuthError implements ErrorMessage {
 class NoInputUsernameError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'username' ",
+      message: "Need to specify a valid 'username' (max 30 char)",
       status: 400,
     };
   }
@@ -122,7 +123,7 @@ class NoInputUsernameError implements ErrorMessage {
 class NoInputModelError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'modelName' ",
+      message: "Need to specify a valid 'modelName' (max 30 char)",
       status: 400,
     };
   }
@@ -131,7 +132,7 @@ class NoInputModelError implements ErrorMessage {
 class NoInputDatasetError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'datasetName'",
+      message: "Need to specify a valid 'datasetName' (max 30 char)",
       status: 400,
     };
   }
@@ -140,7 +141,7 @@ class NoInputDatasetError implements ErrorMessage {
 class NoInputEmailError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify a valid string 'email'",
+      message: "Need to specify a valid string 'email' (max 50 char)",
       status: 400,
     };
   }
@@ -149,7 +150,7 @@ class NoInputEmailError implements ErrorMessage {
 class NoModelFileFoundError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "No file found for this model ",
+      message: "No file found for this model",
       status: 404,
     };
   }
@@ -158,7 +159,7 @@ class NoModelFileFoundError implements ErrorMessage {
 class NoInputTokenNumberError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Number 'token' is invalid ",
+      message: "Need to specify a valid 'token' number (max 10000)",
       status: 400,
     };
   }
@@ -212,7 +213,7 @@ class NoFormRequest implements ErrorMessage {
 class NoInputPasswordError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'password'",
+      message: "Need to specify a valid 'password' (max 80 char)",
       status: 400,
     };
   }
@@ -284,7 +285,7 @@ class NoInputValidBoundingBoxesError implements ErrorMessage {
 class NoInputImageIdentifierError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "Need to specify string 'imagePath'",
+      message: "Need to specify a valid 'imagePath'",
       status: 400,
     };
   }
@@ -311,7 +312,8 @@ class NoInputLabelListError implements ErrorMessage {
 class NoArrayKeywordsError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "'Keywords' need to be an array",
+      message:
+        "You have to specify the 'keywords' array (max 30 char for element, no duplicates allowed)",
       status: 400,
     };
   }
@@ -320,7 +322,7 @@ class NoArrayKeywordsError implements ErrorMessage {
 class NotClassesNumberError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "'classes' need to be a number",
+      message: "'classes' need to be a number (max 120)",
       status: 400,
     };
   }
@@ -329,7 +331,7 @@ class NotClassesNumberError implements ErrorMessage {
 class NewModelNameFormatError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "'modelName' need to be a string",
+      message: "Need to specify a valid 'modelName' (max 30 char)",
       status: 400,
     };
   }
@@ -355,7 +357,7 @@ class ImageAlreadyExists implements ErrorMessage {
 class NewDatasetNameError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "'newDatasetName' name must be a string",
+      message: "Need to specify a valid 'newDatasetName' (max 30 char)",
       status: 400,
     };
   }
@@ -364,12 +366,12 @@ class NewDatasetNameError implements ErrorMessage {
 class ArrayKeywordsError implements ErrorMessage {
   public getMessage(): Response {
     return {
-      message: "'keywords' must be an array and contains no duplicates",
+      message:
+        "You have to specify the 'keywords' array (max 30 char for element, no duplicates allowed)",
       status: 400,
     };
   }
 }
-
 
 export class ErrorFactory {
   constructor() {}
@@ -379,21 +381,21 @@ export class ErrorFactory {
       case ErrEnum.AuthError:
         error = new AuthError();
         break;
-        case ErrEnum.NewDatasetNameError:
-          error = new NewDatasetNameError();
-          break;
-        case ErrEnum.NoInputZipError:
+      case ErrEnum.NewDatasetNameError:
+        error = new NewDatasetNameError();
+        break;
+      case ErrEnum.NoInputZipError:
         error = new NoInputZipError();
         break;
-        case ErrEnum.NewModelNameFormatError:
-          error = new NewModelNameFormatError();
-          break;
-        case ErrEnum.NoArrayKeywordsError:
-          error = new NoArrayKeywordsError();
-          break;
-          case ErrEnum.NotClassesNumberError:
-          error = new NotClassesNumberError();
-          break;
+      case ErrEnum.NewModelNameFormatError:
+        error = new NewModelNameFormatError();
+        break;
+      case ErrEnum.NoArrayKeywordsError:
+        error = new NoArrayKeywordsError();
+        break;
+      case ErrEnum.NotClassesNumberError:
+        error = new NotClassesNumberError();
+        break;
       case ErrEnum.LabelAlreadyExists:
         error = new LabelAlreadyExists();
         break;
@@ -418,9 +420,9 @@ export class ErrorFactory {
       case ErrEnum.NoInputImageIdentifierError:
         error = new NoInputImageIdentifierError();
         break;
-        case ErrEnum.ArrayKeywordsError:
-          error = new ArrayKeywordsError();
-          break;
+      case ErrEnum.ArrayKeywordsError:
+        error = new ArrayKeywordsError();
+        break;
       case ErrEnum.NoInputPasswordError:
         error = new NoInputPasswordError();
         break;

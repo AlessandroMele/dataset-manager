@@ -31,10 +31,8 @@ export const create = async function (
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: model, deleted: false },
     });
-    console.log("ciaociao11");
     // if a model already exists
     if (userModel != null) {
-      console.log("ciaociao22");
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.ModelAlreadyExists).getMessage()
@@ -107,7 +105,7 @@ export const updateMetadata = async function (
       if (userDataset != null) {
         let datasetId = userDataset.getDataValue("id");
         await ModelTable.update(
-          { name: newModelName, datasetId: datasetId },
+          { name: newModelName, dataset: datasetId },
           { where: { name: modelName, user: username, deleted: false } }
         );
         formatResponse(
@@ -159,7 +157,7 @@ export const updateDatasetName = async function (
         //update datasetName that matches datasetId
         let datasetId = userDataset.getDataValue("id");
         const result = await ModelTable.update(
-          { datasetId: datasetId },
+          { dataset: datasetId },
           { where: { name: modelName, user: username, deleted: false } }
         );
         formatResponse(
@@ -271,7 +269,7 @@ export const list = async function (token: string, res: any) {
     let username: string = payload.payload.username;
     let model_list: DatasetTable[] | null = await DatasetTable.findAll({
       // rename to datasetName
-      attributes: [["name", "databaseName"]],
+      attributes: [["name", "datasetName"]],
       where: { user: username, deleted: false },
       raw: true,
       include: [
@@ -298,7 +296,6 @@ export const list = async function (token: string, res: any) {
       );
     }
   } catch (error: any) {
-    console.log(error);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -328,7 +325,6 @@ export const loadFile = async function (
     } else {
       if (!model.getDataValue("path")) {
         let modelId: number = model.getDataValue("id");
-        console.log(modelId);
         let file = files.fileName;
         let savePath = path.join(
           __dirname,
@@ -372,7 +368,7 @@ export const loadFile = async function (
         );
       }
     }
-  } catch (err) {
+  } catch (err: any) {
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -402,7 +398,6 @@ export const updateFile = async function (
     } else {
       if (model.getDataValue("path")) {
         let modelId: number = model.getDataValue("id");
-        console.log(modelId);
         let file = files.fileName;
         let savePath = path.join(
           __dirname,

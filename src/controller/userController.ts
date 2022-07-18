@@ -118,11 +118,11 @@ export const residualToken = async function (token: string, res: any) {
     var username: string = payload.payload.username;
     const user: UserTable | null = await UserTable.findByPk(username);
     let tokenValue: number = user?.getDataValue("token");
-      formatResponseWithData(
-        res,
-        successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
-        { token: tokenValue }
-      );
+    formatResponseWithData(
+      res,
+      successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
+      { token: Number(tokenValue) }
+    );
   } catch (err: any) {
     formatResponse(
       res,

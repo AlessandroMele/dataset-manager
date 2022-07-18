@@ -1,7 +1,6 @@
 import {
   checkAutorization,
   checkInputPassword,
-  checkUserMatches,
   checkAdmin,
   checkInputUser,
   checkInputRole,

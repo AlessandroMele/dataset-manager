@@ -117,7 +117,6 @@ export const remove = async function (
       );
     }
   } catch (error: any) {
-    console.log(error);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -454,7 +453,6 @@ export const labelInsert = async function (
       }
     }
   } catch (error: any) {
-    console.log(error);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()
@@ -478,12 +476,12 @@ export const labelInsertList = async function (
   });
   let userTokens: number = user?.getDataValue("token");
   // error if token are not sufficients
-  if (userTokens < 0.05 * (labelList.length)) {
+  if (userTokens < 0.05 * labelList.length) {
     formatResponse(res, errorFactory.getError(ErrEnum.AuthError).getMessage());
   } else {
     await UserTable.update(
       {
-        token: userTokens - 0.05 * (labelList.length),
+        token: userTokens - 0.05 * labelList.length,
       },
       { where: { username: username } }
     );
@@ -522,18 +520,15 @@ export const labelInsertList = async function (
             path: imagePath,
             message: errorFactory
               .getError(ErrEnum.ImageDoesNotExists)
-              .getMessage().message
+              .getMessage().message,
           });
         } else {
           // if values are undefined, they are set to true
           let widthReal: number | null = width ? width : null;
           let heightReal: number | null = height ? height : null;
           let centerReal: number | null = center ? center : null;
-          console.log(widthReal,heightReal, centerReal)
-          console.log(image)
           let imageId = image.getDataValue("images")[0].id;
-        console.log(imageId)
-          
+
           // check if already exists this label for this same image
           let label: LabelTable | null = await LabelTable.findOne({
             where: {
@@ -652,7 +647,6 @@ export const update = async function (
         );
     }
   } catch (err) {
-    console.log(err);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()

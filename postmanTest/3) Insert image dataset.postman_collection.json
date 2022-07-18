@@ -1,24 +1,24 @@
 {
 	"info": {
-		"_postman_id": "7ee56043-8846-415b-9a27-1b7cadfffadc",
+		"_postman_id": "9daf8565-82e8-4e97-98a2-f39550d693fe",
 		"name": "3) Insert image dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "No dataset found",
+			"name": "No tokenJWT",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(401);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -31,7 +31,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{token-user}}",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -39,19 +39,8 @@
 				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "fileName",
-							"type": "file",
-							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
-						},
-						{
-							"key": "modelName",
-							"value": "occhi_ritagliati",
-							"type": "default"
-						}
-					],
+					"mode": "raw",
+					"raw": "{\n    \"modelName\": \"new_model\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,19 +118,19 @@
 			"response": []
 		},
 		{
-			"name": "No tokenJWT",
+			"name": "Wrong input body",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"pm.test(\"Unauthorized\", function () {",
-							"  pm.response.to.have.status(401);",
+							"  pm.response.to.have.status(400);",
 							"});",
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Unauthorized\");",
+							"  pm.expect(jsonData.message).to.eql(\"Your request body need to be a Form\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -154,7 +143,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "{{token-admin}}",
 							"type": "string"
 						}
 					]
@@ -185,7 +174,7 @@
 			"response": []
 		},
 		{
-			"name": "Insert image success",
+			"name": "No dataset found",
 			"event": [
 				{
 					"listen": "test",
@@ -197,7 +186,7 @@
 							"",
 							"pm.test(\"Confirm response message\", function () {",
 							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
+							"  pm.expect(jsonData.message).to.eql(\"No dataset found with this name\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -223,7 +212,74 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "543.carousel2-potassium-1024w-1366h@2xipad.jpg"
+							"src": "/C:/Users/david/OneDrive/Immagini/csv_keyword_2.PNG"
+						},
+						{
+							"key": "datasetName",
+							"value": "dataset inesistente",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/image",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert image success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model found\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.data.status).to.eql(\"Image loaded\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileName",
+							"type": "file",
+							"src": "/C:/Users/david/OneDrive/Immagini/dokidoki2.jpg"
 						},
 						{
 							"key": "datasetName",

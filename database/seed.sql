@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS `models`;
-DROP TABLE IF EXISTS `images`;
 DROP TABLE IF EXISTS `labels`;
+DROP TABLE IF EXISTS `images`;
 DROP TABLE IF EXISTS `keywords`;
+DROP TABLE IF EXISTS `models`;
 DROP TABLE IF EXISTS `datasets`;
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `username` varchar(30) NOT NULL,
-  `email` varchar(50) NOT NULL UNIQUE,
+  `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `token` DECIMAL(8,3) NOT NULL DEFAULT 100,
   `role` enum('user', 'admin') NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE `datasets` (
 
 CREATE TABLE `images` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(100) NOT NULL UNIQUE,
+  `path` varchar(100) NOT NULL,
   `dataset` int(11) NOT NULL,
   `deleted` BIT DEFAULT 0,
   PRIMARY KEY (`id`),
@@ -48,7 +48,7 @@ CREATE TABLE `labels` (
 CREATE TABLE `models` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
-  `path` varchar(100) DEFAULT NULL UNIQUE,
+  `path` varchar(100) DEFAULT NULL,
   `dataset` int(11) NOT NULL,
   `user` varchar(30) NOT NULL,
   `deleted` BIT DEFAULT 0,
@@ -76,7 +76,7 @@ VALUES (
   (
     'users1@users1.it',
     'user',
-    100000,
+    400,
     'password2',
     'user'
   );
@@ -111,7 +111,7 @@ VALUES (
   (
     2,
     'my_eye_models_1',
-    'models/user/1/my_eye_models_1.py',
+    'models/user/2/my_eye_models_1.py',
     2,
     'user'
   );

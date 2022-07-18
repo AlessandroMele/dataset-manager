@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "672b993c-6746-4bb6-a04e-076506116aaa",
+		"_postman_id": "2d0232a8-3890-4470-b099-1c4ba6a38c56",
 		"name": "2) Load model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -118,6 +118,62 @@
 			"response": []
 		},
 		{
+			"name": "Wrong input body",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Unauthorized\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Confirm response message\", function () {",
+							"  var jsonData = pm.response.json();",
+							"  pm.expect(jsonData.message).to.eql(\"Your request body need to be a Form\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"modelName\": \"new_model\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/model/loadFile",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model",
+						"loadFile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "No model found",
 			"event": [
 				{
@@ -156,11 +212,11 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "9UIjZrO-matrix-movie-wallpapers.jpg"
+							"src": "/C:/Users/david/OneDrive/Immagini/Grafico_condizioni_di_accesso.PNG"
 						},
 						{
 							"key": "modelName",
-							"value": "occhi_ritagliati",
+							"value": "modello non esistente",
 							"type": "default"
 						}
 					],
@@ -192,13 +248,10 @@
 					"script": {
 						"exec": [
 							"pm.test(\"No model found\", function () {",
-							"  pm.response.to.have.status(404);",
+							"  pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Confirm response message\", function () {",
-							"  var jsonData = pm.response.json();",
-							"  pm.expect(jsonData.message).to.eql(\"Model not found\");",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -223,11 +276,11 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "543.carousel2-potassium-1024w-1366h@2xipad.jpg"
+							"src": "/C:/Users/david/OneDrive/Immagini/csv_keyword_2.PNG"
 						},
 						{
 							"key": "modelName",
-							"value": "my_eye_models_0",
+							"value": "nuovo modello",
 							"type": "default"
 						}
 					],

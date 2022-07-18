@@ -1,5 +1,9 @@
-import {checkMetadata, checkModelName, checkInputFile} from "../middleware/model";
-import {checkDatasetName} from "../middleware/dataset";
+import {
+  checkMetadata,
+  checkModelName,
+  checkInputFile,
+} from "../middleware/model";
+import { checkDatasetName } from "../middleware/dataset";
 import {
   create,
   updateMetadata,
@@ -11,7 +15,10 @@ import {
   loadFile,
   inference,
 } from "../controller/modelController";
-import {checkRequestContent, checkRequestContentForm} from "../middleware/util/util";
+import {
+  checkRequestContent,
+  checkRequestContentForm,
+} from "../middleware/util/util";
 
 var express = require("express");
 var router = express.Router();
@@ -31,14 +38,22 @@ router.put(
 );
 
 //load model file
-router.post("/loadFile", [checkRequestContentForm, checkInputFile, checkModelName], function (req: any, res: any) {
-  loadFile(req.files, req.body.modelName, req.headers["authorization"], res);
-});
+router.post(
+  "/loadFile",
+  [checkRequestContentForm, checkInputFile, checkModelName],
+  function (req: any, res: any) {
+    loadFile(req.files, req.body.modelName, req.headers["authorization"], res);
+  }
+);
 
 //delete model
-router.delete("/delete", [checkRequestContent, express.json(), checkModelName], function (req: any, res: any) {
-  remove(req.body.modelName, req.headers["authorization"], res);
-});
+router.delete(
+  "/delete",
+  [checkRequestContent, express.json(), checkModelName],
+  function (req: any, res: any) {
+    remove(req.body.modelName, req.headers["authorization"], res);
+  }
+);
 
 //list of models
 router.get("/list", [], function (req: any, res: any) {
@@ -46,20 +61,48 @@ router.get("/list", [], function (req: any, res: any) {
 });
 
 //update model metadata
-router.put("/updateMetadata", [checkRequestContent, express.json(), checkModelName, checkMetadata], function (req: any, res: any) {
-  if (req.body.newModelName && req.body.datasetName)
-    updateMetadata(req.body.modelName, req.body.newModelName, req.body.datasetName, req.headers["authorization"], res);
-  else if (req.body.newModelName)
-    updateModelName(req.body.modelName, req.body.newModelName, req.headers["authorization"], res);
-  else
-    updateDatasetName(req.body.modelName, req.body.datasetName, req.headers["authorization"], res);
-});
+router.put(
+  "/updateMetadata",
+  [checkRequestContent, express.json(), checkModelName, checkMetadata],
+  function (req: any, res: any) {
+    if (req.body.newModelName && req.body.datasetName)
+      updateMetadata(
+        req.body.modelName,
+        req.body.newModelName,
+        req.body.datasetName,
+        req.headers["authorization"],
+        res
+      );
+    else if (req.body.newModelName)
+      updateModelName(
+        req.body.modelName,
+        req.body.newModelName,
+        req.headers["authorization"],
+        res
+      );
+    else
+      updateDatasetName(
+        req.body.modelName,
+        req.body.datasetName,
+        req.headers["authorization"],
+        res
+      );
+  }
+);
 
 //update model file
-router.put("/updateFile", [checkRequestContentForm, checkInputFile, checkModelName], function (req: any, res: any) {
-  updateFile(req.files, req.body.modelName, req.headers["authorization"], res);
-});
-
+router.put(
+  "/updateFile",
+  [checkRequestContentForm, checkInputFile, checkModelName],
+  function (req: any, res: any) {
+    updateFile(
+      req.files,
+      req.body.modelName,
+      req.headers["authorization"],
+      res
+    );
+  }
+);
 
 //calculating inference of a specific image on a specific model
 router.get(":id/inference/image/:id", function (req: any, res: any) {

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "112dfced-7169-4066-a085-22c4911b92c5",
+		"_postman_id": "d7ff33b0-8153-48da-aab1-d521ce763ccd",
 		"name": "3) Create dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -108,7 +108,7 @@
 			"response": []
 		},
 		{
-			"name": "No name",
+			"name": "No datasetName",
 			"event": [
 				{
 					"listen": "test",
@@ -120,7 +120,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"Need to specify string 'datasetName'\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"Need to specify a valid 'datasetName' (max 30 char)\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -164,6 +164,62 @@
 			"response": []
 		},
 		{
+			"name": "Too many classes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model_name\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify number 'classes' (max 120)\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"classes\":222\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "No numClasses",
 			"event": [
 				{
@@ -176,7 +232,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.message).to.eql(\"You have to specify 'numClasses'\");\r",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify number 'classes' (max 120)\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -199,6 +255,118 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Keyword too long",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model_name\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify the 'keywords' array (max 30 char for element, no duplicates allowed)\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"datasetName\": \"dogs&ats\",\r\n    \"keywords\": [\"cane\", \"cane\"],\r\n    \"classes\":33\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/dataset/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dataset",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Keyword duplicate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"No model_name\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirm response message\", function () {\r",
+							"  var jsonData = pm.response.json();\r",
+							"  pm.expect(jsonData.message).to.eql(\"You have to specify the 'keywords' array (max 30 char for element, no duplicates allowed)\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token-user}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gattoyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyrrrrrrrrrrrrrrrrrrrrrrrttttttt\"],\r\n    \"classes\":33\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -257,7 +425,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dataset nuovo\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"classes\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -313,7 +481,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"datasetName\": \"dogs&cats\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"numClasses\": 2\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dataset nuovo\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"classes\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

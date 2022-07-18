@@ -39,9 +39,8 @@ export enum ErrEnum {
   NotClassesNumberError,
   NewModelNameFormatError,
   NewDatasetNameError,
-  ArrayKeywordsError
+  ArrayKeywordsError,
 }
-
 
 export enum SuccessEnum {
   JWTSuccess,
@@ -52,7 +51,7 @@ export enum SuccessEnum {
   ModelCreateSuccess,
   RemovedSuccess,
   DatasetCreateSuccess,
-  LabelCreateSuccess
+  LabelCreateSuccess,
 }
 
 export interface Response {
