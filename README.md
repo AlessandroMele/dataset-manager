@@ -90,11 +90,11 @@ POST | /dataset/labelList | user/admin | YES | JSON |
 
 ## Descrizione rotte 
 
-Tutte le rotte contrassegnate con *JWT* necessitano di un token di autenticazione, in caso contrario viene restituito un messaggio con codice 401.
-Tutte le rotte contrassegnate con *JSON* necessitano di un body sotto forma di JSON
-Tutte le rotte contrassegnate con *FORM* necessitano di un body sotto forma di FORM
-Nel caso in cui non siano presenti i parametri obbligatori nella richiesta, vengono sollevate le dovute eccezioni. Tutti i parametri sono obbligatori, tranne quelli esplicitamente definiti come opzionali. 
-Nel caso in cui si inseriscano parametri fuori dai range di ammissibilità (stringhe troppo lunghe, interi troppo grandi etc etc) vengono sollevate le dovute eccezioni.
+Tutte le rotte contrassegnate con *JWT* necessitano di un token di autenticazione, in caso contrario viene restituito un messaggio con codice 401.  
+Tutte le rotte contrassegnate con *JSON* necessitano di un body sotto forma di JSON.  
+Tutte le rotte contrassegnate con *FORM* necessitano di un body sotto forma di FORM.  
+Nel caso in cui non siano presenti i parametri obbligatori nella richiesta, vengono sollevate le dovute eccezioni. Tutti i parametri sono obbligatori, tranne quelli esplicitamente definiti come opzionali.  
+Nel caso in cui si inseriscano parametri fuori dai range di ammissibilità (stringhe troppo lunghe, interi troppo grandi etc etc) vengono sollevate le dovute eccezioni.  
 
 ### /user
 
