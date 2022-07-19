@@ -13,6 +13,15 @@ class UserCreateSuccess implements SuccessMessage {
   }
 }
 
+class InferenceSuccess implements SuccessMessage {
+  getMessage(): Response {
+    return {
+      message: "Inference done with success",
+      status: 201,
+    };
+  }
+}
+
 class RemovedSuccess implements SuccessMessage {
   getMessage(): Response {
     return {
@@ -110,6 +119,9 @@ export class SuccessFactory {
         break;
       case SuccessEnum.DatasetCreateSuccess:
         success = new DatasetCreateSuccess();
+        break;
+      case SuccessEnum.InferenceSuccess:
+        success = new InferenceSuccess();
         break;
       case SuccessEnum.UpdateSuccess:
         success = new UpdateSuccess();

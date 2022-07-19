@@ -1,15 +1,15 @@
 import { ModelTable } from "../model/tables/Models";
 import { DatasetTable } from "../model/tables/Datasets";
+import { UserTable } from "../model/tables/Users";
 
-var jwt = require("../middleware/util/jwtUtil");
-var path = require("path");
+const jwt = require("../middleware/util/jwtUtil");
+const path = require("path");
 const fs = require("fs");
-const {spawn} = require("child_process");
+const spawn = require("child_process").spawn;
 
 import {
   SuccessEnum,
   ErrEnum,
-  Response,
   formatResponse,
   formatResponseWithData,
 } from "../responseFactory/util";
@@ -19,7 +19,13 @@ import { SuccessFactory } from "../responseFactory/Success";
 const errorFactory: ErrorFactory = new ErrorFactory();
 const successFactory: SuccessFactory = new SuccessFactory();
 
-//create model
+/**
+ * Insert new model in the database
+ * @param model name of the model
+ * @param dataset linked to model
+ * @param token of the user
+ * @param res response
+ */
 export const create = async function (
   model: string,
   dataset: string,
@@ -27,38 +33,44 @@ export const create = async function (
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    //extracting username
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
     // search if the user has a model with the same name
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: model, deleted: false },
     });
-    // if a model already exists
+    //if model already exists, error
     if (userModel != null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.ModelAlreadyExists).getMessage()
       );
+      //if model not exists, continue
     } else {
       //check if the user has a dataset with the same name passed in the body
       let userDataset: DatasetTable | null = await DatasetTable.findOne({
         where: { user: username, name: dataset, deleted: false },
       });
-      // if the dataset does not exists
+      //if the dataset does not exists, error
       if (userDataset == null) {
         formatResponse(
           res,
           errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
         );
+        //if dataset exists, now it's possible to insert the new model
       } else {
         // extract datasetId from the response
         let datasetId = userDataset.getDataValue("id");
+
         // insert the model in the table
         let results: ModelTable | null = await ModelTable.create({
           name: model,
           dataset: datasetId,
           user: username,
         });
+        //success
         formatResponseWithData(
           res,
           successFactory
@@ -77,7 +89,14 @@ export const create = async function (
   }
 };
 
-//update all model's metadata
+/**
+ * update all model's metadata
+ * @param modelName name of the model
+ * @param newModelName new name of the model
+ * @param datasetName name of the dataset linked to model
+ * @param token of the user
+ * @param res response
+ */
 export const updateMetadata = async function (
   modelName: string,
   newModelName: string,
@@ -86,13 +105,14 @@ export const updateMetadata = async function (
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
     // search if the user's model exists
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
-    // model does not exists
+    // if the model does not exists, error
     if (userModel == null) {
       formatResponse(
         res,
@@ -103,17 +123,19 @@ export const updateMetadata = async function (
       let userDataset: DatasetTable | null = await DatasetTable.findOne({
         where: { user: username, name: datasetName, deleted: false },
       });
-      //if exists, getting dataset id for updating name
+      //if dataset exists, getting id for updating model name
       if (userDataset != null) {
         let datasetId = userDataset.getDataValue("id");
         await ModelTable.update(
           { name: newModelName, dataset: datasetId },
           { where: { name: modelName, user: username, deleted: false } }
         );
+        //success
         formatResponse(
           res,
           successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage()
         );
+        //no dataset found, error
       } else {
         formatResponse(
           res,
@@ -129,7 +151,13 @@ export const updateMetadata = async function (
   }
 };
 
-//updating only dataset name of a specific model
+/**
+ * updating only dataset name of a specific model
+ * @param modelName name of the model
+ * @param datasetName new name of the dataset linked to model
+ * @param token of the user
+ * @param res response
+ */
 export const updateDatasetName = async function (
   modelName: string,
   datasetName: string,
@@ -137,8 +165,9 @@ export const updateDatasetName = async function (
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
     // search if the user's model exists
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
@@ -162,10 +191,12 @@ export const updateDatasetName = async function (
           { dataset: datasetId },
           { where: { name: modelName, user: username, deleted: false } }
         );
+        //success
         formatResponse(
           res,
           successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage()
         );
+        //error
       } else {
         formatResponse(
           res,
@@ -181,7 +212,13 @@ export const updateDatasetName = async function (
   }
 };
 
-//updating only model name of a specific model
+/**
+ * updating only model name of a specific model
+ * @param modelName name of the model
+ * @param newModelName new name of the model
+ * @param token of the user
+ * @param res response
+ */
 export const updateModelName = async function (
   modelName: string,
   newModelName: string,
@@ -189,8 +226,9 @@ export const updateModelName = async function (
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
     // search if the user's model exists
     let userModel: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
@@ -218,6 +256,7 @@ export const updateModelName = async function (
           { name: newModelName },
           { where: { name: modelName, user: username, deleted: false } }
         );
+        //success
         formatResponse(
           res,
           successFactory.getSuccess(SuccessEnum.UpdateSuccess).getMessage()
@@ -232,15 +271,21 @@ export const updateModelName = async function (
   }
 };
 
-//remove model
+/**
+ * deleting model
+ * @param modelName name of the model
+ * @param token of the user
+ * @param res response
+ */
 export const remove = async function (
   modelName: string,
   token: string,
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
     let userModelRemoved: number[] = await ModelTable.update(
       { deleted: true },
       { where: { user: username, name: modelName, deleted: false } }
@@ -263,21 +308,27 @@ export const remove = async function (
   }
 };
 
-//list of models
+/**
+ * List of all models
+ * @param token of the user
+ * @param res response
+ */
 export const list = async function (token: string, res: any) {
   try {
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+
+    //join for getting all info about model's list
     let modelList: DatasetTable[] | null = await DatasetTable.findAll({
-      // rename to datasetName
+      // rename name to datasetName (AS)
       attributes: [["name", "datasetName"]],
       where: { user: username, deleted: false },
       raw: true,
       include: [
         {
           model: ModelTable,
-          // rename to modelName
+          // rename name to modelName (AS)
           attributes: [["name", "modelName"], "path", "user"],
           where: {
             deleted: false,
@@ -285,6 +336,7 @@ export const list = async function (token: string, res: any) {
         },
       ],
     });
+    //if there's something, it's ok
     if (modelList != null) {
       formatResponseWithData(
         res,
@@ -292,6 +344,7 @@ export const list = async function (token: string, res: any) {
         { modelList: modelList }
       );
     } else {
+      //error
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
@@ -305,7 +358,13 @@ export const list = async function (token: string, res: any) {
   }
 };
 
-//load model's file if it not exists
+/**
+ * load model's file (if not exists)
+ * @param files file to upload
+ * @param modelName name of the model
+ * @param token of the user
+ * @param res response
+ */
 export const loadFile = async function (
   files: any,
   modelName: string,
@@ -316,18 +375,25 @@ export const loadFile = async function (
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+
+    //searching if model exists
     let model: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
     if (!model) {
+      //error, model not found
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
       );
+      //if model exists, continue
     } else {
+      //checking if file model already exists
       if (!model.getDataValue("path")) {
         let modelId: number = model.getDataValue("id");
         let file = files.fileName;
+
+        //building path creating directories
         let savePath = path.join(
           __dirname,
           "..",
@@ -336,21 +402,28 @@ export const loadFile = async function (
           username,
           modelId.toString()
         );
+        //creating directories if they don't exists
         if (!fs.existsSync(savePath)) {
           fs.mkdirSync(savePath, { recursive: true });
         }
+        //path to save file
         const completePath: string = savePath + "/" + file.name;
+
+        //move file to the complete path
         await file.mv(completePath);
+
         const finalPath: string = path.join(
           "models",
           username,
           modelId.toString(),
           file.name
         );
+        //updating path in db
         await ModelTable.update(
           { path: finalPath },
           { where: { name: modelName, user: username } }
         );
+        //success
         formatResponseWithData(
           res,
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
@@ -363,6 +436,7 @@ export const loadFile = async function (
             },
           }
         );
+        //if the model file already exists
       } else {
         formatResponse(
           res,
@@ -378,7 +452,13 @@ export const loadFile = async function (
   }
 };
 
-//upgrade model file if already exists
+/**
+ * update model file if already exists
+ * @param files file to update
+ * @param modelName name of the model
+ * @param token of the user
+ * @param res response
+ */
 export const updateFile = async function (
   files: any,
   modelName: string,
@@ -389,18 +469,24 @@ export const updateFile = async function (
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+
+    //checking if model exists
     let model: ModelTable | null = await ModelTable.findOne({
       where: { user: username, name: modelName, deleted: false },
     });
+    //if not, error
     if (!model) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
       );
+      //if exists, continue
     } else {
+      //if path already exists
       if (model.getDataValue("path")) {
         let modelId: number = model.getDataValue("id");
         let file = files.fileName;
+        //folder where to save file
         let savePath = path.join(
           __dirname,
           "..",
@@ -409,11 +495,17 @@ export const updateFile = async function (
           username,
           modelId.toString()
         );
+
+        //creating directories if they don't exist
         if (!fs.existsSync(savePath)) {
           fs.mkdirSync(savePath, { recursive: true });
         }
+
+        //path where to save file
         const completePath = savePath + "/" + file.name;
+        //moving file
         await file.mv(completePath);
+        //updating db
         const finalPath: string = path.join(
           "models",
           username,
@@ -424,6 +516,7 @@ export const updateFile = async function (
           { path: finalPath },
           { where: { name: modelName, user: username } }
         );
+        //success
         formatResponseWithData(
           res,
           successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
@@ -436,6 +529,7 @@ export const updateFile = async function (
             },
           }
         );
+        //error
       } else
         formatResponse(
           res,
@@ -450,7 +544,13 @@ export const updateFile = async function (
   }
 };
 
-//calculating inference of a specific image on a specific model
+/**
+ * calculating inference of a specific image on a specific model
+ * @param files file to pass at the model
+ * @param modelName name of the model
+ * @param token of the user
+ * @param res response
+ */
 export const inference = async function (
   files: any,
   modelName: string,
@@ -458,13 +558,80 @@ export const inference = async function (
   res: any
 ) {
   try {
-    const pythonModel = spawn("python", [path.join(__dirname, "prova.py")]);
+    // get username from token
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
 
-    pythonModel.stdout.on("data", function (data: any) {
-      console.log(data.toString());
-      console.log(data);
-      console.log("end");
+    // search user tokens
+    let user: UserTable | null = await UserTable.findOne({
+      where: { username: username },
     });
+    let userTokens: number = user?.getDataValue("token");
+    // error if token are not sufficients, error
+    if (userTokens < 5) {
+      formatResponse(
+        res,
+        errorFactory.getError(ErrEnum.AuthError).getMessage()
+      );
+      //if not, continue
+    } else {
+      //updating db
+      await UserTable.update(
+        {
+          token: userTokens - 5,
+        },
+        { where: { username: username } }
+      );
+      //searching if model exists
+      let model: ModelTable | null = await ModelTable.findOne({
+        where: { user: username, name: modelName, deleted: false },
+      });
+      //if model not exists, error
+      if (!model) {
+        formatResponse(
+          res,
+          errorFactory.getError(ErrEnum.NoModelFoundError).getMessage()
+        );
+      } else {
+        //if model exists, checking if model file exists
+        let modelPath: string = model.getDataValue("path");
+        if (modelPath) {
+          let image: any = files.fileName;
+          let completePath: string = path.join(
+            __dirname,
+            "..",
+            "..",
+            modelPath
+          );
+          //launch a Python istance for inference on model
+          const pythonModel = spawn("python", [completePath, image]);
+          let resp: string = "";
+          pythonModel.stdout.on("close", function () {
+            try {
+              formatResponseWithData(
+                res,
+                successFactory
+                  .getSuccess(SuccessEnum.InferenceSuccess)
+                  .getMessage(),
+                {
+                  inference: [resp],
+                }
+              );
+            } catch {
+              formatResponse(
+                res,
+                errorFactory.getError(ErrEnum.InternalError).getMessage()
+              );
+            }
+          });
+          pythonModel.stdout.on("data", function (data: any) {
+            try {
+              resp = JSON.parse(data.toString().replace(/'/g, '"'));
+            } catch {}
+          });
+        }
+      }
+    }
   } catch (err) {
     console.log(err);
     formatResponse(

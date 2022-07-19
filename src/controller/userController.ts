@@ -1,4 +1,4 @@
-var jwt = require("../middleware/util/jwtUtil");
+const jwt = require("../middleware/util/jwtUtil");
 import {
   SuccessEnum,
   ErrEnum,
@@ -32,6 +32,7 @@ export const login = async function (
     let user: UserTable | null = await UserTable.findOne({
       where: { username: username, password: password, role: role },
     });
+    //if user exists
     if (user != null) {
       //generate token and json's infos
       let [token, decoded]: [string, string] = jwt.setToken(
@@ -40,13 +41,14 @@ export const login = async function (
         password,
         email
       );
+      //success
       formatResponseWithData(
         res,
         successFactory.getSuccess(SuccessEnum.JWTSuccess).getMessage(),
         { token: token, info: decoded }
       );
     }
-    //wrong password or email
+    //user does not exists, error
     else {
       formatResponse(
         res,
@@ -62,7 +64,7 @@ export const login = async function (
 };
 
 /**
- * Insert user in the database
+ * Insert new user in the database
  * @param username username of the user
  * @param password password of the user
  * @param email email of the user
@@ -77,6 +79,7 @@ export const signUp = async function (
   try {
     //trying to search existing user
     let user: UserTable | null = await UserTable.findByPk(username);
+    //if user does not exists
     if (user == null) {
       //insert new user in the database
       let results: UserTable | null = await UserTable.create({
@@ -85,13 +88,14 @@ export const signUp = async function (
         password: password,
         role: "user",
       });
+      //user created with success
       formatResponseWithData(
         res,
         successFactory.getSuccess(SuccessEnum.UserCreateSuccess).getMessage(),
         results
       );
     }
-    //user exists
+    //if user exists, error
     else {
       formatResponse(
         res,
@@ -109,15 +113,19 @@ export const signUp = async function (
 
 /**
  * Return user's residual tokens
- * @param username of the user
+ * @param token of the user
  * @param res response
  */
 export const residualToken = async function (token: string, res: any) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
+    //extracting username from token
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
+    //extracting user's token
     const user: UserTable | null = await UserTable.findByPk(username);
     let tokenValue: number = user?.getDataValue("token");
+    //success, showing tokens
     formatResponseWithData(
       res,
       successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
@@ -133,7 +141,7 @@ export const residualToken = async function (token: string, res: any) {
 
 /**
  * Update user token
- * @param username name of the user
+ * @param username of the user
  * @param token number of token to update
  * @param res response
  */
@@ -143,11 +151,10 @@ export const updateToken = async function (
   res: any
 ) {
   try {
-    const result = await UserTable.update(
-      { token: token },
-      { where: { username: username } }
-    );
+    //updating user's token
+    await UserTable.update({ token: token }, { where: { username: username } });
 
+    //return user's info
     const user: UserTable | null = await UserTable.findByPk(username);
     if (user != null) {
       formatResponseWithData(
@@ -156,6 +163,7 @@ export const updateToken = async function (
         user
       );
     } else {
+      //user not found, error
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoUserFoundError).getMessage()

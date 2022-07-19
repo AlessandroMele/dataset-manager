@@ -100,25 +100,22 @@ VALUES
 ('occhi', 1,  0, 0.2, 0.4),
 ('occhio', 1, 0.4, 0.5, 0.6);
 
-INSERT INTO `models` (`id`, `name`, `path`, `dataset`, `user`)
+INSERT INTO `models` (`id`, `name`, `dataset`, `user`)
 VALUES (
     1,
     'my_eye_models_0',
-    'models/user/1/my_eye_models_0.js',
     1,
     'user'
   ),
   (
     2,
     'my_eye_models_1',
-    'models/user/2/my_eye_models_1.py',
     2,
     'user'
   ),
     (
     3,
     'my_eye_models_2',
-    NULL,
     2,
     'user'
   );

@@ -23,7 +23,14 @@ const AdmZip = require("adm-zip");
 const errorFactory: ErrorFactory = new ErrorFactory();
 const successFactory: SuccessFactory = new SuccessFactory();
 
-//create dataset
+/**
+ * creating new dataset
+ * @param datasetName name of the dataset
+ * @param classes number of the classes
+ * @param keywords array of keyword
+ * @param token of the user
+ * @param res response
+ */
 export const create = async function (
   datasetName: string,
   classes: string,
@@ -34,29 +41,32 @@ export const create = async function (
   try {
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+
     // search if the user has a dataset with the same name
     let userDataset: DatasetTable | null = await DatasetTable.findOne({
       where: { user: username, name: datasetName, deleted: false },
     });
-    // if a dataset already exists
+    // if a dataset already exists, error
     if (userDataset != null) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.DatasetAlreadyExists).getMessage()
       );
     } else {
-      //dataset creation
+      //inserting dataset on db
       const dataset = await DatasetTable.create({
         name: datasetName,
         classes: classes,
         user: username,
       });
+      //inserting keywords (is array)
       keywords.forEach(async (kw) => {
         await KeywordTable.create({
           keyword: kw,
           dataset: dataset.getDataValue("id"),
         });
       });
+      //success
       formatResponse(
         res,
         successFactory.getSuccess(SuccessEnum.DatasetCreateSuccess).getMessage()
@@ -70,28 +80,35 @@ export const create = async function (
   }
 };
 
-//remove dataset
+/**
+ * delete dataset
+ * @param datasetName name of the dataset
+ * @param token of the user
+ * @param res response
+ */
 export const remove = async function (
   datasetName: string,
   token: string,
   res: any
 ) {
   try {
-    var payload = jwt.getPayload(token);
-    var username: string = payload.payload.username;
-    // extract dataset data
+    let payload = jwt.getPayload(token);
+    let username: string = payload.payload.username;
+
+    // extract dataset
     let userDataset: DatasetTable | null = await DatasetTable.findOne({
       where: { user: username, name: datasetName, deleted: false },
     });
-    // error if dataset does not exists
+    // if dataset does not exists, error
     if (!userDataset) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
       );
     } else {
+      //getting id of dataset
       let datasetId: number = userDataset.getDataValue("id");
-      // delete the dataset
+      // deleting (logical) dataset
       await DatasetTable.update(
         { deleted: true },
         { where: { user: username, name: datasetName, deleted: false } }
@@ -110,7 +127,7 @@ export const remove = async function (
         { deleted: true },
         { where: { dataset: datasetId, deleted: false } }
       );
-
+      //success
       formatResponse(
         res,
         successFactory.getSuccess(SuccessEnum.RemovedSuccess).getMessage()
@@ -124,12 +141,17 @@ export const remove = async function (
   }
 };
 
-//list of datasets
+/**
+ * getting list of datasets
+ * @param token of the user
+ * @param res response
+ */
 export const list = async function (token: string, res: any) {
   try {
-    // get  from token
+    // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+    //join between dataset model, images, labels and keywords for full infos
     let datasetList: DatasetTable[] | null = await DatasetTable.findAll({
       attributes: ["name", "classes", "user"],
       where: { user: username, deleted: false },
@@ -163,12 +185,14 @@ export const list = async function (token: string, res: any) {
       ],
     });
     if (datasetList != null) {
+      //success
       formatResponseWithData(
         res,
         successFactory.getSuccess(SuccessEnum.GetSuccess).getMessage(),
         { datasetList: datasetList }
       );
     } else {
+      //no dataset found
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.NoDatasetFoundError).getMessage()
@@ -182,12 +206,18 @@ export const list = async function (token: string, res: any) {
   }
 };
 
-//insert a single image on the specified dataset
+/**
+ * inserting new image on the dataset
+ * @param req request
+ * @param token of the user
+ * @param res response
+ */
 export const imageInsert = async function (req: any, token: string, res: any) {
   try {
     // get username from token
     let payload = jwt.getPayload(token);
     let username: string = payload.payload.username;
+
     let datasetName = req.body.datasetName;
     // search user tokens
     let user: UserTable | null = await UserTable.findOne({
@@ -222,7 +252,8 @@ export const imageInsert = async function (req: any, token: string, res: any) {
         let datasetId: number = dataset.getDataValue("id");
         // extract image from the form
         let file = req.files.fileName;
-        // create path for the image
+
+        // creating directories for saving image
         let savePath = path.join(
           __dirname,
           "..",
@@ -233,7 +264,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
           datasetId.toString() // needed to avoid collisions when dataset is deleted and recreated
         );
 
-        // create the path to store in the database
+        // create the path to store image in the database
         const finalPath: string = path.join(
           "datasets",
           username,
@@ -276,7 +307,9 @@ export const imageInsert = async function (req: any, token: string, res: any) {
 
           formatResponseWithData(
             res,
-            successFactory.getSuccess(SuccessEnum.ImageInsertSuccess).getMessage(),
+            successFactory
+              .getSuccess(SuccessEnum.ImageInsertSuccess)
+              .getMessage(),
             {
               data: {
                 path: finalPath,
@@ -297,7 +330,14 @@ export const imageInsert = async function (req: any, token: string, res: any) {
   }
 };
 
-//insert a label on a specific image
+/**
+ * insert a label on a specific image
+ * @param imagePath path of the image
+ * @param className number of the classes
+ * @param keywords array of keyword
+ * @param token of the user
+ * @param res response
+ */
 export const labelInsert = async function (
   imagePath: string,
   className: any,
@@ -631,7 +671,7 @@ export const zipInsert = async function (req: any, token: string, res: any) {
 
       //unzipping and loading all files in the dataset folder
       const zip = new AdmZip(zipPath);
-      var zipEntries = zip.getEntries(); // an array of ZipEntry records
+      let zipEntries = zip.getEntries(); // an array of ZipEntry records
 
       let finalJSON: any = JSON.parse('{ "response": [] }');
       for (let index = 0; index < zipEntries.length; index++) {
@@ -656,12 +696,10 @@ export const zipInsert = async function (req: any, token: string, res: any) {
         if (userTokens < 0.1) {
           finalJSON.response[index].info.push({
             path: filePath,
-            message: errorFactory
-              .getError(ErrEnum.AuthError)
-              .getMessage().message,
+            message: errorFactory.getError(ErrEnum.AuthError).getMessage()
+              .message,
           });
-        }
-        else{
+        } else {
           await UserTable.update(
             {
               token: userTokens - 0.1,
@@ -669,58 +707,58 @@ export const zipInsert = async function (req: any, token: string, res: any) {
             { where: { username: username } }
           );
 
-        if (
-          (element.entryName.includes(".jpg") ||
-            element.entryName.includes(".jpeg") ||
-            element.entryName.includes(".png")) && (
-            !element.entryName.includes("/") && filePath.length < 100)
-        ) {
-          
-          // check if the image already exists
-          let image: ImageTable | null = await ImageTable.findOne({
-            where: {
-              dataset: datasetId,
-              path: filePath,
-              deleted: false,
-            },
-          });
-          // if it exists return error
-          if (image) {
+          if (
+            (element.entryName.includes(".jpg") ||
+              element.entryName.includes(".jpeg") ||
+              element.entryName.includes(".png")) &&
+            !element.entryName.includes("/") &&
+            filePath.length < 100
+          ) {
+            // check if the image already exists
+            let image: ImageTable | null = await ImageTable.findOne({
+              where: {
+                dataset: datasetId,
+                path: filePath,
+                deleted: false,
+              },
+            });
+            // if it exists return error
+            if (image) {
+              finalJSON.response[index].info.push({
+                path: filePath,
+                message: errorFactory
+                  .getError(ErrEnum.ImageAlreadyExists)
+                  .getMessage().message,
+              });
+              console.log(finalJSON.response[0].info);
+            } else {
+              await ImageTable.create({
+                dataset: datasetId,
+                path: filePath,
+              });
+              zip.extractEntryTo(
+                /*entry name*/ element,
+                /*target path*/ savePath,
+                /*maintainEntryPath*/ false,
+                /*overwrite*/ true
+              );
+              finalJSON.response[index].info.push({
+                path: filePath,
+                message: successFactory
+                  .getSuccess(SuccessEnum.ImageInsertSuccess)
+                  .getMessage().message,
+              });
+            }
+          } else {
             finalJSON.response[index].info.push({
               path: filePath,
               message: errorFactory
-                .getError(ErrEnum.ImageAlreadyExists)
-                .getMessage().message,
-            });
-            console.log(finalJSON.response[0].info);
-          } else {
-            await ImageTable.create({
-              dataset: datasetId,
-              path: filePath,
-            });
-            zip.extractEntryTo(
-              /*entry name*/ element,
-              /*target path*/ savePath,
-              /*maintainEntryPath*/ false,
-              /*overwrite*/ true
-            );
-            finalJSON.response[index].info.push({
-              path: filePath,
-              message: successFactory
-                .getSuccess(SuccessEnum.ImageInsertSuccess)
+                .getError(ErrEnum.NoImageFoundError)
                 .getMessage().message,
             });
           }
-        } else {
-          finalJSON.response[index].info.push({
-            path: filePath,
-            message: errorFactory
-              .getError(ErrEnum.NoImageFoundError)
-              .getMessage().message,
-          });
         }
       }
-    }
       //deleting zip file
       await fs.unlinkSync(zipPath);
       formatResponseWithData(
@@ -729,8 +767,7 @@ export const zipInsert = async function (req: any, token: string, res: any) {
         finalJSON.response
       );
     }
-  } 
-  catch (err) {
+  } catch (err) {
     console.log(err);
     formatResponse(
       res,

@@ -1,5 +1,4 @@
 import { checkAutorization } from "./middleware/user";
-import { checkRequestContent } from "./middleware/util/util";
 import { renderErrors } from "./middleware/util/util";
 const userRouter = require("./routes/user");
 const modelRouter = require("./routes/model");
@@ -8,7 +7,6 @@ const fileUpload = require("express-fileupload");
 
 const express = require("express");
 const app = express();
-
 
 app.use(fileUpload());
 

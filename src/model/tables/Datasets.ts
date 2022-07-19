@@ -1,8 +1,8 @@
-import {DataTypes, Model, Sequelize} from "sequelize";
-import {Singleton} from "../Singleton";
-import {ImageTable} from "./Images";
-import {ModelTable} from "./Models";
-import {KeywordTable} from "./Keywords";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { Singleton } from "../Singleton";
+import { ImageTable } from "./Images";
+import { ModelTable } from "./Models";
+import { KeywordTable } from "./Keywords";
 const connection: Sequelize = Singleton.getConnection();
 
 export class DatasetTable extends Model {}
@@ -26,7 +26,7 @@ DatasetTable.init(
     },
     deleted: {
       type: DataTypes.BOOLEAN,
-      defaultValue: 0
+      defaultValue: 0,
     },
   },
   {
@@ -37,8 +37,8 @@ DatasetTable.init(
   }
 );
 
-DatasetTable.hasMany(ImageTable, {foreignKey: "dataset"});
+DatasetTable.hasMany(ImageTable, { foreignKey: "dataset" });
 
-DatasetTable.hasMany(ModelTable, {foreignKey: "dataset"});
+DatasetTable.hasMany(ModelTable, { foreignKey: "dataset" });
 
-DatasetTable.hasMany(KeywordTable, {foreignKey: "dataset"});
+DatasetTable.hasMany(KeywordTable, { foreignKey: "dataset" });

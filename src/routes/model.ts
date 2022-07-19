@@ -3,7 +3,11 @@ import {
   checkModelName,
   checkInputFile,
 } from "../middleware/model";
-import { checkDatasetName, checkImageFile,checkImageName } from "../middleware/dataset";
+import {
+  checkDatasetName,
+  checkImageFile,
+  checkImageName,
+} from "../middleware/dataset";
 import {
   create,
   updateMetadata,
@@ -24,7 +28,7 @@ var express = require("express");
 var router = express.Router();
 
 //create model
-router.put(
+router.post(
   "/create",
   [checkRequestContent, express.json(), checkModelName, checkDatasetName],
   function (req: any, res: any) {
@@ -107,7 +111,7 @@ router.put(
 //calculating inference of a specific model on a specific image
 router.post(
   "/inference",
-  [checkRequestContentForm, checkImageName,checkImageFile, checkModelName],
+  [checkRequestContentForm, checkImageName, checkImageFile, checkModelName],
   function (req: any, res: any) {
     inference(req.files, req.body.modelName, req.headers["authorization"], res);
   }

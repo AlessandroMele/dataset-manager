@@ -23,8 +23,8 @@ ModelTable.init(
     },
     deleted: {
       type: DataTypes.BOOLEAN,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   },
   {
     sequelize: connection,

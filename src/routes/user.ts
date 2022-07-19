@@ -56,7 +56,7 @@ router.get(
 );
 
 //update user's token (admin)
-router.post(
+router.put(
   "/updateToken",
   [checkAutorization, checkAdmin, checkInputToken, checkInputUser],
   function (req: any, res: any) {

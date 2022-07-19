@@ -41,7 +41,7 @@ export enum ErrEnum {
   NewDatasetNameError,
   ArrayKeywordsError,
   NoImageFoundError,
-  NoInputFileImageError
+  NoInputFileImageError,
 }
 
 export enum SuccessEnum {
@@ -54,7 +54,8 @@ export enum SuccessEnum {
   RemovedSuccess,
   DatasetCreateSuccess,
   LabelCreateSuccess,
-  ImageInsertSuccess
+  ImageInsertSuccess,
+  InferenceSuccess,
 }
 
 export interface Response {

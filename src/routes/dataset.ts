@@ -29,7 +29,7 @@ import {
   checkClassesUpdate,
   checkDatasetNameUpdate,
   checkInputZip,
-  checkImageName
+  checkImageName,
 } from "../middleware/dataset";
 import { checkInputFile } from "../middleware/model";
 
@@ -37,7 +37,7 @@ var express = require("express");
 var router = express.Router();
 
 //creating dataset
-router.put(
+router.post(
   "/create",
   [
     checkRequestContent,
@@ -58,9 +58,27 @@ router.put(
 );
 
 //updating dataset's metadata
-router.put("/update", [checkRequestContent, express.json(), checkDatasetName, checKeywordsUpdate, checkClassesUpdate, checkDatasetNameUpdate],function (req: any, res: any) {
-  update(req.body.datasetName, req.body.newDatasetName, req.body.keywords, req.body.classes, req.headers["authorization"], res);
-});
+router.put(
+  "/update",
+  [
+    checkRequestContent,
+    express.json(),
+    checkDatasetName,
+    checKeywordsUpdate,
+    checkClassesUpdate,
+    checkDatasetNameUpdate,
+  ],
+  function (req: any, res: any) {
+    update(
+      req.body.datasetName,
+      req.body.newDatasetName,
+      req.body.keywords,
+      req.body.classes,
+      req.headers["authorization"],
+      res
+    );
+  }
+);
 
 //deleting (logically) dataset
 router.delete(
@@ -77,7 +95,7 @@ router.get("/list", function (req: any, res: any) {
 });
 
 //insert a single image on the specified dataset
-router.put(
+router.post(
   "/image",
   [checkRequestContentForm, checkImageName, checkImageFile, checkDatasetName],
   function (req: any, res: any) {
@@ -86,7 +104,7 @@ router.put(
 );
 
 //insert a zip images on the specified dataset
-router.put(
+router.post(
   "/zip",
   [checkRequestContentForm, checkDatasetName, checkInputZip, checkZip],
   function (req: any, res: any) {
@@ -130,7 +148,7 @@ router.post(
     checkImageIdentifierList,
   ],
   function (req: any, res: any) {
-    console.log(req.body)
+    console.log(req.body);
     // if bounding boxes parameters are set, then call the apposite function
     labelInsertList(req.body, req.headers["authorization"], res);
   }

@@ -1,6 +1,6 @@
-import {DataTypes, Model, Sequelize} from "sequelize";
-import {Singleton} from "../Singleton";
-import {LabelTable} from "./Labels";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { Singleton } from "../Singleton";
+import { LabelTable } from "./Labels";
 const connection: Sequelize = Singleton.getConnection();
 
 export class ImageTable extends Model {}
@@ -31,4 +31,4 @@ ImageTable.init(
   }
 );
 
-ImageTable.hasMany(LabelTable, {foreignKey: "image"});
+ImageTable.hasMany(LabelTable, { foreignKey: "image" });

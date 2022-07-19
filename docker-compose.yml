@@ -25,7 +25,9 @@ services:
       volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
-      command: npm run dev
+      command:
+      - npm run build
+      - node build/index.js
       container_name: app-web
       depends_on:
       - db

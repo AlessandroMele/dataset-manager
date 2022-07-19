@@ -1,14 +1,9 @@
-Specifiche progetto.pdf
-dataset-manager.pptx
-
 node_modules
-UML/*.mdj
-UML/*.drawio
-
-env
+images/*.mdj
+images/*.drawio
 
 database/*.drawio
 
-comandi.txt
-
 .DS_Store
+
+Specifiche progetto.pdf
