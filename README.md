@@ -121,11 +121,12 @@ Nel nostro caso è stato utilizzato per la validazione dei dati in input (tipolo
 
 ## Area di lavoro
 
-Per testare il progetto in Postman, è possibile importare l'ambiente preconfigurato.
+Per testare il progetto in Postman, è possibile importare le collections e le variabili di ambiente preconfigurati.
 
-Per farlo è necessario aprire Postman, spostarsi nella sezione 'environment' e cliccare su Import, dopodiché selezionare il file di Backup posizionato nella cartella 'Postman'.
-Per importare le variabili di ambiente, spostarsi sul menù a tendina 'No environment' e selezionare l'ambiente opportuno.
-Per testare l'applicazione con i medesimi file presenti nei test, copiare il contenuto della cartella 'fileTest' all'interno della directory 'files' di Postman; dopodichè, per garantire il collegamento, è comunque necessario selezionare i file all'interno della cartella.
+Per farlo è necessario aprire Postman, spostarsi nella sezione 'import' ed importare sia il file delle variabili di ambiente (situato in postman/environment) che le collection situate in (postman/collections).
+Dopodichè, cliccare sul menu a tendina 'No environments' e selezionare 'dataset-manager'.
+
+Per testare l'applicazione con i medesimi file presenti nei test, copiare il contenuto della cartella 'fileTest' all'interno della directory 'files' di Postman; dopodichè, per garantire il collegamento, è necessario riselezionare i file all'interno della cartella (anche se i nomi coincidono) prima di eseguire i test.
 
 Per avviare il progetto è necessario posizionarsi nella directory di progetto, aprire il terminare ed eseguire:
 
