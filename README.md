@@ -346,7 +346,7 @@ Esempio di richiesta:
 
 #### /inference (JWT, FORM)
 
-Rotta attraverso la quale un utente può eliminare un proprio modello con uno specifico nome. La rimozione è logica e non fisica.
+Rotta attraverso la quale un utente può calcolare l'inferenza di un immagine selezionando un modello con uno specifico nome.
 
 Input:
 
