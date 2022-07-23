@@ -633,7 +633,6 @@ export const inference = async function (
       }
     }
   } catch (err) {
-    console.log(err);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()

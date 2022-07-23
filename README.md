@@ -7,17 +7,17 @@
 
 # Requisiti
 
-- [Docker](https://www.docker.com/products/docker-desktop/);
-- [Node.JS](https://nodejs.org/it/);
-- [Postman](https://www.postman.com/);
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Node.JS](https://nodejs.org/it/)
+- [Postman](https://www.postman.com/)
 
 # Descrizione ed obiettivi di progetto
 
 Si realizzi un sistema che consenta di gestire dati circa attività di annotazione di data-set ed inferenza a partire da modelli pre-addestrati. Devono essere predisposte le seguenti rotte:<br />
 
-- [U] + Creazione di un data-set (fornire metadati minimi come nome ed una serie di tag sotto forma di lista di parole e numero di classi); all’inizio il data-set risulta vuoto.
+- [U] Creazione di un data-set (fornire metadati minimi come nome ed una serie di tag sotto forma di lista di parole e numero di classi); all’inizio il data-set risulta vuoto.
 - [U] Cancellazione (logica) di un data-set;
-- [U] + Ottenere la lista dei data-set;
+- [U] Ottenere la lista dei data-set;
 - [U] Aggiornamento di un data-set (con verifica della non sovrapposizione con data-set dello stesso utente con lo stesso nome);
 - [U] Inserimento di contenuti all’interno del data-set;
   - Caricamento di una immagine;
@@ -28,30 +28,30 @@ Si realizzi un sistema che consenta di gestire dati circa attività di annotazio
   - Per ogni etichetta prevedere la possibilità di associare anche il bounding box; è necessario per ogni etichetta specificare la classe.
   - Per ogni label si applica un costo di 0.05token; deve essere verificato se il credito disponibile è sufficiente a gestire la richiesta;
 - [U] Estendere la chiamata sopra al caso di più immagini;
-- [U] + Creazione di un modello (fornire metadati minimi come nome ed il riferimento al data-set);
-- [U] + Caricamento di un file di modello associato ad modello creato;
+- [U] Creazione di un modello (fornire metadati minimi come nome ed il riferimento al data-set);
+- [U] Caricamento di un file di modello associato a modello creato;
 - [U] Cancellazione (logica) di un modello;
-- [U] + Ottenere la lista dei modelli;
-- [U] + Aggiornamento di un modello (con verifica della non sovrapposizione con modelli dello stesso utente con lo stesso nome); l'aggiornamento può essere sui metadati o sul file del modello;
+- [U] Ottenere la lista dei modelli;
+- [U] Aggiornamento di un modello (con verifica della non sovrapposizione con modelli dello stesso utente con lo stesso nome); l'aggiornamento può essere sui metadati o sul file del modello;
 - [U] Effettuare una inferenza su una immagine che viene passata al back-end; l’utente specifica l’id
   del modello da usare (si usi come rete quella dell’esame di CV&DL). Restituire un JSON contenente i dettagli dell’inferenza (es. classe o lista di bounding boxes);
 
   - Ogni richiesta di inferenza ha un costo di 5 token. L’inferenza ha luogo se i crediti associati all’utente sono sufficienti.
 
-- [U] + Restituire il credito residuo di un utente (necessaria autenticazione mediante token JWT)
+- [U] Restituire il credito residuo di un utente (necessaria autenticazione mediante token JWT)
   dove [U] corrisponde ad una rotta autenticata mediante JWT.
 
 I dati di cui sopra devono essere memorizzati in un database esterno interfacciato con Sequelize. <br />La scelta del DB è a discrezione degli studenti. <br />
-Le richieste devono essere validate.<br />
-Ogni utente autenticato (ovvero con JWT) ha un numero di token (valore iniziale impostato nel seed del database).<br />
-Nel caso di token terminati ogni richiesta da parte dello stesso utente deve restituire 401 Unauthorized.<br />
+Le richieste devono essere validate. <br />
+Ogni utente autenticato (ovvero con JWT) ha un numero di token (valore iniziale impostato nel seed del database). <br />
+Nel caso di token terminati ogni richiesta da parte dello stesso utente deve restituire 401 Unauthorized. <br />
 
-- Prevedere una rotta per l’utente con ruolo admin che consenta di effettuare la ricarica per un utente fornendo la mail ed il nuovo “credito” (sempre mediante JWT).<br />
+- Prevedere una rotta per l’utente con ruolo admin che consenta di effettuare la ricarica per un utente fornendo la mail ed il nuovo “credito” (sempre mediante JWT). <br />
   Il numero residuo di token deve essere memorizzato nel db sopra citato. <br />
-  Si deve prevedere degli script di seed per inizializzare il sistema.<br />
-  Si chiede di utilizzare le funzionalità di middleware.<br />
-  Si chiede di gestire eventuali errori mediante gli strati middleware sollevando le opportune eccezioni.<br />
-  Si chiede di commentare opportunamente il codice.<br />
+  Si deve prevedere degli script di seed per inizializzare il sistema. <br />
+  Si chiede di utilizzare le funzionalità di middleware. <br />
+  Si chiede di gestire eventuali errori mediante gli strati middleware sollevando le opportune eccezioni. <br />
+  Si chiede di commentare opportunamente il codice. <br />
 
 # Progettazione
 
@@ -126,9 +126,9 @@ Per testare il progetto in Postman, è possibile importare le collections e le v
 Per farlo è necessario aprire Postman, spostarsi nella sezione 'import' ed importare sia il file delle variabili di ambiente (situato in postman/environment) che le collection situate in (postman/collections).
 Dopodichè, cliccare sul menu a tendina 'No environments' e selezionare 'dataset-manager'.
 
-Per testare l'applicazione con i medesimi file presenti nei test, copiare il contenuto della cartella 'fileTest' all'interno della directory 'files' di Postman; dopodichè, per garantire il collegamento, è necessario riselezionare i file all'interno della cartella (anche se i nomi coincidono) prima di eseguire i test.
+Per testare l'applicazione con i medesimi file presenti nei test, copiare il contenuto della cartella 'file' all'interno della directory 'files' di Postman; dopodichè, per garantire il collegamento, è necessario riselezionare i file all'interno della cartella (anche se i nomi coincidono) prima di eseguire i test.
 
-Per avviare il progetto è necessario posizionarsi nella directory di progetto, aprire il terminare ed eseguire:
+Per avviare il progetto è necessario posizionarsi nella directory di progetto, aprire il terminale ed eseguire:
 
 ```
 docker compose up
@@ -346,6 +346,26 @@ Esempio di richiesta:
 
 #### /inference (JWT, FORM)
 
+Rotta attraverso la quale un utente può eliminare un proprio modello con uno specifico nome. La rimozione è logica e non fisica.
+
+Input:
+
+- fileName: immagine di cui si vuole calcolare l'inferenza;
+- modelName: nome del modello che si vuole usare per calcolare l'inferenza.
+
+Errori:
+
+- L'utente non possiede alcune modello con il nome indicato: 404.
+
+Esempio di richiesta:
+
+```json
+{
+  "fileName": "matrix.png",
+  "modelName": "my_eye_models_1"
+}
+```
+
 ### dataset
 
 #### /create (JWT, JSON)
@@ -436,7 +456,7 @@ Input:
 
 Errori:
 
-- L'utente non possiede alcune dataset con il nome indicato: 404;
+- L'utente non possiede alcuni dataset con il nome indicato: 404;
 - Token insufficienti: 401;
 - Il file non è un'immagine: 400;
 - Il dataset contiene già un'immagine con questo nome: 409.
@@ -452,7 +472,7 @@ Input:
 
 Errori:
 
-- L'utente non possiede alcune dataset con il nome indicato: 404
+- L'utente non possiede alcuni dataset con il nome indicato: 404
   Il server risponde con un array JSON contenente un elemento per ogni elemento nello zip, le possibili risposte dipendono dall'esito dell'inserimento dell'immagine:
   - Token insufficienti;
   - Il file non è un'immagine;

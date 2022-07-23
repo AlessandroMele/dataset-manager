@@ -546,7 +546,6 @@ export const labelInsertList = async function (
           }
         }
       } catch (error: any) {
-        console.log(error);
         finalJSON.response[index].info.push({
           message: errorFactory.getError(ErrEnum.InternalError).getMessage()
             .message,
@@ -676,7 +675,6 @@ export const zipInsert = async function (req: any, token: string, res: any) {
       let finalJSON: any = JSON.parse('{ "response": [] }');
       for (let index = 0; index < zipEntries.length; index++) {
         let element: any = zipEntries[index];
-        console.log(element.entryName);
 
         const filePath: string = path.join(
           "datasets",
@@ -686,8 +684,6 @@ export const zipInsert = async function (req: any, token: string, res: any) {
           element.entryName
         );
         finalJSON.response.push({ info: [] });
-
-        ////// AGGIUNGERE CONTROLLO TOKEN E LUNGHEZZA DEL FILEPATH /////////
         let user: UserTable | null = await UserTable.findOne({
           where: { username: username },
         });
@@ -730,7 +726,6 @@ export const zipInsert = async function (req: any, token: string, res: any) {
                   .getError(ErrEnum.ImageAlreadyExists)
                   .getMessage().message,
               });
-              console.log(finalJSON.response[0].info);
             } else {
               await ImageTable.create({
                 dataset: datasetId,
@@ -768,7 +763,6 @@ export const zipInsert = async function (req: any, token: string, res: any) {
       );
     }
   } catch (err) {
-    console.log(err);
     formatResponse(
       res,
       errorFactory.getError(ErrEnum.InternalError).getMessage()

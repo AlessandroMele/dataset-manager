@@ -24,7 +24,6 @@ export const checkDatasetName = function (req: any, res: any, next: any) {
       next(error);
     } else next();
   } catch (error: any) {
-    console.log(error)
     var error: Response = errorFactory
       .getError(ErrEnum.InternalError)
       .getMessage();
@@ -444,14 +443,13 @@ export const checkZip = function (req: any, res: any, next: any) {
   }
 };
 
-
 /**
  * Check if request contains file
  * @param req user request
  * @param res response
  * @param next next middleware
  */
- export const checkInputZip = function (req: any, res: any, next: any) {
+export const checkInputZip = function (req: any, res: any, next: any) {
   try {
     //checking if exists fileName and if name has less than 40 chars
     if (
@@ -459,9 +457,7 @@ export const checkZip = function (req: any, res: any, next: any) {
       !req.files.fileName ||
       req.files.fileName.name.length > 40
     ) {
-      var error = errorFactory
-        .getError(ErrEnum.NoInputZipError)
-        .getMessage();
+      var error = errorFactory.getError(ErrEnum.NoInputZipError).getMessage();
       next(error);
     } else next();
   } catch (err: any) {
@@ -472,15 +468,13 @@ export const checkZip = function (req: any, res: any, next: any) {
   }
 };
 
-
-
 /**
  * Check if request contains file
  * @param req user request
  * @param res response
  * @param next next middleware
  */
- export const checkImageName = function (req: any, res: any, next: any) {
+export const checkImageName = function (req: any, res: any, next: any) {
   try {
     //checking if exists fileName and if name has less than 40 chars
     if (
