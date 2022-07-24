@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d100d2ba-089d-44a2-9401-168603b78aeb",
+		"_postman_id": "aa274e5b-d7e9-4c10-b801-2bbe2b0d1f00",
 		"name": "2)  Load model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/loadFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"loadFile"
+						"file"
 					]
 				}
 			},
@@ -104,14 +104,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/loadFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"loadFile"
+						"file"
 					]
 				}
 			},
@@ -160,14 +160,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/loadFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"loadFile"
+						"file"
 					]
 				}
 			},
@@ -227,14 +227,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/loadFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"loadFile"
+						"file"
 					]
 				}
 			},
@@ -276,7 +276,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "works.py"
+							"src": "/Users/alessandro/Desktop/vscode/dataset-manager/postman/file/works.py"
 						},
 						{
 							"key": "modelName",
@@ -291,14 +291,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/loadFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"loadFile"
+						"file"
 					]
 				}
 			},

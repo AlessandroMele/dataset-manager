@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "45fb50e4-cc01-428f-a83c-30c4ee061e74",
+		"_postman_id": "024573cd-40c0-4626-a435-d2cabb322f16",
 		"name": "2) Create model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -94,14 +94,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -150,14 +149,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -206,14 +204,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -262,14 +259,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -318,14 +314,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -374,14 +369,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -430,14 +424,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},
@@ -489,14 +482,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/create",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"create"
+						"model"
 					]
 				}
 			},

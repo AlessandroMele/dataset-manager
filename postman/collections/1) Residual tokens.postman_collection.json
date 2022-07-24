@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c02f4ad7-eaf9-435d-adf5-cbd974ab12ca",
+		"_postman_id": "330d82fe-44d5-4406-be56-c69d48c73d64",
 		"name": "1) Residual tokens",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -41,14 +41,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/residualToken",
+					"raw": "localhost:8080/user/token",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"residualToken"
+						"token"
 					]
 				}
 			},
@@ -67,7 +67,7 @@
 							"\r",
 							"pm.test(\"Confirm response message\", function () {\r",
 							"  var jsonData = pm.response.json();\r",
-							"  pm.expect(jsonData.token).to.eql(80);\r",
+							"  pm.expect(jsonData.token).to.eql(70);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -100,14 +100,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/residualToken",
+					"raw": "localhost:8080/user/token",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"residualToken"
+						"token"
 					]
 				}
 			},

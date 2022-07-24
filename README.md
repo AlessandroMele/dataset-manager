@@ -136,27 +136,27 @@ docker compose up
 
 # Rotte
 
-| Metodo | Rotta                 | Tipologia Utente | Autenticazione JWT | Body della richiesta |
-| ------ | --------------------- | ---------------- | ------------------ | -------------------- |
-| POST   | /user/signup          | guest            | NO                 | JSON                 |
-| POST   | /user/login           | user/admin       | NO                 | JSON                 |
-| GET    | /user/residualToken   | user/admin       | YES                | JSON                 |
-| PUT    | /user/updateToken     | admin            | YES                | JSON                 |
-| POST   | /model/create         | user/admin       | YES                | JSON                 |
-| POST   | /model/loadFile       | user/admin       | YES                | FORM                 |
-| GET    | /model/list           | user/admin       | YES                | JSON                 |
-| PUT    | /model/updateMetadata | user/admin       | YES                | JSON                 |
-| PUT    | /model/updateFile     | user/admin       | YES                | FORM                 |
-| DELETE | /model/delete         | user/admin       | YES                | JSON                 |
-| POST   | /model/inference      | user/admin       | YES                | JSON                 |
-| POST   | /dataset/create       | user/admin       | YES                | JSON                 |
-| PUT    | /dataset/update       | user/admin       | YES                | JSON                 |
-| GET    | /dataset/list         | user/admin       | YES                | JSON                 |
-| DELETE | /dataset/delete       | user/admin       | YES                | JSON                 |
-| POST   | /dataset/zip          | user/admin       | YES                | FORM                 |
-| POST   | /dataset/image        | user/admin       | YES                | FORM                 |
-| POST   | /dataset/label        | user/admin       | YES                | JSON                 |
-| POST   | /dataset/labelList    | user/admin       | YES                | JSON                 |
+| Metodo | Rotta              | Tipologia Utente | Autenticazione JWT | Body della richiesta |
+| ------ | ------------------ | ---------------- | ------------------ | -------------------- |
+| POST   | /user/signup       | guest            | NO                 | JSON                 |
+| POST   | /user/login        | user/admin       | NO                 | JSON                 |
+| GET    | /user/token        | user/admin       | YES                | JSON                 |
+| PUT    | /user/token        | admin            | YES                | JSON                 |
+| POST   | /model             | user/admin       | YES                | JSON                 |
+| POST   | /model/file        | user/admin       | YES                | FORM                 |
+| GET    | /model/list        | user/admin       | YES                | JSON                 |
+| PUT    | /model/metadata    | user/admin       | YES                | JSON                 |
+| PUT    | /model/file        | user/admin       | YES                | FORM                 |
+| DELETE | /model             | user/admin       | YES                | JSON                 |
+| POST   | /model/inference   | user/admin       | YES                | JSON                 |
+| POST   | /dataset           | user/admin       | YES                | JSON                 |
+| PUT    | /dataset           | user/admin       | YES                | JSON                 |
+| GET    | /dataset/list      | user/admin       | YES                | JSON                 |
+| DELETE | /dataset           | user/admin       | YES                | JSON                 |
+| POST   | /dataset/zip       | user/admin       | YES                | FORM                 |
+| POST   | /dataset/image     | user/admin       | YES                | FORM                 |
+| POST   | /dataset/label     | user/admin       | YES                | JSON                 |
+| POST   | /dataset/labelList | user/admin       | YES                | JSON                 |
 
 ## Testing
 
@@ -217,13 +217,13 @@ Esempio di richiesta:
 }
 ```
 
-#### /residualToken (JWT, JSON)
+#### /token (JWT, JSON)
 
 Rotta attravero la quale l'utente può accedere al numero di token rimasti.
 
 Non sono necessari parametri nella richiesta.
 
-#### /updateToken (JWT, JSON)
+#### /token (JWT, JSON)
 
 Rotta attraverso la quale l'admin ha la possibilità di aggiornare il numero di token in possesso di uno degli altri utenti registrati.
 Input:
@@ -245,7 +245,7 @@ Esempio di richiesta:
 
 ### model
 
-#### /create (JWT, JSON)
+#### POST: (JWT, JSON)
 
 Rotta attraverso la quale è possible creare un nuovo modello collegandolo ad un dataset precedentemente creato
 Input:
@@ -267,7 +267,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /loadFile (JWT, FORM)
+#### POST: /file (JWT, FORM)
 
 Rotta attraverso la quale è possibile caricare un file ed associarlo ad uno specifico modello. Per evitare problematiche di sovrapposizione dei file dei modelli, soprattutto in caso di cancellazione e creazione di un modello con lo stesso nome, i file sono salvati nel percorso "models/${username}/${modelName}/${modelId}/${filename}". Tale percorso sarà restituito dopo il caricamento e potrà essere utilizzato per applicare il modello ad un'immagine di input tramite la rotta _/inference_.
 Input:
@@ -281,7 +281,7 @@ Errori:
 - Esiste già un file associato al modello: 409;
 - Il file non è un file python: 400.
 
-#### /updateFile (JWT, FORM)
+#### PUT: /file (JWT, FORM)
 
 Rotta attraverso la quale è possibile aggiornare un file associato ad uno specifico modello.
 
@@ -296,11 +296,11 @@ Errori:
 - Il modello non ha alcun file associato: 404;
 - Il file non è un file python: 400.
 
-#### /list (JWT, JSON)
+#### GET: /list (JWT, JSON)
 
 Rotta attraverso la quale l'utente può ottenere la lista dei propri modelli. Nel caso in cui l'utente non abbia alcun modello verrà restituito un errore con codice 404. Tale rotta non necessita di alcun parametro.
 
-#### /updateMetadata (JWT, JSON)
+#### PUT: /metadata (JWT, JSON)
 
 Rotta attraverso la quale è possibile aggiornare le informazioni di un modello.
 Input:
@@ -324,7 +324,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /delete (JWT, JSON)
+#### DELETE: (JWT, JSON)
 
 Rotta attraverso la quale un utente può eliminare un proprio modello con uno specifico nome. La rimozione è logica e non fisica.
 
@@ -344,7 +344,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /inference (JWT, FORM)
+#### POST: /inference (JWT, FORM)
 
 Rotta attraverso la quale un utente può calcolare l'inferenza di un immagine selezionando un modello con uno specifico nome.
 
@@ -368,7 +368,7 @@ Esempio di richiesta:
 
 ### dataset
 
-#### /create (JWT, JSON)
+#### POST: (JWT, JSON)
 
 Rotta attraverso la quale è possible creare un nuovo dataset fornendo le opportune informazioni.
 
@@ -396,7 +396,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /update (JWT, JSON)
+#### PUT: (JWT, JSON)
 
 Rotta attraverso la quale è possibile aggiornare le informazioni di un dataset.
 Input:
@@ -421,11 +421,11 @@ Esempio di richiesta:
 }
 ```
 
-#### /list (JWT, JSON)
+#### GET: /list (JWT, JSON)
 
 Rotta attraverso la quale l'utente può ottenere la lista dei propri dataset. Tale rotta non necessita di alcun parametro. Il JSON restituito dal server contiene informazioni riguardo il dataset e le immagini che lo compongono, ognuna con le rispettive labels.
 
-#### /delete (JWT, JSON)
+#### DELETE: (JWT, JSON)
 
 Rotta attraverso la quale un utente può eliminare un proprio dataset con uno specifico nome. La rimozione è logica, quindi il dataset rimane salvato nel database, ma l'utente non ha più la possibilità di accederci, inoltre vengono eliminate in cascata le immagini e le keywords associate al dataset.
 
@@ -445,7 +445,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /image (JWT, FORM)
+#### POST: /image (JWT, FORM)
 
 Rotta attraverso la quale un utente inserisce un'immagine da associare ad uno specifico dataset. Per evitare problematiche di sovrapposizione delle immagini, soprattutto in caso di cancellazione e creazione di un dataset con lo stesso nome, i file sono salvati nel percorso "datasets/${username}/${datasetName}/${datasetId}/${filename}". Tale percorso sarà restituito dopo l'inserimento e potrà essere utilizzato per assegnare una o più etichette alla classe
 
@@ -461,7 +461,7 @@ Errori:
 - Il file non è un'immagine: 400;
 - Il dataset contiene già un'immagine con questo nome: 409.
 
-#### /zip (JWT, FORM)
+#### POST: /zip (JWT, FORM)
 
 Rotta attraverso la quale un utente inserisce uno zip contenente immagini da inserire in uno specifico dataset.
 
@@ -479,7 +479,7 @@ Errori:
   - Il dataset contiene già un'immagine con questo nome;
   - L'immagine è stata caricata con successo.
 
-#### /label (JWT, JSON)
+#### POST: /label (JWT, JSON)
 
 Rotta attraverso la quale l'utente può associare un'etichetta ad una specifica immagine.
 
@@ -512,7 +512,7 @@ Esempio di richiesta:
 }
 ```
 
-#### /labelList (JWT, JSON)
+#### POST: /labelList (JWT, JSON)
 
 Rotta attraverso la quale l'utente può associare una lista di etichette ad una o più immagini. Per ogni elemento dell'array l'utente può decidere se inserire solamente l'etichetta di classe o se inserire anche un bounding box definito attraverso 3 parametri: altezza, larghezza e centro;
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8b9bdde9-f8f4-4856-ad3e-5a5d78b37a2d",
+		"_postman_id": "b19e4623-d8a3-4cbd-b15e-4428e0a6ecdb",
 		"name": "3) Create dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -38,14 +38,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -94,14 +93,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -150,14 +148,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -206,14 +203,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -262,14 +258,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -318,14 +313,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -374,14 +368,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -422,7 +415,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"datasetName\": \"dataset nuovo\",\r\n    \"keywords\": [\"cane\", \"gatto\"],\r\n    \"classes\": 2\r\n}",
+					"raw": "{\r\n    \"datasetName\": \"dataset nuovo2\",\r\n    \"keywords\": [\"1\", \"2\"],\r\n    \"classes\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -430,14 +423,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},
@@ -486,14 +478,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/create",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"create"
+						"dataset"
 					]
 				}
 			},

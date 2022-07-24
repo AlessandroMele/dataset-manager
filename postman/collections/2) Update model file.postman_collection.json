@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5226075a-f8c2-403a-a763-65a30003148b",
+		"_postman_id": "7a8d7529-5b64-4a43-b2c1-f25bf6e94d9d",
 		"name": "2) Update model file",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateFile"
+						"file"
 					]
 				}
 			},
@@ -104,14 +104,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateFile"
+						"file"
 					]
 				}
 			},
@@ -160,14 +160,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateFile"
+						"file"
 					]
 				}
 			},
@@ -227,14 +227,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateFile"
+						"file"
 					]
 				}
 			},
@@ -276,7 +276,7 @@
 						{
 							"key": "fileName",
 							"type": "file",
-							"src": "works.py"
+							"src": "/Users/alessandro/Desktop/vscode/dataset-manager/postman/file/works.py"
 						},
 						{
 							"key": "modelName",
@@ -291,14 +291,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateFile",
+					"raw": "localhost:8080/model/file",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateFile"
+						"file"
 					]
 				}
 			},

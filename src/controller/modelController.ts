@@ -1,7 +1,7 @@
 import { ModelTable } from "../model/tables/Models";
 import { DatasetTable } from "../model/tables/Datasets";
 import { UserTable } from "../model/tables/Users";
-
+import { inferenceCost } from "./tokenPrice";
 const jwt = require("../middleware/util/jwtUtil");
 const path = require("path");
 const fs = require("fs");
@@ -568,7 +568,7 @@ export const inference = async function (
     });
     let userTokens: number = user?.getDataValue("token");
     // error if token are not sufficients, error
-    if (userTokens < 5) {
+    if (userTokens < inferenceCost) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.AuthError).getMessage()
@@ -578,7 +578,7 @@ export const inference = async function (
       //updating db
       await UserTable.update(
         {
-          token: userTokens - 5,
+          token: userTokens - inferenceCost,
         },
         { where: { username: username } }
       );

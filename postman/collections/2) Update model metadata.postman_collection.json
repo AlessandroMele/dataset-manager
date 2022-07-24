@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f695dccf-d855-4a05-8b3b-621abd9c87c6",
+		"_postman_id": "6e813f38-fa30-444c-b326-b6b3e99c4014",
 		"name": "2) Update model metadata",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -104,14 +104,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -161,14 +161,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -219,14 +219,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -277,14 +277,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -333,14 +333,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -389,14 +389,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -445,14 +445,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},
@@ -501,14 +501,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/updateMetadata",
+					"raw": "localhost:8080/model/metadata",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"model",
-						"updateMetadata"
+						"metadata"
 					]
 				}
 			},

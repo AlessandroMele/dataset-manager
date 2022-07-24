@@ -29,7 +29,7 @@ var router = express.Router();
 
 //create model
 router.post(
-  "/create",
+  "",
   [checkRequestContent, express.json(), checkModelName, checkDatasetName],
   function (req: any, res: any) {
     create(
@@ -43,7 +43,7 @@ router.post(
 
 //load model file
 router.post(
-  "/loadFile",
+  "/file",
   [checkRequestContentForm, checkInputFile, checkModelName],
   function (req: any, res: any) {
     loadFile(req.files, req.body.modelName, req.headers["authorization"], res);
@@ -52,7 +52,7 @@ router.post(
 
 //delete model
 router.delete(
-  "/delete",
+  "",
   [checkRequestContent, express.json(), checkModelName],
   function (req: any, res: any) {
     remove(req.body.modelName, req.headers["authorization"], res);
@@ -66,7 +66,7 @@ router.get("/list", [], function (req: any, res: any) {
 
 //update model metadata
 router.put(
-  "/updateMetadata",
+  "/metadata",
   [checkRequestContent, express.json(), checkModelName, checkMetadata],
   function (req: any, res: any) {
     if (req.body.newModelName && req.body.datasetName)
@@ -96,7 +96,7 @@ router.put(
 
 //update model file
 router.put(
-  "/updateFile",
+  "/file",
   [checkRequestContentForm, checkInputFile, checkModelName],
   function (req: any, res: any) {
     updateFile(

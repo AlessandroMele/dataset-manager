@@ -47,17 +47,13 @@ router.post(
 );
 
 //return user's residual tokens (user)
-router.get(
-  "/residualToken",
-  [checkAutorization],
-  function (req: any, res: any) {
-    residualToken(req.headers["authorization"], res);
-  }
-);
+router.get("/token", [checkAutorization], function (req: any, res: any) {
+  residualToken(req.headers["authorization"], res);
+});
 
 //update user's token (admin)
 router.put(
-  "/updateToken",
+  "/token",
   [checkAutorization, checkAdmin, checkInputToken, checkInputUser],
   function (req: any, res: any) {
     updateToken(req.body.username, req.body.token, res);

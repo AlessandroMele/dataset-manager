@@ -38,7 +38,7 @@ var router = express.Router();
 
 //creating dataset
 router.post(
-  "/create",
+  "",
   [
     checkRequestContent,
     express.json(),
@@ -59,7 +59,7 @@ router.post(
 
 //updating dataset's metadata
 router.put(
-  "/update",
+  "",
   [
     checkRequestContent,
     express.json(),
@@ -82,7 +82,7 @@ router.put(
 
 //deleting (logically) dataset
 router.delete(
-  "/delete",
+  "",
   [checkRequestContent, express.json(), checkDatasetName],
   function (req: any, res: any) {
     remove(req.body.datasetName, req.headers["authorization"], res);

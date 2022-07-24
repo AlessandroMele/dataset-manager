@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8bf69ad2-cb9e-4321-862e-872830d20434",
+		"_postman_id": "1f245063-9775-4fef-90f9-a416b216c78b",
 		"name": "2) Delete model",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"model"
 					]
 				}
 			},
@@ -104,14 +103,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"model"
 					]
 				}
 			},
@@ -160,14 +158,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"model"
 					]
 				}
 			},
@@ -216,14 +213,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/model/delete",
+					"raw": "localhost:8080/model",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"model",
-						"delete"
+						"model"
 					]
 				}
 			},

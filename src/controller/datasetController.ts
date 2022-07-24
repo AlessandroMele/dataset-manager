@@ -1,5 +1,5 @@
 import { DatasetTable } from "../model/tables/Datasets";
-
+import { insertImageCost, insertLabelCost } from "./tokenPrice";
 const jwt = require("../middleware/util/jwtUtil");
 
 import {
@@ -22,7 +22,7 @@ const AdmZip = require("adm-zip");
 
 const errorFactory: ErrorFactory = new ErrorFactory();
 const successFactory: SuccessFactory = new SuccessFactory();
-
+const maxLengthFilePath: number = 100;
 /**
  * creating new dataset
  * @param datasetName name of the dataset
@@ -225,7 +225,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
     });
     let userTokens: number = user?.getDataValue("token");
     // error if token are not sufficients
-    if (userTokens < 0.1) {
+    if (userTokens < insertImageCost) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.AuthError).getMessage()
@@ -233,7 +233,7 @@ export const imageInsert = async function (req: any, token: string, res: any) {
     } else {
       await UserTable.update(
         {
-          token: userTokens - 0.1,
+          token: userTokens - insertImageCost,
         },
         { where: { username: username } }
       );
@@ -356,7 +356,7 @@ export const labelInsert = async function (
     });
     let userTokens: number = user?.getDataValue("token");
     // error if token are not sufficients
-    if (userTokens < 0.05) {
+    if (userTokens < insertLabelCost) {
       formatResponse(
         res,
         errorFactory.getError(ErrEnum.AuthError).getMessage()
@@ -364,7 +364,7 @@ export const labelInsert = async function (
     } else {
       await UserTable.update(
         {
-          token: userTokens - 0.05,
+          token: userTokens - insertLabelCost,
         },
         { where: { username: username } }
       );
@@ -456,12 +456,12 @@ export const labelInsertList = async function (
   });
   let userTokens: number = user?.getDataValue("token");
   // error if token are not sufficients
-  if (userTokens < 0.05 * labelList.length) {
+  if (userTokens < insertLabelCost * labelList.length) {
     formatResponse(res, errorFactory.getError(ErrEnum.AuthError).getMessage());
   } else {
     await UserTable.update(
       {
-        token: userTokens - 0.05 * labelList.length,
+        token: userTokens - insertLabelCost * labelList.length,
       },
       { where: { username: username } }
     );
@@ -689,7 +689,7 @@ export const zipInsert = async function (req: any, token: string, res: any) {
         });
         let userTokens: number = user?.getDataValue("token");
         // error if token are not sufficients
-        if (userTokens < 0.1) {
+        if (userTokens < insertImageCost) {
           finalJSON.response[index].info.push({
             path: filePath,
             message: errorFactory.getError(ErrEnum.AuthError).getMessage()
@@ -698,17 +698,17 @@ export const zipInsert = async function (req: any, token: string, res: any) {
         } else {
           await UserTable.update(
             {
-              token: userTokens - 0.1,
+              token: userTokens - insertImageCost,
             },
             { where: { username: username } }
           );
-
+          let lowerName: string = element.entryName.toLowerCase();
           if (
-            (element.entryName.includes(".jpg") ||
-              element.entryName.includes(".jpeg") ||
-              element.entryName.includes(".png")) &&
-            !element.entryName.includes("/") &&
-            filePath.length < 100
+            (lowerName.includes(".jpg") ||
+              lowerName.includes(".jpeg") ||
+              lowerName.includes(".png")) &&
+            !lowerName.includes("/") &&
+            filePath.length < maxLengthFilePath
           ) {
             // check if the image already exists
             let image: ImageTable | null = await ImageTable.findOne({

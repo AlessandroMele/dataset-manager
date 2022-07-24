@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9d3b2cb3-9664-4a46-a4a4-c694ef254d13",
+		"_postman_id": "8dd651aa-b4e6-47a7-9bdf-b63c94e9df1e",
 		"name": "3) Update dataset metadata",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -104,14 +103,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -162,14 +160,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -220,14 +217,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -278,14 +274,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -334,14 +329,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -390,14 +384,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -446,14 +439,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -502,14 +494,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -558,14 +549,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -614,14 +604,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},
@@ -670,14 +659,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/update",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"update"
+						"dataset"
 					]
 				}
 			},

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5d77bf81-6a29-45c9-8769-c4abdd81f22d",
+		"_postman_id": "3089c261-1c0f-482f-90e3-f15110831a42",
 		"name": "3) Delete dataset",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -48,14 +48,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"dataset"
 					]
 				}
 			},
@@ -104,14 +103,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"dataset"
 					]
 				}
 			},
@@ -160,14 +158,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"dataset"
 					]
 				}
 			},
@@ -216,14 +213,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/dataset/delete",
+					"raw": "localhost:8080/dataset",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"dataset",
-						"delete"
+						"dataset"
 					]
 				}
 			},
